@@ -213,11 +213,11 @@
                                      alt="{{ $product->name }}" 
                                      class="h-12 w-12 rounded-lg object-cover flex-shrink-0 border border-gray-200">
                             @else
-                                <div class="h-12 w-12 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                    </svg>
-                                </div>
+                            <div class="h-12 w-12 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                </svg>
+                            </div>
                             @endif
                             <div class="flex-1 min-w-0">
                                 <h4 class="text-sm font-medium text-gray-900 truncate">{{ $product->name }}</h4>
@@ -319,11 +319,11 @@
                                              alt="{{ $product->name }}" 
                                              class="h-12 w-12 rounded-lg object-cover mr-4 border border-gray-200">
                                     @else
-                                        <div class="h-12 w-12 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg flex items-center justify-center mr-4">
-                                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                            </svg>
-                                        </div>
+                                    <div class="h-12 w-12 bg-gradient-to-r from-blue-100 to-orange-100 rounded-lg flex items-center justify-center mr-4">
+                                        <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                        </svg>
+                                    </div>
                                     @endif
                                     <div>
                                         <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
@@ -427,11 +427,11 @@
                                          alt="{{ $product->name }}" 
                                          class="h-12 w-12 rounded-lg object-cover border border-gray-200">
                                 @else
-                                    <div class="p-2 bg-blue-100 rounded-lg">
-                                        <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                        </svg>
-                                    </div>
+                                <div class="p-2 bg-blue-100 rounded-lg">
+                                    <svg class="h-5 w-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                    </svg>
+                                </div>
                                 @endif
                                 @if($product->status === 'published' && $product->is_active)
                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -453,7 +453,7 @@
                                 @else
                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                                         {{ ucfirst($product->status) }}
-                                    </span>
+                                </span>
                                 @endif
                             </div>
                             <h3 class="font-semibold text-gray-900 mb-1 line-clamp-2">{{ $product->name }}</h3>

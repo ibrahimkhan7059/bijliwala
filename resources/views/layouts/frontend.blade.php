@@ -402,7 +402,7 @@
                             </a>
                         </div>
             @endauth
-                </div>
+        </div>
             </div>
         </div>
 
@@ -692,7 +692,7 @@
             }
         });
     </script>
-    
+
     @stack('scripts')
 </body>
 </html>

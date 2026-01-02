@@ -254,7 +254,7 @@
                                 const data = Alpine.$data(body);
                                 if (data && data.sidebarOpen) {
                                     body.classList.add('sidebar-open');
-                                } else {
+            } else {
                                     body.classList.remove('sidebar-open');
                                 }
                             } catch (e) {

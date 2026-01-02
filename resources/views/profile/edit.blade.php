@@ -31,9 +31,9 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 md:gap-6 w-full md:w-auto">
                     <!-- Avatar - Name First Letter Only -->
                     <div class="relative">
-                        <div class="h-16 w-16 md:h-20 md:w-20 rounded-full bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 flex items-center justify-center border-4 border-amber-300 shadow-lg">
+                            <div class="h-16 w-16 md:h-20 md:w-20 rounded-full bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 flex items-center justify-center border-4 border-amber-300 shadow-lg">
                             <span class="text-xl md:text-2xl font-bold text-white uppercase">{{ substr($user->name, 0, 1) }}</span>
-                        </div>
+                            </div>
                     </div>
                     
                     <div class="flex-1">
