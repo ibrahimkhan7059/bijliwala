@@ -149,7 +149,7 @@ class CategoryController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            $uploadPath = public_path('storage/categories');
+            $uploadPath = storage_path('app/public/categories');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
@@ -214,11 +214,11 @@ class CategoryController extends Controller
         // Handle image upload
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($category->image && file_exists(public_path('storage/' . $category->image))) {
-                unlink(public_path('storage/' . $category->image));
+            if ($category->image && file_exists(storage_path('app/public/' . $category->image))) {
+                unlink(storage_path('app/public/' . $category->image));
             }
             
-            $uploadPath = public_path('storage/categories');
+            $uploadPath = storage_path('app/public/categories');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }

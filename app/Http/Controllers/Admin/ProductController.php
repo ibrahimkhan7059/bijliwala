@@ -210,7 +210,7 @@ class ProductController extends Controller
             \Log::info('Images received: ' . count($request->file('images')));
             
             // Create directory if it doesn't exist
-            $uploadPath = public_path('storage/products');
+            $uploadPath = storage_path('app/public/products');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0755, true);
             }
@@ -285,7 +285,7 @@ class ProductController extends Controller
             // Delete old images
             if ($product->images) {
                 foreach ($product->images as $oldImage) {
-                    $oldImagePath = public_path('storage/' . $oldImage);
+                    $oldImagePath = storage_path('app/public/' . $oldImage);
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
                     }
@@ -296,7 +296,7 @@ class ProductController extends Controller
             $uploadedImages = [];
             foreach ($request->file('images') as $image) {
                 $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('storage/products'), $filename);
+                $image->move(storage_path('app/public/products'), $filename);
                 $uploadedImages[] = 'products/' . $filename;
             }
             $validated['images'] = $uploadedImages;
