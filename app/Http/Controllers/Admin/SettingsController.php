@@ -216,8 +216,8 @@ class SettingsController extends Controller
     {
         return [
             // General Settings
-            'site_name' => $this->getSetting('site_name', 'Bijliwala E-commerce'),
-            'site_email' => $this->getSetting('site_email', 'admin@bijliwala.com'),
+            'site_name' => $this->getSetting('site_name', 'AJelectric'),
+            'site_email' => $this->getSetting('site_email', 'admin@ajelectric.com'),
             'site_phone' => $this->getSetting('site_phone', '+92-300-1234567'),
             'site_address' => $this->getSetting('site_address', 'Karachi, Pakistan'),
             'currency' => $this->getSetting('currency', 'PKR'),
@@ -232,8 +232,8 @@ class SettingsController extends Controller
             'mail_port' => $this->getSetting('mail_port', 587),
             'mail_username' => $this->getSetting('mail_username', ''),
             'mail_encryption' => $this->getSetting('mail_encryption', 'tls'),
-            'mail_from_address' => $this->getSetting('mail_from_address', 'noreply@bijliwala.com'),
-            'mail_from_name' => $this->getSetting('mail_from_name', 'Bijliwala'),
+            'mail_from_address' => $this->getSetting('mail_from_address', 'noreply@ajelectric.com'),
+            'mail_from_name' => $this->getSetting('mail_from_name', 'AJelectric'),
             
             // Security Settings
             'session_lifetime' => $this->getSetting('session_lifetime', 120),

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }} - Register</title>
+    <title>{{ config('app.name', 'AJelectric') }} - Register</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gradient-to-br from-orange-50 via-pink-50 to-blue-50 relative">
@@ -19,13 +19,11 @@
         <div class="max-w-md w-full space-y-6 page-transition my-4">
             <!-- Header Section -->
             <div class="text-center animate-slide-up">
-                <div class="mx-auto h-20 w-20 bg-gradient-to-r from-orange-500 to-blue-600 rounded-3xl flex items-center justify-center mb-6 animate-bounce shadow-2xl">
-                    <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                    </svg>
+                <div class="mx-auto h-20 w-20 mb-6 animate-bounce shadow-2xl">
+                    <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-20 w-20 object-contain rounded-3xl">
                 </div>
                 <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent mb-2">Welcome!</h1>
-                <p class="text-gray-600 text-lg">Bijli Wala Bhai</p>
+                <p class="text-gray-600 text-lg">AJelectric</p>
             </div>
 
             <!-- Toggle Buttons -->

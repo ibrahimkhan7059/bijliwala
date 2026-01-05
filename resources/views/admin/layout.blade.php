@@ -8,11 +8,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.avif') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
     
-    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'AJelectric') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-base md:text-lg lg:text-xl font-bold text-white leading-tight">Admin Panel</span>
-                        <span class="text-[9px] md:text-[10px] text-yellow-100">Bijli Wala Bhai</span>
+                        <span class="text-[9px] md:text-[10px] text-yellow-100">AJelectric</span>
                     </div>
                 </div>
                 <!-- Mobile close button -->

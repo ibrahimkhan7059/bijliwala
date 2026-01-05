@@ -1,6 +1,6 @@
-# Bijli Wala Bhai - E-commerce Website
+# AJelectric - E-commerce Website
 
-Laravel-based e-commerce platform for electrical and solar products, inspired by bijliwalabhai.com.
+Laravel-based e-commerce platform for electrical and solar products.
 
 ## 🚀 Features
 
@@ -55,7 +55,7 @@ php artisan serve
 ## 👤 Default Login Credentials
 
 ### Admin Panel
-- **Email**: admin@bijliwalabhai.com
+- **Email**: admin@ajelectric.com
 - **Password**: admin123
 - **Access**: `/admin`
 

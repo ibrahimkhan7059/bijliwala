@@ -8,11 +8,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.avif') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
     
-    <title>{{ config('app.name', 'Laravel') }} - Authentication</title>
+    <title>{{ config('app.name', 'AJelectric') }} - Authentication</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 relative">
@@ -27,13 +27,11 @@
         <div class="max-w-md w-full space-y-4 md:space-y-6 page-transition my-2 md:my-4">
             <!-- Header Section -->
             <div class="text-center animate-slide-up">
-                <div class="mx-auto h-16 w-16 md:h-20 md:w-20 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-3xl flex items-center justify-center mb-4 md:mb-6 animate-bounce shadow-2xl">
-                    <svg class="h-8 w-8 md:h-10 md:w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
+                <div class="mx-auto h-16 w-16 md:h-20 md:w-20 mb-4 md:mb-6 animate-bounce shadow-2xl">
+                    <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-16 w-16 md:h-20 md:w-20 object-contain rounded-3xl">
                 </div>
                 <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 via-orange-500 to-red-600 bg-clip-text text-transparent mb-2">Welcome Back!</h1>
-                <p class="text-gray-600 text-base md:text-lg font-medium">Bijli Wala Bhai</p>
+                <p class="text-gray-600 text-base md:text-lg font-medium">AJelectric</p>
             </div>
 
             <!-- Toggle Buttons -->

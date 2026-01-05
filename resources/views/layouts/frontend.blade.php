@@ -8,11 +8,11 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.avif') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
 
-    <title>{{ config('app.name', 'Bijli Wala Bhai') }} - @yield('title', 'Electrical & Solar Products')</title>
+    <title>{{ config('app.name', 'AJelectric') }} - @yield('title', 'Electrical & Solar Products')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -146,9 +146,9 @@
                     </button>
                     
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                        <span class="text-3xl lightning-pulse">⚡</span>
+                        <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
                         <div class="flex flex-col">
-                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight">Bijli Wala Bhai</span>
+                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight">AJelectric</span>
                             <span class="text-[10px] text-amber-600 hidden sm:block font-semibold">Electrical & Solar Products</span>
                         </div>
                         </a>
@@ -159,8 +159,14 @@
                     <a href="{{ route('home') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                             Home
                         </a>
-                    <a href="{{ route('shop') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('shop') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('home') }}#shop" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'shop' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                             Shop
+                        </a>
+                    <a href="{{ route('home') }}#products" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'products' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                            Products
+                        </a>
+                    <a href="{{ route('home') }}#about" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                            About
                         </a>
                         @auth
                             @if(Auth::user()->isAdmin())
@@ -334,11 +340,23 @@
                         </svg>
                 Home
             </a>
-                    <a href="{{ route('shop') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('shop') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('home') }}#shop" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('home') && request()->get('_fragment') == 'shop' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
                 Shop
+            </a>
+                    <a href="{{ route('home') }}#products" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('home') && request()->get('_fragment') == 'products' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                        </svg>
+                Products
+            </a>
+                    <a href="{{ route('home') }}#about" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                About
             </a>
                     <a href="{{ route('cart.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('cart.index') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -471,7 +489,7 @@
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-3xl">⚡</span>
                         <div>
-                            <h3 class="text-xl font-bold text-white">Bijli Wala Bhai</h3>
+                            <h3 class="text-xl font-bold text-white">AJelectric</h3>
                             <p class="text-xs text-gray-400">Electrical & Solar</p>
                         </div>
                     </div>
@@ -493,11 +511,27 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('shop') }}" class="text-gray-400 hover:text-indigo-400 transition-colors flex items-center text-sm">
+                            <a href="{{ route('home') }}#shop" class="text-gray-400 hover:text-indigo-400 transition-colors flex items-center text-sm">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                                 Shop
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('home') }}#products" class="text-gray-400 hover:text-indigo-400 transition-colors flex items-center text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                                Products
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('home') }}#about" class="text-gray-400 hover:text-indigo-400 transition-colors flex items-center text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                                About
                             </a>
                         </li>
                         <li>
@@ -540,7 +574,7 @@
                             </svg>
                 <div>
                                 <p class="text-gray-400">Email</p>
-                                <p class="text-white">info@bijliwalabhai.com</p>
+                                <p class="text-white">info@ajelectric.com</p>
                 </div>
                         </li>
                         <li class="flex items-start text-sm">
@@ -624,6 +658,55 @@
 
         // Update cart count on page load
         updateCartCount();
+        
+        // Handle anchor links for smooth scrolling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle anchor links in navigation
+            const anchorLinks = document.querySelectorAll('a[href*="#shop"], a[href*="#products"], a[href*="#about"]');
+            anchorLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && href.includes('#')) {
+                        const hash = href.split('#')[1];
+                        const currentPath = window.location.pathname;
+                        const isHomePage = currentPath === '/' || currentPath === '{{ route("home") }}';
+                        
+                        // If we're on home page, scroll directly
+                        if (isHomePage) {
+                            e.preventDefault();
+                            const targetElement = document.getElementById(hash);
+                            if (targetElement) {
+                                targetElement.scrollIntoView({ 
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                                // Update URL without reload
+                                history.pushState(null, null, '#' + hash);
+                            }
+                        } else {
+                            // If we're on a different page, store hash and navigate
+                            sessionStorage.setItem('scrollTo', hash);
+                            // Let the link navigate normally to home page
+                        }
+                    }
+                });
+            });
+            
+            // Check if we need to scroll after page load (from sessionStorage or URL hash)
+            const scrollTo = sessionStorage.getItem('scrollTo') || window.location.hash.substring(1);
+            if (scrollTo) {
+                sessionStorage.removeItem('scrollTo');
+                setTimeout(() => {
+                    const targetElement = document.getElementById(scrollTo);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 300);
+            }
+        });
     </script>
 
     <!-- Alpine.js -->
@@ -653,6 +736,16 @@
         body {
             overflow-x: hidden;
             overflow-y: auto;
+        }
+        
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Offset for fixed header when scrolling to sections */
+        section[id], div[id] {
+            scroll-margin-top: 100px;
         }
     </style>
     

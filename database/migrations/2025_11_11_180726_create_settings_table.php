@@ -24,7 +24,7 @@ return new class extends Migration
         DB::table('settings')->insert([
             [
                 'key' => 'site_name',
-                'value' => 'Bijliwala E-commerce',
+                'value' => 'AJelectric',
                 'type' => 'string',
                 'description' => 'Website name displayed in header and emails',
                 'created_at' => now(),
@@ -32,7 +32,7 @@ return new class extends Migration
             ],
             [
                 'key' => 'site_email',
-                'value' => 'admin@bijliwala.com',
+                'value' => 'admin@ajelectric.com',
                 'type' => 'string',
                 'description' => 'Primary contact email address',
                 'created_at' => now(),

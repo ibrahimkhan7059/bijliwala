@@ -14,7 +14,7 @@ class AdminUserSeeder extends Seeder
     {
         \App\Models\User::create([
             'name' => 'Admin User',
-            'email' => 'admin@bijliwalabhai.com',
+            'email' => 'admin@ajelectric.com',
             'password' => bcrypt('admin123'),
             'phone' => '0333-7449456',
             'role' => 'admin',

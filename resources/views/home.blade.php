@@ -7,7 +7,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Hero Section -->
-        <div class="relative bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden mb-8 md:mb-12">
+        <div class="relative rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden mb-8 md:mb-12" style="background-image: url('{{ asset('images/sectionimg.jfif') }}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+            <!-- Overlay for better text readability -->
+            <div class="absolute inset-0 bg-black/40"></div>
             <!-- Decorative Elements -->
             <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 md:w-48 md:h-48 bg-yellow-300/20 rounded-full blur-3xl"></div>
             <div class="absolute bottom-0 left-0 -mb-4 -ml-4 w-32 h-32 md:w-48 md:h-48 bg-yellow-300/20 rounded-full blur-3xl"></div>
@@ -16,7 +18,7 @@
             <div class="relative px-4 py-8 md:p-12 lg:p-16 text-white text-center">
                 <div class="max-w-4xl mx-auto">
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 leading-tight">
-                        Welcome to <br class="md:hidden"/>Bijli Wala Bhai
+                        Welcome to <br class="md:hidden"/>AJelectric
                     </h1>
                     <p class="text-base md:text-xl lg:text-2xl mb-6 md:mb-8 text-indigo-100 leading-relaxed">
                         Your trusted source for quality electrical and solar products across Pakistan
@@ -48,9 +50,9 @@
             </div>
         </div>
 
-        <!-- Categories Section -->
+        <!-- Categories Section / Shop Section -->
         @if($categories->count() > 0)
-        <div class="mb-8 md:mb-12 bg-gradient-to-br from-orange-100/80 via-amber-50/90 to-yellow-100/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border-2 border-orange-200">
+        <div id="shop" class="mb-8 md:mb-12 bg-gradient-to-br from-orange-100/80 via-amber-50/90 to-yellow-100/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border-2 border-orange-200">
             <div class="flex items-center justify-between mb-4 md:mb-6">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-900">Shop by Category</h2>
                 <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,9 +79,9 @@
         </div>
         @endif
 
-        <!-- Featured Products -->
+        <!-- Featured Products / Products Section -->
         @if($featuredProducts->count() > 0)
-        <div class="mb-8 md:mb-12 bg-gradient-to-br from-orange-100/90 via-amber-100/90 to-yellow-100/90 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border-2 border-orange-200">
+        <div id="products" class="mb-8 md:mb-12 bg-gradient-to-br from-orange-100/90 via-amber-100/90 to-yellow-100/90 backdrop-blur-sm rounded-3xl p-6 md:p-8 shadow-xl border-2 border-orange-200">
             <div class="flex justify-between items-center mb-4 md:mb-6">
                 <div class="flex items-center space-x-2">
                     <span class="text-2xl">⭐</span>
@@ -534,10 +536,10 @@
         </div>
         @endif
 
-        <!-- Contact Info -->
-        <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-2xl md:rounded-3xl p-6 md:p-10 text-white shadow-2xl">
+        <!-- Contact Info / About Section -->
+        <div id="about" class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-2xl md:rounded-3xl p-6 md:p-10 text-white shadow-2xl">
             <div class="text-center mb-6 md:mb-8">
-                <h3 class="text-2xl md:text-3xl font-bold mb-2">Get in Touch</h3>
+                <h3 class="text-2xl md:text-3xl font-bold mb-2">About AJelectric</h3>
                 <p class="text-gray-300 text-sm md:text-base">We're here to help you with all your electrical needs</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">
