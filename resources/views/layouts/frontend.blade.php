@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
 
-    <title>{{ config('app.name', 'AJelectric') }} - @yield('title', 'Electrical & Solar Products')</title>
+    <title>@yield('title', 'AJ Electric')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

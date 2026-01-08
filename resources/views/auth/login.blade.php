@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
     
-    <title>{{ config('app.name', 'AJelectric') }} - Authentication</title>
+    <title>AJ Electric - Login</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 relative">

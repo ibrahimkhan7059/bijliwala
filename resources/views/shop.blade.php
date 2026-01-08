@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'Shop - All Products')
+@section('title', 'AJ Electric - Shop')
 
 @section('content')
 <div class="py-4 md:py-8" style="background: linear-gradient(180deg, rgba(255,245,230,0.5) 0%, rgba(255,237,213,0.8) 50%, rgba(255,228,196,0.5) 100%); min-height: calc(100vh - 200px);">

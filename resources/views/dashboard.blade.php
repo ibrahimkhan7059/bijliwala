@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'My Dashboard')
+@section('title', 'AJ Electric - Dashboard')
 
 @section('content')
 <div class="py-8 bg-gray-50 min-h-screen">

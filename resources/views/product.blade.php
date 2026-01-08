@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', $product->name)
+@section('title', 'AJ Electric - ' . $product->name)
 
 @push('styles')
 <style>

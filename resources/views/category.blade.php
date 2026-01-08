@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', $category->name)
+@section('title', 'AJ Electric - ' . $category->name)
 
 @section('content')
 <div class="py-8">
