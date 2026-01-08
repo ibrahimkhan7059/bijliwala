@@ -726,8 +726,8 @@
         });
     </script>
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js - Load from CDN (works even if Vite assets not built) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
     
     <style>
         /* Hide elements with x-cloak until Alpine.js is ready */
@@ -767,35 +767,46 @@
     </style>
     
     <script>
-        // Handle body scroll lock when menu opens/closes - only on mobile
-        document.addEventListener('DOMContentLoaded', () => {
-            if (window.innerWidth <= 768) {
-                const checkAlpine = setInterval(() => {
-                    if (window.Alpine) {
-                        clearInterval(checkAlpine);
-                        
-                        const body = document.body;
-                        const checkMenuState = () => {
-                            try {
-                                const data = Alpine.$data(body);
-                                if (data && data.mobileMenuOpen) {
-                                    body.classList.add('menu-open');
-                                } else {
-                                    body.classList.remove('menu-open');
-                                }
-                            } catch (e) {
+        // Ensure Alpine.js is loaded and initialized
+        function initAlpineMenu() {
+            if (window.Alpine && window.Alpine.$data) {
+                // Handle body scroll lock when menu opens/closes - only on mobile
+                if (window.innerWidth <= 768) {
+                    const body = document.body;
+                    const checkMenuState = () => {
+                        try {
+                            const data = Alpine.$data(body);
+                            if (data && data.mobileMenuOpen) {
+                                body.classList.add('menu-open');
+                            } else {
                                 body.classList.remove('menu-open');
                             }
-                        };
-                        
-                        setInterval(checkMenuState, 200);
-                    }
-                }, 100);
-                
-                setTimeout(() => clearInterval(checkAlpine), 5000);
+                        } catch (e) {
+                            body.classList.remove('menu-open');
+                        }
+                    };
+                    
+                    setInterval(checkMenuState, 200);
+                }
             }
-        });
+        }
         
+        // Wait for Alpine.js to load
+        if (window.Alpine) {
+            initAlpineMenu();
+        } else {
+            // Check for Alpine.js every 100ms for up to 5 seconds
+            const checkAlpine = setInterval(() => {
+                if (window.Alpine) {
+                    clearInterval(checkAlpine);
+                    initAlpineMenu();
+                }
+            }, 100);
+            
+            setTimeout(() => clearInterval(checkAlpine), 5000);
+        }
+        
+        // Handle window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
                 document.body.classList.remove('menu-open');
