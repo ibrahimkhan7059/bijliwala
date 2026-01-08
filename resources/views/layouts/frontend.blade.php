@@ -155,7 +155,7 @@
                 </div>
 
                 <!-- Desktop Navigation Links (Center) -->
-                <div class="hidden lg:flex items-center justify-center flex-1 space-x-1 mx-4">
+                <div class="hidden md:flex items-center justify-center flex-1 space-x-1 mx-4">
                     <a href="{{ route('home') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                         Home
                     </a>
