@@ -168,6 +168,9 @@
                     <a href="{{ route('home') }}#about" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                             About
                         </a>
+                    <a href="{{ route('blog.index') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                            Blog
+                        </a>
                         @auth
                             @if(Auth::user()->isAdmin())
                             <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
@@ -358,6 +361,12 @@
                         </svg>
                 About
             </a>
+                    <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                Blog
+            </a>
                     <a href="{{ route('cart.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('cart.index') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -532,6 +541,14 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
                                 About
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('blog.index') }}" class="text-gray-400 hover:text-indigo-400 transition-colors flex items-center text-sm">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                                Blog
                             </a>
                         </li>
                         <li>

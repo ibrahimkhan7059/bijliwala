@@ -96,6 +96,16 @@
                         Categories
                     </a>
 
+                    <!-- Blog -->
+                    <a href="{{ route('admin.blogs.index') }}" 
+                        @click="sidebarOpen = false"
+                        class="group flex items-center px-3 py-2.5 md:py-3 text-xs sm:text-sm font-semibold rounded-xl {{ request()->routeIs('admin.blogs.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 hover:text-orange-700' }} transition-all">
+                        <svg class="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                        </svg>
+                        Blog
+                    </a>
+
                     <!-- Orders -->
                     <a href="{{ route('admin.orders.index') }}" 
                         @click="sidebarOpen = false"
