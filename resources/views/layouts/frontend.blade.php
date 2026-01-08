@@ -132,9 +132,9 @@
     <!-- Navigation -->
     <nav class="bg-gradient-to-r from-white/98 via-orange-50/30 to-white/98 backdrop-blur-md border-b-2 border-orange-200 sticky top-0 z-50 shadow-xl">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 md:h-20">
-                    <!-- Logo -->
-                <div class="flex items-center">
+            <div class="flex items-center h-16 md:h-20">
+                <!-- Logo Section -->
+                <div class="flex items-center flex-shrink-0">
                     <!-- Mobile Menu Button (Open) -->
                     <button @click="mobileMenuOpen = true" 
                             type="button"
@@ -148,57 +148,57 @@
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
                         <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
                         <div class="flex flex-col">
-                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight">AJelectric</span>
-                            <span class="text-[10px] text-amber-600 hidden sm:block font-semibold">Electrical & Solar Products</span>
+                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">AJelectric</span>
+                            <span class="text-[10px] text-amber-600 hidden lg:block font-semibold whitespace-nowrap">Electrical & Solar Products</span>
                         </div>
-                        </a>
-                    </div>
+                    </a>
+                </div>
 
-                <!-- Desktop Navigation Links -->
-                <div class="hidden md:flex items-center space-x-1">
-                    <a href="{{ route('home') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                            Home
+                <!-- Desktop Navigation Links (Center) -->
+                <div class="hidden lg:flex items-center justify-center flex-1 space-x-1 mx-4">
+                    <a href="{{ route('home') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        Home
+                    </a>
+                    <a href="{{ route('home') }}#shop" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') && request()->get('_fragment') == 'shop' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        Shop
+                    </a>
+                    <a href="{{ route('home') }}#products" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') && request()->get('_fragment') == 'products' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        Products
+                    </a>
+                    <a href="{{ route('home') }}#about" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        About
+                    </a>
+                    <a href="{{ route('blog.index') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        Blog
+                    </a>
+                    @auth
+                        @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                            Admin Panel
                         </a>
-                    <a href="{{ route('home') }}#shop" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'shop' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                            Shop
+                        @else
+                        <a href="{{ route('dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                            Dashboard
                         </a>
-                    <a href="{{ route('home') }}#products" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'products' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                            Products
-                        </a>
-                    <a href="{{ route('home') }}#about" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                            About
-                        </a>
-                    <a href="{{ route('blog.index') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                            Blog
-                        </a>
-                        @auth
-                            @if(Auth::user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('admin.dashboard') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                                    Admin Panel
-                                </a>
-                            @else
-                            <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
-                                    Dashboard
-                                </a>
-                            @endif
-                        @endauth
-                    </div>
+                        @endif
+                    @endauth
+                </div>
 
                 <!-- Right Side Actions -->
-                <div class="flex items-center space-x-2 md:space-x-4">
+                <div class="flex items-center space-x-1 md:space-x-2 flex-shrink-0">
                     <!-- Search Icon (Mobile) -->
-                    <button onclick="document.getElementById('mobile-search').classList.toggle('hidden')" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+                    <button onclick="document.getElementById('mobile-search').classList.toggle('hidden')" class="lg:hidden p-2 rounded-lg hover:bg-gray-100">
                         <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </button>
 
                     <!-- Desktop Search -->
-                    <form action="{{ route('shop') }}" method="GET" class="hidden md:block">
+                    <form action="{{ route('shop') }}" method="GET" class="hidden lg:block">
                         <div class="relative">
-                        <input type="search" name="search" placeholder="Search products..." 
-                               value="{{ request('search') }}"
-                                   class="pl-10 pr-4 py-2 w-64 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
+                            <input type="search" name="search" placeholder="Search..." 
+                                   value="{{ request('search') }}"
+                                   class="pl-10 pr-4 py-2 w-48 xl:w-56 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm">
                             <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
@@ -207,7 +207,7 @@
 
                     <!-- Wishlist (Authenticated Users Only) -->
                     @auth
-                    <a href="{{ route('wishlist.index') }}" class="relative p-2 rounded-lg hover:bg-amber-50 transition-all" title="Wishlist">
+                    <a href="{{ route('wishlist.index') }}" class="hidden md:block relative p-2 rounded-lg hover:bg-amber-50 transition-all" title="Wishlist">
                         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
@@ -216,7 +216,7 @@
 
                     <!-- Cart -->
                     <a href="{{ route('cart.index') }}" class="relative p-2 rounded-lg hover:bg-amber-50 transition-all" title="Shopping Cart">
-                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow-lg">0</span>
@@ -224,25 +224,27 @@
 
                     <!-- User Menu -->
                     @auth
-                        <div x-data="{ open: false }" class="relative hidden md:block">
-                            <button @click="open = !open" class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-amber-50 transition-all">
-                                <div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg">
+                        <div x-data="{ open: false }" @click.away="open = false" class="relative hidden md:block">
+                            <button @click="open = !open" type="button" class="flex items-center space-x-1 xl:space-x-2 px-2 xl:px-3 py-2 rounded-lg hover:bg-amber-50 transition-all focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                <div class="w-8 h-8 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg flex-shrink-0">
                                     {{ substr(Auth::user()->name, 0, 1) }}
                                 </div>
-                                <span class="text-sm font-semibold text-gray-700 hidden lg:block">{{ Auth::user()->name }}</span>
-                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <span class="text-sm font-semibold text-gray-700 hidden xl:block max-w-[100px] truncate">{{ Auth::user()->name }}</span>
+                                <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
 
-                            <div x-show="open" @click.away="open = false" 
+                            <div x-show="open" 
+                                 x-cloak
+                                 style="display: none;"
                                  x-transition:enter="transition ease-out duration-200"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
                                  x-transition:leave="transition ease-in duration-150"
                                  x-transition:leave-start="opacity-100 scale-100"
                                  x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 ring-1 ring-black ring-opacity-5">
+                                 class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl py-2 ring-1 ring-black ring-opacity-5 z-50">
                                 <div class="px-4 py-3 border-b border-gray-100">
                                     <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
                                     <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
@@ -268,26 +270,27 @@
                                     </a>
                                 @endif
                                 <div class="border-t border-gray-100 mt-2 pt-2">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors text-left">
                                             <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                        </svg>
-                                        Logout
-                                    </button>
-                                </form>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                            </svg>
+                                            Logout
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     @else
-                        <a href="{{ route('login') }}" class="hidden md:block text-sm font-semibold text-gray-700 hover:text-indigo-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-all">
+                        <a href="{{ route('login') }}" class="hidden lg:block text-sm font-semibold text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-lg hover:bg-gray-100 transition-all whitespace-nowrap">
                             Login
                         </a>
-                        <a href="{{ route('register') }}" class="hidden md:block btn-primary text-sm px-4 py-2 rounded-lg">
+                        <a href="{{ route('register') }}" class="hidden lg:block btn-primary text-sm px-3 py-2 rounded-lg whitespace-nowrap">
                             Register
                         </a>
                     @endauth
+                </div>
             </div>
         </div>
 
