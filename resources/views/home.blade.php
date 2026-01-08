@@ -18,7 +18,7 @@
             <div class="relative px-4 py-8 md:p-12 lg:p-16 text-white text-center">
                 <div class="max-w-4xl mx-auto">
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 leading-tight">
-                        Welcome to <br class="md:hidden"/>AJelectric
+                        Welcome to <br class="md:hidden"/>AJ Electric
                     </h1>
                     <p class="text-base md:text-xl lg:text-2xl mb-6 md:mb-8 text-indigo-100 leading-relaxed">
                         Your trusted source for quality electrical and solar products across Pakistan
@@ -539,7 +539,7 @@
         <!-- Contact Info / About Section -->
         <div id="about" class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-2xl md:rounded-3xl p-6 md:p-10 text-white shadow-2xl">
             <div class="text-center mb-6 md:mb-8">
-                <h3 class="text-2xl md:text-3xl font-bold mb-2">About AJelectric</h3>
+                <h3 class="text-2xl md:text-3xl font-bold mb-2">About AJ Electric</h3>
                 <p class="text-gray-300 text-sm md:text-base">We're here to help you with all your electrical needs</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">

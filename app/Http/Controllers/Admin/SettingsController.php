@@ -216,7 +216,7 @@ class SettingsController extends Controller
     {
         return [
             // General Settings
-            'site_name' => $this->getSetting('site_name', 'AJelectric'),
+            'site_name' => $this->getSetting('site_name', 'AJ Electric'),
             'site_email' => $this->getSetting('site_email', 'admin@ajelectric.com'),
             'site_phone' => $this->getSetting('site_phone', '+92-300-1234567'),
             'site_address' => $this->getSetting('site_address', 'Karachi, Pakistan'),
@@ -233,7 +233,7 @@ class SettingsController extends Controller
             'mail_username' => $this->getSetting('mail_username', ''),
             'mail_encryption' => $this->getSetting('mail_encryption', 'tls'),
             'mail_from_address' => $this->getSetting('mail_from_address', 'noreply@ajelectric.com'),
-            'mail_from_name' => $this->getSetting('mail_from_name', 'AJelectric'),
+            'mail_from_name' => $this->getSetting('mail_from_name', 'AJ Electric'),
             
             // Security Settings
             'session_lifetime' => $this->getSetting('session_lifetime', 120),

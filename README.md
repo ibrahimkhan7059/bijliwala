@@ -1,4 +1,4 @@
-# AJelectric - E-commerce Website
+# AJ Electric - E-commerce Website
 
 Laravel-based e-commerce platform for electrical and solar products.
 

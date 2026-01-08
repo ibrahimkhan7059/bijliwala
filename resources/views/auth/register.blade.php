@@ -20,10 +20,10 @@
             <!-- Header Section -->
             <div class="text-center animate-slide-up">
                 <div class="mx-auto h-20 w-20 mb-6 animate-bounce shadow-2xl">
-                    <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-20 w-20 object-contain rounded-3xl">
+                    <img src="{{ asset('images/logo.avif') }}" alt="AJ Electric Logo" class="h-20 w-20 object-contain rounded-3xl">
                 </div>
                 <h1 class="text-4xl font-bold bg-gradient-to-r from-orange-500 to-blue-600 bg-clip-text text-transparent mb-2">Welcome!</h1>
-                <p class="text-gray-600 text-lg">AJelectric</p>
+                <p class="text-gray-600 text-lg">AJ Electric</p>
             </div>
 
             <!-- Toggle Buttons -->

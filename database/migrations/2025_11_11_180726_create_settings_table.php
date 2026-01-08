@@ -24,7 +24,7 @@ return new class extends Migration
         DB::table('settings')->insert([
             [
                 'key' => 'site_name',
-                'value' => 'AJelectric',
+                'value' => 'AJ Electric',
                 'type' => 'string',
                 'description' => 'Website name displayed in header and emails',
                 'created_at' => now(),

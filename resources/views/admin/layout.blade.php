@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('images/logo.avif') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.avif') }}">
     
-    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'AJelectric') }}</title>
+    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'AJ Electric') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="flex flex-col">
                         <span class="text-base md:text-lg lg:text-xl font-bold text-white leading-tight">Admin Panel</span>
-                        <span class="text-[9px] md:text-[10px] text-yellow-100">AJelectric</span>
+                        <span class="text-[9px] md:text-[10px] text-yellow-100">AJ Electric</span>
                     </div>
                 </div>
                 <!-- Mobile close button -->

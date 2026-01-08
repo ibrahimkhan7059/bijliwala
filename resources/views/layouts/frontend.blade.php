@@ -146,9 +146,9 @@
                     </button>
                     
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                        <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
+                        <img src="{{ asset('images/logo.avif') }}" alt="AJ Electric Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
                         <div class="flex flex-col">
-                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">AJelectric</span>
+                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">AJ Electric</span>
                             <span class="text-[10px] text-amber-600 hidden lg:block font-semibold whitespace-nowrap">Electrical & Solar Products</span>
                         </div>
                     </a>
@@ -501,7 +501,7 @@
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-3xl">⚡</span>
                         <div>
-                            <h3 class="text-xl font-bold text-white">AJelectric</h3>
+                            <h3 class="text-xl font-bold text-white">AJ Electric</h3>
                             <p class="text-xs text-gray-400">Electrical & Solar</p>
                         </div>
                     </div>

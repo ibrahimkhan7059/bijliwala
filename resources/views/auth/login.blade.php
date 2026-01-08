@@ -28,10 +28,10 @@
             <!-- Header Section -->
             <div class="text-center animate-slide-up">
                 <div class="mx-auto h-16 w-16 md:h-20 md:w-20 mb-4 md:mb-6 animate-bounce shadow-2xl">
-                    <img src="{{ asset('images/logo.avif') }}" alt="AJelectric Logo" class="h-16 w-16 md:h-20 md:w-20 object-contain rounded-3xl">
+                    <img src="{{ asset('images/logo.avif') }}" alt="AJ Electric Logo" class="h-16 w-16 md:h-20 md:w-20 object-contain rounded-3xl">
                 </div>
                 <h1 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-600 via-orange-500 to-red-600 bg-clip-text text-transparent mb-2">Welcome Back!</h1>
-                <p class="text-gray-600 text-base md:text-lg font-medium">AJelectric</p>
+                <p class="text-gray-600 text-base md:text-lg font-medium">AJ Electric</p>
             </div>
 
             <!-- Toggle Buttons -->
