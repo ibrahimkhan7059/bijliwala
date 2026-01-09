@@ -116,7 +116,7 @@
                                 <div class="flex-shrink-0">
                                     <div class="w-24 h-24 rounded-lg border-2 border-gray-300 overflow-hidden bg-white shadow-sm">
                                         <img id="logoPreview" 
-                                             src="{{ $settings['site_logo'] ? asset('storage/' . $settings['site_logo']) : asset('images/logo.avif') }}" 
+                                             src="{{ $settings['site_logo'] ? asset('storage/' . $settings['site_logo']) . '?v=' . time() : asset('images/logo.avif') }}" 
                                              alt="Current Logo" 
                                              class="w-full h-full object-contain p-2">
                                     </div>

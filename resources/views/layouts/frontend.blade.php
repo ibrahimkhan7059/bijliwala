@@ -146,7 +146,7 @@
                     </button>
                     
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                        <img src="{{ $siteSettings->site_logo ? asset('storage/' . $siteSettings->site_logo) : asset('images/logo.avif') }}" alt="{{ $siteSettings->site_name }} Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
+                        <img src="{{ $siteSettings->site_logo ? asset('storage/' . $siteSettings->site_logo) . '?v=' . time() : asset('images/logo.avif') }}" alt="{{ $siteSettings->site_name }} Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
                         <div class="flex flex-col">
                             <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">{{ $siteSettings->site_name }}</span>
                             <span class="text-[10px] text-amber-600 hidden lg:block font-semibold whitespace-nowrap">Electrical & Solar Products</span>
