@@ -33,7 +33,7 @@ class SettingsController extends Controller
             'site_email' => 'required|email|max:255',
             'site_phone' => 'nullable|string|max:20',
             'site_address' => 'nullable|string|max:500',
-            'site_logo' => 'nullable|image|mimes:jpeg,jpg,png,webp,avif|max:2048',
+            'site_logo' => 'nullable|file|mimes:jpeg,jpg,png,webp,avif|mimetypes:image/jpeg,image/jpg,image/png,image/webp,image/avif|max:2048',
             'currency' => 'required|string|max:3',
             'currency_symbol' => 'required|string|max:5',
             'timezone' => 'required|string|max:50',
