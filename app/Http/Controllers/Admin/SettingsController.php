@@ -56,9 +56,21 @@ class SettingsController extends Controller
             $oldLogo = $this->getSetting('site_logo');
             if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
                 Storage::disk('public')->delete($oldLogo);
+                // Also delete from public/storage if exists (Windows workaround)
+                $publicPath = public_path('storage/' . $oldLogo);
+                if (file_exists($publicPath)) {
+                    @unlink($publicPath);
+                }
             }
             
             $this->updateSetting('site_logo', 'settings/' . $filename);
+            
+            // Copy to public/storage for Windows compatibility
+            $publicSettingsPath = public_path('storage/settings');
+            if (!file_exists($publicSettingsPath)) {
+                mkdir($publicSettingsPath, 0755, true);
+            }
+            copy($logoPath . '/' . $filename, $publicSettingsPath . '/' . $filename);
         }
 
         $this->updateSetting('site_name', $request->site_name);
