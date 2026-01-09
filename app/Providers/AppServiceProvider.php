@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
                     'site_email' => $settingsData['site_email'] ?? 'admin@ajelectric.com',
                     'site_phone' => $settingsData['site_phone'] ?? '+92-300-1234567',
                     'site_address' => $settingsData['site_address'] ?? 'Karachi, Pakistan',
+                    'site_logo' => $settingsData['site_logo'] ?? null,
                     'currency_symbol' => $settingsData['currency_symbol'] ?? 'Rs.',
                 ];
             });

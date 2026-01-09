@@ -33,12 +33,33 @@ class SettingsController extends Controller
             'site_email' => 'required|email|max:255',
             'site_phone' => 'nullable|string|max:20',
             'site_address' => 'nullable|string|max:500',
+            'site_logo' => 'nullable|image|mimes:jpeg,jpg,png,webp,avif|max:2048',
             'currency' => 'required|string|max:3',
             'currency_symbol' => 'required|string|max:5',
             'timezone' => 'required|string|max:50',
             'date_format' => 'required|string|max:20',
             'items_per_page' => 'required|integer|min:5|max:100'
         ]);
+
+        // Handle logo upload
+        if ($request->hasFile('site_logo')) {
+            $logoPath = storage_path('app/public/settings');
+            if (!file_exists($logoPath)) {
+                mkdir($logoPath, 0755, true);
+            }
+            
+            $logo = $request->file('site_logo');
+            $filename = 'logo_' . time() . '.' . $logo->getClientOriginalExtension();
+            $logo->move($logoPath, $filename);
+            
+            // Delete old logo if exists
+            $oldLogo = $this->getSetting('site_logo');
+            if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
+                Storage::disk('public')->delete($oldLogo);
+            }
+            
+            $this->updateSetting('site_logo', 'settings/' . $filename);
+        }
 
         $this->updateSetting('site_name', $request->site_name);
         $this->updateSetting('site_email', $request->site_email);
@@ -220,6 +241,7 @@ class SettingsController extends Controller
             'site_email' => $this->getSetting('site_email', 'admin@ajelectric.com'),
             'site_phone' => $this->getSetting('site_phone', '+92-300-1234567'),
             'site_address' => $this->getSetting('site_address', 'Karachi, Pakistan'),
+            'site_logo' => $this->getSetting('site_logo', null),
             'currency' => $this->getSetting('currency', 'PKR'),
             'currency_symbol' => $this->getSetting('currency_symbol', 'Rs.'),
             'timezone' => $this->getSetting('timezone', 'Asia/Karachi'),
