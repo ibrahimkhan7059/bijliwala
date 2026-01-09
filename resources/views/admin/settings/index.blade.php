@@ -131,7 +131,7 @@
                                            class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg"
                                            onchange="previewLogo(event)">
                                     <p class="mt-2 text-xs text-gray-500">
-                                        Upload a logo (JPG, PNG, WEBP, AVIF). Recommended size: 200x200px
+                                        <strong>📏 Size:</strong> Max 2MB | <strong>✅ Best:</strong> 200x200px (square) | <strong>🎨 Format:</strong> PNG recommended for transparency
                                     </p>
                                 </div>
                             </div>
