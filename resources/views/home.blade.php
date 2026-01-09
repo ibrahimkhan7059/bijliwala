@@ -18,7 +18,7 @@
             <div class="relative px-4 py-8 md:p-12 lg:p-16 text-white text-center">
                 <div class="max-w-4xl mx-auto">
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 leading-tight">
-                        Welcome to <br class="md:hidden"/>AJ Electric
+                        Welcome to <br class="md:hidden"/>{{ $siteSettings->site_name }}
                     </h1>
                     <p class="text-base md:text-xl lg:text-2xl mb-6 md:mb-8 text-indigo-100 leading-relaxed">
                         Your trusted source for quality electrical and solar products across Pakistan
