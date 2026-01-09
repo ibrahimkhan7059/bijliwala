@@ -28,7 +28,7 @@
             <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover border-2 border-orange-200 hover:border-red-400 transition-all">
                 <!-- Video Thumbnail -->
                 @if($blog->youtube_thumbnail)
-                <a href="{{ $blog->youtube_url }}" target="_blank" rel="noopener noreferrer" class="block relative aspect-video bg-gray-100 overflow-hidden group">
+                <a href="{{ route('blog.show', $blog->slug) }}" class="block relative aspect-video bg-gray-100 overflow-hidden group">
                     <img src="{{ $blog->youtube_thumbnail }}" 
                          alt="{{ $blog->title }}" 
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform">
@@ -50,7 +50,7 @@
                 <!-- Content -->
                 <div class="p-4 md:p-5">
                     <h3 class="text-lg md:text-xl font-bold text-gray-900 mb-2 line-clamp-2 hover:text-red-600 transition-colors">
-                        <a href="{{ $blog->youtube_url }}" target="_blank" rel="noopener noreferrer">
+                        <a href="{{ route('blog.show', $blog->slug) }}">
                             {{ $blog->title }}
                         </a>
                     </h3>
@@ -79,13 +79,11 @@
                             </div>
                         </div>
 
-                        <a href="{{ $blog->youtube_url }}" 
-                           target="_blank" 
-                           rel="noopener noreferrer"
+                        <a href="{{ route('blog.show', $blog->slug) }}" 
                            class="inline-flex items-center px-3 md:px-4 py-2 bg-red-600 text-white text-xs md:text-sm font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md hover:shadow-lg">
-                            <span>Watch</span>
-                            <svg class="w-3 h-3 md:w-4 md:h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            <span>Watch Now</span>
+                            <svg class="w-3 h-3 md:w-4 md:h-4 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
                             </svg>
                         </a>
                     </div>
