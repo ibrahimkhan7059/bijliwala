@@ -298,6 +298,7 @@ class SettingsController extends Controller
         );
         
         Cache::forget("setting_{$key}");
+        Cache::forget('site_settings'); // Clear global settings cache
     }
 
     /**

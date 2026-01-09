@@ -146,9 +146,9 @@
                     </button>
                     
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                        <img src="{{ asset('images/logo.avif') }}" alt="AJ Electric Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
+                        <img src="{{ asset('images/logo.avif') }}" alt="{{ $siteSettings->site_name }} Logo" class="h-10 w-10 md:h-12 md:w-12 object-contain">
                         <div class="flex flex-col">
-                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">AJ Electric</span>
+                            <span class="text-lg md:text-xl font-bold gradient-text leading-tight whitespace-nowrap">{{ $siteSettings->site_name }}</span>
                             <span class="text-[10px] text-amber-600 hidden lg:block font-semibold whitespace-nowrap">Electrical & Solar Products</span>
                         </div>
                     </a>
@@ -501,7 +501,7 @@
                     <div class="flex items-center space-x-2 mb-4">
                         <span class="text-3xl">⚡</span>
                         <div>
-                            <h3 class="text-xl font-bold text-white">AJ Electric</h3>
+                            <h3 class="text-xl font-bold text-white">{{ $siteSettings->site_name }}</h3>
                             <p class="text-xs text-gray-400">Electrical & Solar</p>
                         </div>
                     </div>
@@ -584,8 +584,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                             </svg>
                             <div>
-                                <p class="text-gray-400">WhatsApp Only</p>
-                                <p class="text-white font-semibold">0333-7449456</p>
+                                <p class="text-gray-400">Contact</p>
+                                <p class="text-white font-semibold">{{ $siteSettings->site_phone }}</p>
                             </div>
                         </li>
                         <li class="flex items-start text-sm">
@@ -594,7 +594,7 @@
                             </svg>
                 <div>
                                 <p class="text-gray-400">Email</p>
-                                <p class="text-white">info@ajelectric.com</p>
+                                <p class="text-white">{{ $siteSettings->site_email }}</p>
                 </div>
                         </li>
                         <li class="flex items-start text-sm">
@@ -604,7 +604,7 @@
                             </svg>
                 <div>
                                 <p class="text-gray-400">Location</p>
-                                <p class="text-white">Rahim Yar Khan, Pakistan</p>
+                                <p class="text-white">{{ $siteSettings->site_address }}</p>
                             </div>
                         </li>
                     </ul>

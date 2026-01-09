@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Share settings with all views
+        View::composer('*', function ($view) {
+            $settings = Cache::remember('site_settings', 3600, function () {
+                $settingsData = DB::table('settings')->pluck('value', 'key')->toArray();
+                
+                return [
+                    'site_name' => $settingsData['site_name'] ?? 'AJ Electric',
+                    'site_email' => $settingsData['site_email'] ?? 'admin@ajelectric.com',
+                    'site_phone' => $settingsData['site_phone'] ?? '+92-300-1234567',
+                    'site_address' => $settingsData['site_address'] ?? 'Karachi, Pakistan',
+                    'currency_symbol' => $settingsData['currency_symbol'] ?? 'Rs.',
+                ];
+            });
+            
+            $view->with('siteSettings', (object) $settings);
+        });
     }
 }

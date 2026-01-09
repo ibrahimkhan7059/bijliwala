@@ -539,7 +539,7 @@
         <!-- Contact Info / About Section -->
         <div id="about" class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-2xl md:rounded-3xl p-6 md:p-10 text-white shadow-2xl">
             <div class="text-center mb-6 md:mb-8">
-                <h3 class="text-2xl md:text-3xl font-bold mb-2">About AJ Electric</h3>
+                <h3 class="text-2xl md:text-3xl font-bold mb-2">About {{ $siteSettings->site_name }}</h3>
                 <p class="text-gray-300 text-sm md:text-base">We're here to help you with all your electrical needs</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-6">
@@ -551,7 +551,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-300 text-xs md:text-sm mb-1">Store Location</p>
-                    <p class="font-bold text-sm md:text-base">Gulshan-e-Usman<br/>Rahim Yar Khan</p>
+                    <p class="font-bold text-sm md:text-base">{!! nl2br(e($siteSettings->site_address)) !!}</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all text-center">
                     <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-lg">
@@ -559,8 +559,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                         </svg>
                     </div>
-                    <p class="text-gray-300 text-xs md:text-sm mb-1">WhatsApp Only</p>
-                    <p class="font-bold text-sm md:text-base">0333-7449456</p>
+                    <p class="text-gray-300 text-xs md:text-sm mb-1">Contact</p>
+                    <p class="font-bold text-sm md:text-base">{{ $siteSettings->site_phone }}</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all text-center">
                     <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
