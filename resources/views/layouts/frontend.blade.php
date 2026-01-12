@@ -137,6 +137,7 @@
                 <div class="flex items-center flex-shrink-0">
                     <!-- Mobile Menu Button (Open) -->
                     <button @click="mobileMenuOpen = true" 
+                            onclick="document.getElementById('mobile-sidebar').classList.remove('hidden'); document.getElementById('mobile-overlay').classList.remove('hidden'); document.body.classList.add('menu-open');"
                             type="button"
                             class="md:hidden mr-3 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
                             aria-label="Open menu">
@@ -310,17 +311,18 @@
         </div>
 
         <!-- Mobile Menu Sidebar -->
-        <div x-show="mobileMenuOpen" 
+        <div id="mobile-sidebar"
+             x-show="mobileMenuOpen" 
              x-cloak
-             @click.away="if(window.innerWidth < 768) mobileMenuOpen = false"
-             @keydown.escape.window="mobileMenuOpen = false"
+             @click.away="if(window.innerWidth < 768) { mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open'); }"
+             @keydown.escape.window="mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
              x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="-translate-x-full"
-             x-transition:enter-end="translate-x-0"
+             x-transition:enter-start="-translate-x-full opacity-0"
+             x-transition:enter-end="translate-x-0 opacity-100"
              x-transition:leave="transition ease-in duration-300"
-             x-transition:leave-start="translate-x-0"
-             x-transition:leave-end="-translate-x-full"
-             class="fixed top-0 left-0 w-64 bg-white shadow-2xl md:hidden z-[100] overflow-y-auto"
+             x-transition:leave-start="translate-x-0 opacity-100"
+             x-transition:leave-end="-translate-x-full opacity-0"
+             class="fixed top-0 left-0 w-64 bg-white shadow-2xl md:hidden z-[100] overflow-y-auto hidden"
              style="height: 100vh; height: 100dvh; bottom: 0;"
              role="dialog"
              aria-modal="true"
@@ -329,11 +331,12 @@
                 <!-- Close Button Inside Sidebar -->
                 <div class="flex items-center justify-between mb-6">
                     <button @click="mobileMenuOpen = false" 
+                            onclick="document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
                             type="button"
                             class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
                             aria-label="Close menu">
                         <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                     <span class="text-xl font-bold gradient-text">Menu</span>
@@ -437,16 +440,18 @@
         </div>
 
         <!-- Mobile Menu Overlay -->
-        <div x-show="mobileMenuOpen" 
+        <div id="mobile-overlay"
+             x-show="mobileMenuOpen" 
              x-cloak
-             @click="mobileMenuOpen = false"
+             @click="mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
+             onclick="document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
-             class="fixed inset-0 bg-black bg-opacity-50 md:hidden z-[90]"></div>
+             class="fixed inset-0 bg-black bg-opacity-50 md:hidden z-[90] hidden"></div>
     </nav>
 
     <!-- Flash Messages -->
@@ -729,8 +734,18 @@
         });
     </script>
 
-    <!-- Alpine.js - Load from CDN (works even if Vite assets not built) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+    <!-- Alpine.js fallback - Only load from CDN if Vite Alpine not available -->
+    <script>
+        // Wait for Vite Alpine.js to load, if not available after 1 second, load from CDN
+        setTimeout(() => {
+            if (!window.Alpine) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js';
+                script.defer = true;
+                document.head.appendChild(script);
+            }
+        }, 1000);
+    </script>
     
     <style>
         /* Hide elements with x-cloak until Alpine.js is ready */
@@ -747,7 +762,11 @@
             }
             
             /* Ensure sidebar is properly positioned and visible when open */
-            nav[x-data] [x-show="mobileMenuOpen"] {
+            #mobile-sidebar:not(.hidden) {
+                display: block !important;
+            }
+            
+            #mobile-overlay:not(.hidden) {
                 display: block !important;
             }
         }
@@ -770,49 +789,101 @@
     </style>
     
     <script>
-        // Ensure Alpine.js is loaded and initialized
-        function initAlpineMenu() {
-            if (window.Alpine && window.Alpine.$data) {
-                // Handle body scroll lock when menu opens/closes - only on mobile
-                if (window.innerWidth <= 768) {
-                    const body = document.body;
-                    const checkMenuState = () => {
-                        try {
-                            const data = Alpine.$data(body);
-                            if (data && data.mobileMenuOpen) {
-                                body.classList.add('menu-open');
-                            } else {
-                                body.classList.remove('menu-open');
-                            }
-                        } catch (e) {
-                            body.classList.remove('menu-open');
-                        }
-                    };
-                    
-                    setInterval(checkMenuState, 200);
-                }
-            }
-        }
-        
-        // Wait for Alpine.js to load
-        if (window.Alpine) {
-            initAlpineMenu();
-        } else {
-            // Check for Alpine.js every 100ms for up to 5 seconds
-            const checkAlpine = setInterval(() => {
-                if (window.Alpine) {
-                    clearInterval(checkAlpine);
-                    initAlpineMenu();
-                }
-            }, 100);
+        // Handle body scroll lock when mobile menu opens/closes
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-overlay');
             
-            setTimeout(() => clearInterval(checkAlpine), 5000);
-        }
+            if (!sidebar || !overlay) return;
+            
+            // Sync Alpine.js state with hidden class
+            const syncMenuState = () => {
+                try {
+                    if (window.Alpine && window.Alpine.$data) {
+                        const data = window.Alpine.$data(document.body);
+                        if (data && data.mobileMenuOpen !== undefined) {
+                            if (data.mobileMenuOpen) {
+                                sidebar.classList.remove('hidden');
+                                overlay.classList.remove('hidden');
+                                if (window.innerWidth <= 768) {
+                                    document.body.classList.add('menu-open');
+                                }
+                            } else {
+                                sidebar.classList.add('hidden');
+                                overlay.classList.add('hidden');
+                                document.body.classList.remove('menu-open');
+                            }
+                        }
+                    }
+                } catch (e) {
+                    // Alpine not ready or error
+                }
+            };
+            
+            // Wait for Alpine.js to be ready
+            const initMenuHandler = () => {
+                if (!window.Alpine) {
+                    setTimeout(initMenuHandler, 100);
+                    return;
+                }
+                
+                // Sync state periodically
+                setInterval(syncMenuState, 200);
+                
+                // Also watch for Alpine reactivity
+                if (window.Alpine && window.Alpine.effect) {
+                    // Try to watch Alpine data changes
+                    syncMenuState();
+                }
+            };
+            
+            initMenuHandler();
+        });
         
         // Handle window resize
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
+                const sidebar = document.getElementById('mobile-sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                if (sidebar) sidebar.classList.add('hidden');
+                if (overlay) overlay.classList.add('hidden');
                 document.body.classList.remove('menu-open');
+                
+                // Close menu in Alpine.js too
+                try {
+                    if (window.Alpine && window.Alpine.$data) {
+                        const data = window.Alpine.$data(document.body);
+                        if (data && data.mobileMenuOpen) {
+                            data.mobileMenuOpen = false;
+                        }
+                    }
+                } catch (e) {
+                    // Ignore
+                }
+            }
+        });
+        
+        // Handle ESC key to close menu
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('mobile-sidebar');
+                const overlay = document.getElementById('mobile-overlay');
+                if (sidebar && !sidebar.classList.contains('hidden')) {
+                    sidebar.classList.add('hidden');
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('menu-open');
+                    // Also update Alpine state
+                    try {
+                        if (window.Alpine && window.Alpine.$data) {
+                            const data = window.Alpine.$data(document.body);
+                            if (data && data.mobileMenuOpen !== undefined) {
+                                data.mobileMenuOpen = false;
+                            }
+                        }
+                    } catch (e) {
+                        // Ignore
+                    }
+                }
             }
         });
     </script>
