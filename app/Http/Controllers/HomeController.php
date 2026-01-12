@@ -15,10 +15,9 @@ class HomeController extends Controller
     {
         $featuredProducts = Product::active()->featured()->latest()->take(8)->get();
         $saleProducts = Product::active()->onSale()->latest()->take(8)->get();
-        $newProducts = Product::active()->latest()->take(12)->get();
         $categories = Category::active()->root()->orderBy('sort_order')->get();
 
-        return view('home', compact('featuredProducts', 'saleProducts', 'newProducts', 'categories'));
+        return view('home', compact('featuredProducts', 'saleProducts', 'categories'));
     }
 
     /**
