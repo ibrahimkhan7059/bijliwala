@@ -136,8 +136,7 @@
                 <!-- Logo Section -->
                 <div class="flex items-center flex-shrink-0">
                     <!-- Mobile Menu Button (Open) -->
-                    <button @click="mobileMenuOpen = true" 
-                            onclick="document.getElementById('mobile-sidebar').classList.remove('hidden'); document.getElementById('mobile-overlay').classList.remove('hidden'); document.body.classList.add('menu-open');"
+                    <button onclick="openMobileMenu()"
                             type="button"
                             class="md:hidden mr-3 p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
                             aria-label="Open menu">
@@ -312,10 +311,6 @@
 
         <!-- Mobile Menu Sidebar -->
         <div id="mobile-sidebar"
-             x-show="mobileMenuOpen" 
-             x-cloak
-             @click.away="if(window.innerWidth < 768) { mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open'); }"
-             @keydown.escape.window="mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="-translate-x-full opacity-0"
              x-transition:enter-end="translate-x-0 opacity-100"
@@ -330,8 +325,7 @@
             <div class="p-6">
                 <!-- Close Button Inside Sidebar -->
                 <div class="flex items-center justify-between mb-6">
-                    <button @click="mobileMenuOpen = false" 
-                            onclick="document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
+                    <button onclick="closeMobileMenu()"
                             type="button"
                             class="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
                             aria-label="Close menu">
@@ -441,16 +435,7 @@
 
         <!-- Mobile Menu Overlay -->
         <div id="mobile-overlay"
-             x-show="mobileMenuOpen" 
-             x-cloak
-             @click="mobileMenuOpen = false; document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
-             onclick="document.getElementById('mobile-sidebar').classList.add('hidden'); document.getElementById('mobile-overlay').classList.add('hidden'); document.body.classList.remove('menu-open');"
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
+             onclick="closeMobileMenu()"
              class="fixed inset-0 bg-black bg-opacity-50 md:hidden z-[90] hidden"></div>
     </nav>
 
@@ -789,101 +774,41 @@
     </style>
     
     <script>
-        // Handle body scroll lock when mobile menu opens/closes
-        document.addEventListener('DOMContentLoaded', function() {
+        // Simple helpers for mobile sidebar - pure JS so it always works
+        function openMobileMenu() {
             const sidebar = document.getElementById('mobile-sidebar');
             const overlay = document.getElementById('mobile-overlay');
-            
             if (!sidebar || !overlay) return;
-            
-            // Sync Alpine.js state with hidden class
-            const syncMenuState = () => {
-                try {
-                    if (window.Alpine && window.Alpine.$data) {
-                        const data = window.Alpine.$data(document.body);
-                        if (data && data.mobileMenuOpen !== undefined) {
-                            if (data.mobileMenuOpen) {
-                                sidebar.classList.remove('hidden');
-                                overlay.classList.remove('hidden');
-                                if (window.innerWidth <= 768) {
-                                    document.body.classList.add('menu-open');
-                                }
-                            } else {
-                                sidebar.classList.add('hidden');
-                                overlay.classList.add('hidden');
-                                document.body.classList.remove('menu-open');
-                            }
-                        }
-                    }
-                } catch (e) {
-                    // Alpine not ready or error
-                }
-            };
-            
-            // Wait for Alpine.js to be ready
-            const initMenuHandler = () => {
-                if (!window.Alpine) {
-                    setTimeout(initMenuHandler, 100);
-                    return;
-                }
-                
-                // Sync state periodically
-                setInterval(syncMenuState, 200);
-                
-                // Also watch for Alpine reactivity
-                if (window.Alpine && window.Alpine.effect) {
-                    // Try to watch Alpine data changes
-                    syncMenuState();
-                }
-            };
-            
-            initMenuHandler();
-        });
-        
-        // Handle window resize
+
+            sidebar.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+
+            if (window.innerWidth <= 768) {
+                document.body.classList.add('menu-open');
+            }
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('mobile-sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            if (!sidebar || !overlay) return;
+
+            sidebar.classList.add('hidden');
+            overlay.classList.add('hidden');
+            document.body.classList.remove('menu-open');
+        }
+
+        // Close on window resize (desktop)
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
-                const sidebar = document.getElementById('mobile-sidebar');
-                const overlay = document.getElementById('mobile-overlay');
-                if (sidebar) sidebar.classList.add('hidden');
-                if (overlay) overlay.classList.add('hidden');
-                document.body.classList.remove('menu-open');
-                
-                // Close menu in Alpine.js too
-                try {
-                    if (window.Alpine && window.Alpine.$data) {
-                        const data = window.Alpine.$data(document.body);
-                        if (data && data.mobileMenuOpen) {
-                            data.mobileMenuOpen = false;
-                        }
-                    }
-                } catch (e) {
-                    // Ignore
-                }
+                closeMobileMenu();
             }
         });
-        
-        // Handle ESC key to close menu
+
+        // Close on ESC key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                const sidebar = document.getElementById('mobile-sidebar');
-                const overlay = document.getElementById('mobile-overlay');
-                if (sidebar && !sidebar.classList.contains('hidden')) {
-                    sidebar.classList.add('hidden');
-                    overlay.classList.add('hidden');
-                    document.body.classList.remove('menu-open');
-                    // Also update Alpine state
-                    try {
-                        if (window.Alpine && window.Alpine.$data) {
-                            const data = window.Alpine.$data(document.body);
-                            if (data && data.mobileMenuOpen !== undefined) {
-                                data.mobileMenuOpen = false;
-                            }
-                        }
-                    } catch (e) {
-                        // Ignore
-                    }
-                }
+                closeMobileMenu();
             }
         });
     </script>

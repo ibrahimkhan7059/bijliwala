@@ -262,28 +262,284 @@
                             <span class="font-medium">Rs. {{ number_format($total) }}</span>
                         </div>
                         <div class="flex justify-between text-sm sm:text-base text-gray-600">
-                            <span>Delivery</span>
-                            <span class="font-medium text-green-600">FREE</span>
+                            <span>Delivery Charges</span>
+                            <span class="font-medium">Rs. {{ number_format($deliveryCharges) }}</span>
                         </div>
                         <div class="border-t border-gray-200 pt-2 sm:pt-3">
                             <div class="flex justify-between text-base sm:text-lg font-bold text-gray-900">
                                 <span>Total</span>
-                                <span>Rs. {{ number_format($total) }}</span>
+                                <span>Rs. {{ number_format($grandTotal) }}</span>
                             </div>
                         </div>
                     </div>
 
                     @auth
-                        <a href="#" class="block w-full btn-primary text-center py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base font-semibold mb-3">
-                            Proceed to Checkout
-                        </a>
-                    @else
-                        <div class="mb-4 p-3 sm:p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                            <p class="text-xs sm:text-sm text-yellow-800">Please login to checkout</p>
+                        @if($siteSettings->bank_name || $siteSettings->account_number)
+                        <!-- Bank Details for Payment -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                </svg>
+                                <h3 class="text-base font-bold text-gray-900">Payment Details</h3>
+                            </div>
+                            <div class="space-y-2 text-sm mb-3">
+                                @if($siteSettings->bank_name)
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Bank:</span>
+                                    <span class="text-gray-900 font-semibold">{{ $siteSettings->bank_name }}</span>
+                                </div>
+                                @endif
+                                @if($siteSettings->account_number)
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Account:</span>
+                                    <span class="text-gray-900 font-mono text-xs sm:text-sm break-all">{{ $siteSettings->account_number }}</span>
+                                </div>
+                                @endif
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Amount:</span>
+                                    <span class="text-green-700 font-bold text-lg">Rs. {{ number_format($grandTotal) }}</span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-green-200">
+                                <p class="text-xs text-gray-700 leading-relaxed">
+                                    <strong>📱 Steps:</strong> 1) Transfer amount to above account 2) Upload payment screenshot below 3) Submit order
+                                </p>
+                            </div>
                         </div>
-                        <a href="{{ route('login') }}" class="block w-full btn-primary text-center py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base font-semibold mb-3">
-                            Login to Checkout
-                        </a>
+
+                        <!-- Order Placement Form -->
+                        <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            @csrf
+                            
+                            @if ($errors->any())
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                <div class="flex items-start">
+                                    <svg class="w-4 h-4 text-red-600 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h3 class="text-xs font-semibold text-red-800 mb-1">Please fix the following errors:</h3>
+                                        <ul class="text-xs text-red-700 list-disc list-inside space-y-0.5">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            <!-- Phone Number -->
+                            <div>
+                                <label for="customer_phone" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Phone Number <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       name="customer_phone" 
+                                       id="customer_phone" 
+                                       value="{{ old('customer_phone', Auth::user()->phone ?? '') }}"
+                                       class="w-full px-3 py-2 text-sm border @error('customer_phone') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                       placeholder="03XX-XXXXXXX"
+                                       required>
+                                @error('customer_phone')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Delivery Address -->
+                            <div>
+                                <label for="customer_address" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Delivery Address <span class="text-red-500">*</span>
+                                </label>
+                                <textarea name="customer_address" 
+                                          id="customer_address" 
+                                          rows="2"
+                                          class="w-full px-3 py-2 text-sm border @error('customer_address') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                          placeholder="Enter complete delivery address"
+                                          required>{{ old('customer_address') }}</textarea>
+                                @error('customer_address')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Payment Proof Upload -->
+                            <div>
+                                <label for="payment_proof" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Payment Screenshot <span class="text-red-500">*</span>
+                                </label>
+                                <input type="file" 
+                                       name="payment_proof" 
+                                       id="payment_proof" 
+                                       accept="image/*"
+                                       class="w-full px-3 py-2 text-sm border @error('payment_proof') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                                       required>
+                                @error('payment_proof')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @else
+                                    <p class="mt-1 text-xs text-gray-500">Upload payment screenshot (JPG, PNG, WEBP - Max 5MB)</p>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="w-full btn-primary py-3 px-4 rounded-lg text-sm font-bold">
+                                <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Submit Order
+                            </button>
+                        </form>
+                        @endif
+                    @else
+                        <!-- Guest Checkout Section -->
+                        @if($siteSettings->bank_name || $siteSettings->account_number)
+                        <!-- Bank Details for Payment -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
+                            <div class="flex items-center mb-3">
+                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                                </svg>
+                                <h3 class="text-base font-bold text-gray-900">Payment Details</h3>
+                            </div>
+                            <div class="space-y-2 text-sm mb-3">
+                                @if($siteSettings->bank_name)
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Bank:</span>
+                                    <span class="text-gray-900 font-semibold">{{ $siteSettings->bank_name }}</span>
+                                </div>
+                                @endif
+                                @if($siteSettings->account_number)
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Account:</span>
+                                    <span class="text-gray-900 font-mono text-xs sm:text-sm break-all">{{ $siteSettings->account_number }}</span>
+                                </div>
+                                @endif
+                                <div class="flex items-start">
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Amount:</span>
+                                    <span class="text-green-700 font-bold text-lg">Rs. {{ number_format($grandTotal) }}</span>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-green-200">
+                                <p class="text-xs text-gray-700 leading-relaxed">
+                                    <strong>📱 Steps:</strong> 1) Transfer amount to above account 2) Upload payment screenshot below 3) Submit order
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Guest Order Placement Form -->
+                        <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            @csrf
+                            
+                            @if ($errors->any())
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-3">
+                                <div class="flex items-start">
+                                    <svg class="w-4 h-4 text-red-600 mt-0.5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <h3 class="text-xs font-semibold text-red-800 mb-1">Please fix the following errors:</h3>
+                                        <ul class="text-xs text-red-700 list-disc list-inside space-y-0.5">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            <!-- Customer Name -->
+                            <div>
+                                <label for="guest_name" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Full Name <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       name="customer_name" 
+                                       id="guest_name" 
+                                       value="{{ old('customer_name') }}"
+                                       class="w-full px-3 py-2 text-sm border @error('customer_name') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                       placeholder="Enter your full name"
+                                       required>
+                                @error('customer_name')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div>
+                                <label for="guest_phone" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Phone Number <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       name="customer_phone" 
+                                       id="guest_phone" 
+                                       value="{{ old('customer_phone') }}"
+                                       class="w-full px-3 py-2 text-sm border @error('customer_phone') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                       placeholder="03XX-XXXXXXX"
+                                       required>
+                                @error('customer_phone')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Delivery Address -->
+                            <div>
+                                <label for="guest_address" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Delivery Address <span class="text-red-500">*</span>
+                                </label>
+                                <textarea name="customer_address" 
+                                          id="guest_address" 
+                                          rows="2"
+                                          class="w-full px-3 py-2 text-sm border @error('customer_address') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                          placeholder="Enter complete delivery address"
+                                          required>{{ old('customer_address') }}</textarea>
+                                @error('customer_address')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Payment Proof Upload -->
+                            <div>
+                                <label for="guest_payment_proof" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Payment Screenshot <span class="text-red-500">*</span>
+                                </label>
+                                <input type="file" 
+                                       name="payment_proof" 
+                                       id="guest_payment_proof" 
+                                       accept="image/*"
+                                       class="w-full px-3 py-2 text-sm border @error('payment_proof') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+                                       required>
+                                @error('payment_proof')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @else
+                                    <p class="mt-1 text-xs text-gray-500">Upload payment screenshot (JPG, PNG, WEBP - Max 5MB)</p>
+                                @enderror
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="w-full btn-primary py-3 px-4 rounded-lg text-sm font-bold">
+                                <svg class="w-4 h-4 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Submit Order
+                            </button>
+                        </form>
+
+                        <!-- Or Login Link -->
+                        <div class="mt-4 text-center">
+                            <p class="text-xs text-gray-600">
+                                Already have an account? 
+                                <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-800 font-semibold">Login here</a>
+                            </p>
+                        </div>
+                        @else
+                            <div class="mb-4 p-3 sm:p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="text-xs sm:text-sm text-yellow-800">Bank details are not configured. Please contact support or login to checkout.</p>
+                            </div>
+                            <a href="{{ route('login') }}" class="block w-full btn-primary text-center py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base font-semibold mb-3">
+                                Login to Checkout
+                            </a>
+                        @endif
                     @endauth
 
                     <a href="{{ route('shop') }}" class="block w-full text-center py-2.5 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-lg text-sm sm:text-base font-semibold text-gray-700 hover:bg-gray-50">
@@ -292,18 +548,6 @@
 
                     <!-- Features -->
                     <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-2 sm:space-y-3">
-                        <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Free delivery on all orders</span>
-                        </div>
-                        <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span>Cash on Delivery available</span>
-                        </div>
                         <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600">
                             <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />

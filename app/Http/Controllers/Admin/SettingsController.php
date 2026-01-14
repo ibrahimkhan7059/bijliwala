@@ -38,7 +38,13 @@ class SettingsController extends Controller
             'currency_symbol' => 'required|string|max:5',
             'timezone' => 'required|string|max:50',
             'date_format' => 'required|string|max:20',
-            'items_per_page' => 'required|integer|min:5|max:100'
+            'items_per_page' => 'required|integer|min:5|max:100',
+            'social_facebook' => 'nullable|url|max:255',
+            'social_instagram' => 'nullable|url|max:255',
+            'social_tiktok' => 'nullable|url|max:255',
+            'delivery_charges' => 'required|numeric|min:0|max:99999',
+            'bank_name' => 'nullable|string|max:255',
+            'account_number' => 'nullable|string|max:255'
         ]);
 
         // Handle logo upload
@@ -82,6 +88,13 @@ class SettingsController extends Controller
         $this->updateSetting('timezone', $request->timezone);
         $this->updateSetting('date_format', $request->date_format);
         $this->updateSetting('items_per_page', $request->items_per_page);
+        $this->updateSetting('delivery_charges', $request->delivery_charges);
+        $this->updateSetting('bank_name', $request->bank_name);
+        $this->updateSetting('account_number', $request->account_number);
+        $this->updateSetting('social_facebook', $request->social_facebook);
+        $this->updateSetting('social_instagram', $request->social_instagram);
+        $this->updateSetting('social_tiktok', $request->social_tiktok);
+        $this->updateSetting('delivery_charges', $request->delivery_charges);
 
         return redirect()->route('admin.settings.index')
                         ->with('success', 'General settings updated successfully!');
@@ -259,6 +272,13 @@ class SettingsController extends Controller
             'timezone' => $this->getSetting('timezone', 'Asia/Karachi'),
             'date_format' => $this->getSetting('date_format', 'Y-m-d'),
             'items_per_page' => $this->getSetting('items_per_page', 25),
+            'delivery_charges' => $this->getSetting('delivery_charges', 250),
+            'bank_name' => $this->getSetting('bank_name', null),
+            'account_number' => $this->getSetting('account_number', null),
+            'social_facebook' => $this->getSetting('social_facebook', null),
+            'social_instagram' => $this->getSetting('social_instagram', null),
+            'social_tiktok' => $this->getSetting('social_tiktok', null),
+            'delivery_charges' => $this->getSetting('delivery_charges', 250),
             
             // Email Settings
             'mail_driver' => $this->getSetting('mail_driver', 'smtp'),
@@ -333,6 +353,7 @@ class SettingsController extends Controller
         
         Cache::forget("setting_{$key}");
         Cache::forget('site_settings'); // Clear global settings cache
+        Cache::forget('delivery_charges'); // Clear delivery charges cache
     }
 
     /**

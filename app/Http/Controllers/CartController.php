@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class CartController extends Controller
 {
@@ -34,7 +36,15 @@ class CartController extends Controller
             }
         }
 
-        return view('cart.index', compact('cartItems', 'total'));
+        // Get delivery charges from settings
+        $deliveryCharges = Cache::remember('delivery_charges', 3600, function() {
+            $setting = DB::table('settings')->where('key', 'delivery_charges')->first();
+            return $setting ? (float) $setting->value : 250;
+        });
+        
+        $grandTotal = $total + $deliveryCharges;
+
+        return view('cart.index', compact('cartItems', 'total', 'deliveryCharges', 'grandTotal'));
     }
 
     /**

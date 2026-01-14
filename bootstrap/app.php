@@ -13,6 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'prevent-back' => \App\Http\Middleware\PreventBackHistory::class,
+        ]);
+        
+        // Append prevent-back middleware to web group (preserves default middlewares)
+        $middleware->web(append: [
+            \App\Http\Middleware\PreventBackHistory::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

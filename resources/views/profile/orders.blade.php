@@ -73,8 +73,8 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                                     @foreach($order->orderItems->take(3) as $item)
                                     <div class="flex items-center space-x-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-3 border border-amber-200">
-                                        @if($item->product && $item->product->images->first())
-                                            <img src="{{ Storage::url($item->product->images->first()->image_path) }}" 
+                                        @if($item->product && is_array($item->product->images) && count($item->product->images) > 0)
+                                            <img src="{{ asset('storage/' . $item->product->images[0]) }}" 
                                                  alt="{{ $item->product->name }}" 
                                                  class="h-12 w-12 object-cover rounded-lg">
                                         @else
@@ -85,8 +85,8 @@
                                             </div>
                                         @endif
                                         <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $item->product->name ?? 'Product' }}</p>
-                                            <p class="text-xs text-gray-600">Qty: {{ $item->quantity }} × PKR {{ number_format($item->price, 2) }}</p>
+                                            <p class="text-sm font-medium text-gray-900 truncate">{{ $item->product->name ?? $item->product_name ?? 'Product' }}</p>
+                                            <p class="text-xs text-gray-600">Qty: {{ $item->quantity }} × PKR {{ number_format($item->product_price, 2) }}</p>
                                         </div>
                                     </div>
                                     @endforeach
