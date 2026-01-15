@@ -636,17 +636,17 @@
             <div class="border-t border-gray-700 pt-8">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
                     <p class="text-gray-400 text-sm text-center sm:text-left">
-                        &copy; {{ date('Y') }} <span class="font-semibold text-white">Bijli Wala Bhai</span>. All rights reserved.
+                        &copy; {{ date('Y') }} <span class="font-semibold text-white">{{ $siteSettings->site_name }}</span>. All rights reserved.
                     </p>
                     <div class="flex items-center space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <a href="{{ route('privacy') }}" class="text-gray-400 hover:text-white transition-colors">
                             <span class="sr-only">Privacy Policy</span>
-                            <span class="text-sm">Privacy</span>
+                            <span class="text-sm">Privacy Policy</span>
                         </a>
                         <span class="text-gray-600">|</span>
-                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                            <span class="sr-only">Terms</span>
-                            <span class="text-sm">Terms</span>
+                        <a href="{{ route('terms') }}" class="text-gray-400 hover:text-white transition-colors">
+                            <span class="sr-only">Terms of Service</span>
+                            <span class="text-sm">Terms of Service</span>
                         </a>
                 </div>
             </div>

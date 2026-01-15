@@ -71,6 +71,15 @@
                     Security
                 </button>
                 
+                <button @click="activeTab = 'privacy-terms'"
+                        :class="activeTab === 'privacy-terms' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                        class="whitespace-nowrap py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors">
+                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Privacy & Terms
+                </button>
+                
                 <button @click="activeTab = 'system'"
                         :class="activeTab === 'system' ? 'border-blue-500 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
                         class="whitespace-nowrap py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors">
@@ -698,6 +707,70 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0L8 8m4-4v12"></path>
                                 </svg>
                                 Update Security Settings
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Privacy & Terms Tab -->
+            <div x-show="activeTab === 'privacy-terms'" x-transition>
+                <form method="POST" action="{{ route('admin.settings.privacy-terms') }}">
+                    @csrf
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center mb-6">
+                            <div class="p-2 bg-green-100 rounded-lg mr-3">
+                                <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-900">Privacy Policy & Terms of Service</h3>
+                                <p class="text-sm text-gray-600">Manage privacy policy and terms of service content</p>
+                            </div>
+                        </div>
+
+                        <!-- Privacy Policy Editor -->
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-4 sm:p-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                <svg class="w-5 h-5 inline-block mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Privacy Policy Content
+                            </label>
+                            <textarea name="privacy_policy" 
+                                      id="privacy_policy" 
+                                      rows="15"
+                                      class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono"
+                                      placeholder="Enter Privacy Policy content here...">{{ old('privacy_policy', $settings['privacy_policy'] ?? '') }}</textarea>
+                            <p class="mt-2 text-xs text-gray-500">You can use HTML tags for formatting. This content will be displayed on the Privacy Policy page.</p>
+                        </div>
+
+                        <!-- Terms of Service Editor -->
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200 p-4 sm:p-6">
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                <svg class="w-5 h-5 inline-block mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Terms of Service Content
+                            </label>
+                            <textarea name="terms_of_service" 
+                                      id="terms_of_service" 
+                                      rows="15"
+                                      class="w-full px-4 py-3 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 font-mono"
+                                      placeholder="Enter Terms of Service content here...">{{ old('terms_of_service', $settings['terms_of_service'] ?? '') }}</textarea>
+                            <p class="mt-2 text-xs text-gray-500">You can use HTML tags for formatting. This content will be displayed on the Terms of Service page.</p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex justify-end pt-4 border-t border-gray-200">
+                            <button type="submit" 
+                                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Update Privacy & Terms
                             </button>
                         </div>
                     </div>

@@ -22,6 +22,12 @@ Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.show');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
 
 // Test route for custom login (temporary)
 Route::get('/test-login', function () {
@@ -73,6 +79,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::post('/general', [AdminSettingsController::class, 'updateGeneral'])->name('settings.general');
         Route::post('/email', [AdminSettingsController::class, 'updateEmail'])->name('settings.email');
         Route::post('/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security');
+        Route::post('/privacy-terms', [AdminSettingsController::class, 'updatePrivacyTerms'])->name('settings.privacy-terms');
         Route::post('/clear-cache', [AdminSettingsController::class, 'clearCache'])->name('settings.clear-cache');
         Route::post('/backup-database', [AdminSettingsController::class, 'backupDatabase'])->name('settings.backup-database');
     });

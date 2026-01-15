@@ -134,6 +134,23 @@ class SettingsController extends Controller
     }
 
     /**
+     * Update privacy and terms settings
+     */
+    public function updatePrivacyTerms(Request $request)
+    {
+        $request->validate([
+            'privacy_policy' => 'nullable|string',
+            'terms_of_service' => 'nullable|string'
+        ]);
+
+        $this->updateSetting('privacy_policy', $request->privacy_policy ?? '');
+        $this->updateSetting('terms_of_service', $request->terms_of_service ?? '');
+
+        return redirect()->route('admin.settings.index')
+                        ->with('success', 'Privacy Policy and Terms of Service updated successfully!');
+    }
+
+    /**
      * Update security settings
      */
     public function updateSecurity(Request $request)
@@ -296,7 +313,11 @@ class SettingsController extends Controller
             'lockout_duration' => $this->getSetting('lockout_duration', 15),
             'require_email_verification' => $this->getSetting('require_email_verification', true),
             'enable_2fa' => $this->getSetting('enable_2fa', false),
-            'maintenance_mode' => app()->isDownForMaintenance()
+            'maintenance_mode' => app()->isDownForMaintenance(),
+            
+            // Privacy & Terms
+            'privacy_policy' => $this->getSetting('privacy_policy', null),
+            'terms_of_service' => $this->getSetting('terms_of_service', null)
         ];
     }
 

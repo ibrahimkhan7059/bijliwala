@@ -40,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
                     'delivery_charges' => $settingsData['delivery_charges'] ?? 250,
                     'bank_name' => $settingsData['bank_name'] ?? null,
                     'account_number' => $settingsData['account_number'] ?? null,
+                    'privacy_policy' => $settingsData['privacy_policy'] ?? null,
+                    'terms_of_service' => $settingsData['terms_of_service'] ?? null,
                 ];
             });
             
