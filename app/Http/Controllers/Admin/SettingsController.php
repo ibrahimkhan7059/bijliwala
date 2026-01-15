@@ -32,6 +32,7 @@ class SettingsController extends Controller
             'site_name' => 'required|string|max:255',
             'site_email' => 'required|email|max:255',
             'site_phone' => 'nullable|string|max:20',
+            'site_whatsapp' => 'nullable|string|max:20',
             'site_address' => 'nullable|string|max:500',
             'site_logo' => 'nullable|file|mimes:jpeg,jpg,png,webp,avif|mimetypes:image/jpeg,image/jpg,image/png,image/webp,image/avif|max:2048',
             'currency' => 'required|string|max:3',
@@ -84,6 +85,7 @@ class SettingsController extends Controller
         $this->updateSetting('site_name', $request->site_name);
         $this->updateSetting('site_email', $request->site_email);
         $this->updateSetting('site_phone', $request->site_phone);
+        $this->updateSetting('site_whatsapp', $request->site_whatsapp);
         $this->updateSetting('site_address', $request->site_address);
         $this->updateSetting('currency', $request->currency);
         $this->updateSetting('currency_symbol', $request->currency_symbol);
@@ -99,6 +101,9 @@ class SettingsController extends Controller
         $this->updateSetting('social_youtube', $request->social_youtube);
         $this->updateSetting('social_twitter', $request->social_twitter);
         $this->updateSetting('delivery_charges', $request->delivery_charges);
+
+        // Clear view cache automatically after updating settings
+        Artisan::call('view:clear');
 
         return redirect()->route('admin.settings.index')
                         ->with('success', 'General settings updated successfully!');
@@ -133,6 +138,9 @@ class SettingsController extends Controller
         $this->updateSetting('mail_from_address', $request->mail_from_address);
         $this->updateSetting('mail_from_name', $request->mail_from_name);
 
+        // Clear view cache automatically
+        Artisan::call('view:clear');
+
         return redirect()->route('admin.settings.index')
                         ->with('success', 'Email settings updated successfully!');
     }
@@ -149,6 +157,9 @@ class SettingsController extends Controller
 
         $this->updateSetting('privacy_policy', $request->privacy_policy ?? '');
         $this->updateSetting('terms_of_service', $request->terms_of_service ?? '');
+
+        // Clear view cache automatically
+        Artisan::call('view:clear');
 
         return redirect()->route('admin.settings.index')
                         ->with('success', 'Privacy Policy and Terms of Service updated successfully!');
@@ -286,6 +297,7 @@ class SettingsController extends Controller
             'site_name' => $this->getSetting('site_name', 'AJ Electric'),
             'site_email' => $this->getSetting('site_email', 'admin@ajelectric.com'),
             'site_phone' => $this->getSetting('site_phone', '+92-300-1234567'),
+            'site_whatsapp' => $this->getSetting('site_whatsapp', null),
             'site_address' => $this->getSetting('site_address', 'Karachi, Pakistan'),
             'site_logo' => $this->getSetting('site_logo', null),
             'currency' => $this->getSetting('currency', 'PKR'),

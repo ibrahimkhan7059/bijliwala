@@ -24,13 +24,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share settings with all views
         View::composer('*', function ($view) {
-            $settings = Cache::remember('site_settings', 3600, function () {
+            // In development, cache for only 60 seconds. In production, cache for 1 hour
+            $cacheTime = config('app.debug') ? 60 : 3600;
+            
+            $settings = Cache::remember('site_settings', $cacheTime, function () {
                 $settingsData = DB::table('settings')->pluck('value', 'key')->toArray();
                 
                 return [
                     'site_name' => $settingsData['site_name'] ?? 'AJ Electric',
                     'site_email' => $settingsData['site_email'] ?? 'admin@ajelectric.com',
                     'site_phone' => $settingsData['site_phone'] ?? '+92-300-1234567',
+                    'site_whatsapp' => $settingsData['site_whatsapp'] ?? null,
                     'site_address' => $settingsData['site_address'] ?? 'Karachi, Pakistan',
                     'site_logo' => $settingsData['site_logo'] ?? null,
                     'currency_symbol' => $settingsData['currency_symbol'] ?? 'Rs.',
