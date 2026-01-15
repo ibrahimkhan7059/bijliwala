@@ -436,10 +436,10 @@
             </div>
 
             <!-- Social Media Links -->
-            @if(($siteSettings->social_facebook ?? null) || ($siteSettings->social_instagram ?? null) || ($siteSettings->social_tiktok ?? null))
+            @if(($siteSettings->social_facebook ?? null) || ($siteSettings->social_instagram ?? null) || ($siteSettings->social_tiktok ?? null) || ($siteSettings->social_youtube ?? null) || ($siteSettings->social_twitter ?? null))
             <div class="mt-6 md:mt-8 text-center">
                 <h4 class="text-lg md:text-xl font-bold mb-4 text-white">Follow Us</h4>
-                <div class="flex items-center justify-center space-x-4 md:space-x-6">
+                <div class="flex items-center justify-center space-x-4 md:space-x-6 flex-wrap gap-3 md:gap-4">
                     @if($siteSettings->social_facebook ?? null)
                     <a href="{{ $siteSettings->social_facebook }}" target="_blank" rel="noopener noreferrer" 
                        class="group bg-white/10 hover:bg-blue-600 backdrop-blur-md rounded-full p-3 md:p-4 transition-all duration-300 transform hover:scale-110 hover:shadow-xl border-2 border-white/20 hover:border-blue-400">
@@ -463,6 +463,24 @@
                        class="group bg-white/10 hover:bg-black backdrop-blur-md rounded-full p-3 md:p-4 transition-all duration-300 transform hover:scale-110 hover:shadow-xl border-2 border-white/20 hover:border-gray-400">
                         <svg class="w-6 h-6 md:w-8 md:h-8 text-white group-hover:text-white" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.18 6.18 0 0 0-1-.05A6.18 6.18 0 0 0 5 20.1a6.18 6.18 0 0 0 10.86-4.43v-7a8.28 8.28 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                    @endif
+
+                    @if($siteSettings->social_youtube ?? null)
+                    <a href="{{ $siteSettings->social_youtube }}" target="_blank" rel="noopener noreferrer" 
+                       class="group bg-white/10 hover:bg-red-600 backdrop-blur-md rounded-full p-3 md:p-4 transition-all duration-300 transform hover:scale-110 hover:shadow-xl border-2 border-white/20 hover:border-red-400">
+                        <svg class="w-6 h-6 md:w-8 md:h-8 text-white group-hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    @endif
+
+                    @if($siteSettings->social_twitter ?? null)
+                    <a href="{{ $siteSettings->social_twitter }}" target="_blank" rel="noopener noreferrer" 
+                       class="group bg-white/10 hover:bg-blue-400 backdrop-blur-md rounded-full p-3 md:p-4 transition-all duration-300 transform hover:scale-110 hover:shadow-xl border-2 border-white/20 hover:border-blue-300">
+                        <svg class="w-6 h-6 md:w-8 md:h-8 text-white group-hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
                         </svg>
                     </a>
                     @endif

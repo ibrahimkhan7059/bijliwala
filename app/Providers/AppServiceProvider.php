@@ -37,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
                     'social_facebook' => $settingsData['social_facebook'] ?? null,
                     'social_instagram' => $settingsData['social_instagram'] ?? null,
                     'social_tiktok' => $settingsData['social_tiktok'] ?? null,
+                    'social_youtube' => $settingsData['social_youtube'] ?? null,
+                    'social_twitter' => $settingsData['social_twitter'] ?? null,
                     'delivery_charges' => $settingsData['delivery_charges'] ?? 250,
                     'bank_name' => $settingsData['bank_name'] ?? null,
                     'account_number' => $settingsData['account_number'] ?? null,

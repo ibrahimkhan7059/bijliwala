@@ -42,6 +42,8 @@ class SettingsController extends Controller
             'social_facebook' => 'nullable|url|max:255',
             'social_instagram' => 'nullable|url|max:255',
             'social_tiktok' => 'nullable|url|max:255',
+            'social_youtube' => 'nullable|url|max:255',
+            'social_twitter' => 'nullable|url|max:255',
             'delivery_charges' => 'required|numeric|min:0|max:99999',
             'bank_name' => 'nullable|string|max:255',
             'account_number' => 'nullable|string|max:255'
@@ -94,6 +96,8 @@ class SettingsController extends Controller
         $this->updateSetting('social_facebook', $request->social_facebook);
         $this->updateSetting('social_instagram', $request->social_instagram);
         $this->updateSetting('social_tiktok', $request->social_tiktok);
+        $this->updateSetting('social_youtube', $request->social_youtube);
+        $this->updateSetting('social_twitter', $request->social_twitter);
         $this->updateSetting('delivery_charges', $request->delivery_charges);
 
         return redirect()->route('admin.settings.index')
@@ -295,6 +299,8 @@ class SettingsController extends Controller
             'social_facebook' => $this->getSetting('social_facebook', null),
             'social_instagram' => $this->getSetting('social_instagram', null),
             'social_tiktok' => $this->getSetting('social_tiktok', null),
+            'social_youtube' => $this->getSetting('social_youtube', null),
+            'social_twitter' => $this->getSetting('social_twitter', null),
             'delivery_charges' => $this->getSetting('delivery_charges', 250),
             
             // Email Settings
