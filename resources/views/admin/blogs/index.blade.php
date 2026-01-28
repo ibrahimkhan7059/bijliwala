@@ -161,7 +161,7 @@
                     </div>
 
                     @if($blog->description)
-                        <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ $blog->description }}</p>
+                        <p class="text-sm text-gray-600 line-clamp-2 mb-3">{{ strip_tags($blog->description) }}</p>
                     @endif
 
                     <!-- Stats -->

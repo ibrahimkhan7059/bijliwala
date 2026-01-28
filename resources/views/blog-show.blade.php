@@ -78,11 +78,9 @@
 
                 <!-- Description -->
                 @if($blog->description)
-                <div class="prose prose-lg max-w-none">
+                <div>
                     <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">About this video</h2>
-                    <div class="text-gray-700 leading-relaxed whitespace-pre-line">
-                        {{ $blog->description }}
-                    </div>
+                    @include('components.prose-content', ['content' => $blog->description])
                 </div>
                 @endif
 

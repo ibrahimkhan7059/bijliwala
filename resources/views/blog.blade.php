@@ -57,7 +57,7 @@
 
                     @if($blog->description)
                     <p class="text-sm md:text-base text-gray-600 mb-4 line-clamp-3">
-                        {{ $blog->description }}
+                        {{ strip_tags($blog->description) }}
                     </p>
                     @endif
 
