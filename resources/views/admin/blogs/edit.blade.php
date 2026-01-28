@@ -180,6 +180,18 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+    // Get existing content from textarea
+    var existingContent = document.querySelector('textarea[name=description]').value;
+    
+    // Convert plain text line breaks to HTML paragraphs if no HTML tags exist
+    if (existingContent && !existingContent.includes('<')) {
+        // Plain text detected, convert to paragraphs
+        existingContent = '<p>' + existingContent.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+    }
+    
+    // Set the content in editor div
+    document.getElementById('editor').innerHTML = existingContent || '';
+    
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
