@@ -80,7 +80,7 @@
                 @if($blog->description)
                 <div>
                     <h2 class="text-xl md:text-2xl font-bold text-gray-900 mb-4">About this video</h2>
-                    @include('components.prose-content', ['content' => $blog->description])
+                    <x-prose-content :content="$blog->description" />
                 </div>
                 @endif
 
