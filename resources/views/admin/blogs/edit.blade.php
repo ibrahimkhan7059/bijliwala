@@ -4,7 +4,13 @@
 @section('page-title', 'Edit Blog Post')
 
 @push('styles')
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+    .ql-editor {
+        min-height: 300px;
+        font-size: 16px;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -80,10 +86,8 @@
                         <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
                             Description (Optional)
                         </label>
-                        <textarea name="description" 
-                                  id="description" 
-                                  rows="8"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 @error('description') border-red-500 @enderror">{{ old('description', $blog->description) }}</textarea>
+                        <div id="editor" class="bg-white border border-gray-300 rounded-lg @error('description') border-red-500 @enderror">{!! old('description', $blog->description) !!}</div>
+                        <textarea name="description" id="description" style="display:none;">{{ old('description', $blog->description) }}</textarea>
                         @error('description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -174,25 +178,26 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    tinymce.init({
-        selector: '#description',
-        height: 400,
-        menubar: false,
-        plugins: 'lists link code',
-        toolbar: 'undo redo | formatselect | bold italic | bullist numlist | link | code',
-        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }',
-        formats: {
-            h1: { block: 'h1' },
-            h2: { block: 'h2' },
-            h3: { block: 'h3' }
+    var quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ]
         },
-        block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3',
-        setup: function(editor) {
-            editor.on('init', function() {
-                console.log('TinyMCE initialized for blog description');
-            });
-        }
+        placeholder: 'Enter video description with formatting...'
     });
+
+    // Update hidden textarea when form is submitted
+    document.querySelector('form').onsubmit = function() {
+        var description = document.querySelector('textarea[name=description]');
+        description.value = quill.root.innerHTML;
+    };
 </script>
 @endpush
