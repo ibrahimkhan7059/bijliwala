@@ -26,6 +26,8 @@
             }
         }
     </style>
+    
+    @stack('styles')
 </head>
 <body class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 font-sans" x-data="{ sidebarOpen: false }">
     <div class="min-h-screen flex">
@@ -287,5 +289,7 @@
             }
         });
     </script>
+    
+    @stack('scripts')
 </body>
 </html>

@@ -3,6 +3,10 @@
 @section('title', 'Edit Blog')
 @section('page-title', 'Edit Blog Post')
 
+@push('styles')
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+@endpush
+
 @section('content')
 <div class="animate-fade-in max-w-full overflow-hidden">
     <!-- Professional Header -->
@@ -79,21 +83,11 @@
                         <textarea name="description" 
                                   id="description" 
                                   rows="8"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 font-mono text-sm @error('description') border-red-500 @enderror"
-                                  placeholder="Enter video description with HTML formatting...">{{ old('description', $blog->description) }}</textarea>
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 @error('description') border-red-500 @enderror">{{ old('description', $blog->description) }}</textarea>
                         @error('description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                        <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                            <p class="text-xs font-semibold text-blue-800 mb-2">💡 You can use HTML formatting:</p>
-                            <div class="text-xs text-blue-700 space-y-1">
-                                <p><code class="bg-blue-100 px-1 rounded">&lt;h2&gt;Heading&lt;/h2&gt;</code> - For headings</p>
-                                <p><code class="bg-blue-100 px-1 rounded">&lt;p&gt;Text&lt;/p&gt;</code> - For paragraphs</p>
-                                <p><code class="bg-blue-100 px-1 rounded">&lt;ul&gt;&lt;li&gt;Item&lt;/li&gt;&lt;/ul&gt;</code> - For bullet lists</p>
-                                <p><code class="bg-blue-100 px-1 rounded">&lt;strong&gt;Bold&lt;/strong&gt;</code> - For bold text</p>
-                                <p><code class="bg-blue-100 px-1 rounded">&lt;em&gt;Italic&lt;/em&gt;</code> - For italic text</p>
-                            </div>
-                        </div>
+                        <p class="mt-2 text-xs text-gray-500">Use the formatting toolbar above to add headings, bullets, bold text, etc.</p>
                     </div>
 
                     <!-- YouTube URL -->
@@ -179,4 +173,26 @@
 </div>
 @endsection
 
-
+@push('scripts')
+<script>
+    tinymce.init({
+        selector: '#description',
+        height: 400,
+        menubar: false,
+        plugins: 'lists link code',
+        toolbar: 'undo redo | formatselect | bold italic | bullist numlist | link | code',
+        content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }',
+        formats: {
+            h1: { block: 'h1' },
+            h2: { block: 'h2' },
+            h3: { block: 'h3' }
+        },
+        block_formats: 'Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3',
+        setup: function(editor) {
+            editor.on('init', function() {
+                console.log('TinyMCE initialized for blog description');
+            });
+        }
+    });
+</script>
+@endpush
