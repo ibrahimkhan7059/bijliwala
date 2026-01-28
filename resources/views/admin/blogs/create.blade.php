@@ -178,9 +178,18 @@
     });
 
     // Update hidden textarea when form is submitted
-    document.querySelector('form').onsubmit = function() {
+    var form = document.querySelector('form');
+    form.addEventListener('submit', function(e) {
         var description = document.querySelector('textarea[name=description]');
-        description.value = quill.root.innerHTML;
-    };
+        var content = quill.root.innerHTML;
+        
+        // Remove Quill's default <p><br></p> for empty content
+        if (content === '<p><br></p>') {
+            content = '';
+        }
+        
+        description.value = content;
+        console.log('Saving content:', content); // Debug log
+    });
 </script>
 @endpush
