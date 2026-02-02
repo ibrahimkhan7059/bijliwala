@@ -47,7 +47,7 @@
             <p class="text-xs sm:text-sm text-gray-600 mt-1">Update the details below to edit your blog post</p>
         </div>
         
-        <form method="POST" action="{{ route('admin.blogs.update', $blog) }}" class="p-4 sm:p-6">
+        <form id="blog-form" method="POST" action="{{ route('admin.blogs.update', $blog) }}" class="p-4 sm:p-6">
             @csrf
             @method('PUT')
             <!-- Simple Single Column Form -->
@@ -86,12 +86,12 @@
                         <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
                             Description (Optional)
                         </label>
-                        <div id="editor" class="bg-white border border-gray-300 rounded-lg @error('description') border-red-500 @enderror">{!! old('description', $blog->description) !!}</div>
+                        <div id="editor" class="bg-white border border-gray-300 rounded-lg min-h-[300px] @error('description') border-red-500 @enderror"></div>
                         <textarea name="description" id="description" style="display:none;">{{ old('description', $blog->description) }}</textarea>
                         @error('description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
-                        <p class="mt-2 text-xs text-gray-500">Use the formatting toolbar above to add headings, bullets, bold text, etc.</p>
+                        <p class="mt-2 text-xs text-gray-500">✏️ Use the formatting toolbar above to add headings, bullets, bold text, etc. Click the bullet icon for lists!</p>
                     </div>
 
                     <!-- YouTube URL -->
@@ -180,18 +180,10 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Get existing content from textarea
-    var existingContent = document.querySelector('textarea[name=description]').value;
-    
-    // Convert plain text line breaks to HTML paragraphs if no HTML tags exist
-    if (existingContent && !existingContent.includes('<')) {
-        // Plain text detected, convert to paragraphs
-        existingContent = '<p>' + existingContent.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
-    }
-    
-    // Set the content in editor div
-    document.getElementById('editor').innerHTML = existingContent || '';
-    
+document.addEventListener('DOMContentLoaded', function() {
+    var textarea = document.querySelector('textarea[name=description]');
+    var existingContent = textarea ? textarea.value.trim() : '';
+
     var quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
@@ -206,19 +198,25 @@
         placeholder: 'Enter video description with formatting...'
     });
 
-    // Update hidden textarea when form is submitted
-    var form = document.querySelector('form');
-    form.addEventListener('submit', function(e) {
-        var description = document.querySelector('textarea[name=description]');
-        var content = quill.root.innerHTML;
-        
-        // Remove Quill's default <p><br></p> for empty content
-        if (content === '<p><br></p>') {
-            content = '';
-        }
-        
-        description.value = content;
-        console.log('Saving content:', content); // Debug log
-    });
+    if (existingContent) {
+        var htmlContent = existingContent.includes('<')
+            ? existingContent
+            : '<p>' + existingContent.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+        quill.clipboard.dangerouslyPasteHTML(htmlContent);
+    }
+
+    var form = document.getElementById('blog-form') || (textarea ? textarea.closest('form') : null);
+    if (form) {
+        form.addEventListener('submit', function() {
+            var content = quill.root.innerHTML;
+            if (content === '<p><br></p>' || content === '<p></p>') {
+                content = '';
+            }
+            if (textarea) {
+                textarea.value = content;
+            }
+        });
+    }
+});
 </script>
 @endpush
