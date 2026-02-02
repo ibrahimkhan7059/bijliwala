@@ -196,8 +196,9 @@ class ProductController extends Controller
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'status' => 'required|in:draft,published,out_of_stock',
-            'images' => 'nullable|array|max:10',
+            'images' => 'nullable|array|max:5',
             'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
+            'video' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(6);
@@ -220,11 +221,36 @@ class ProductController extends Controller
                 $image->move($uploadPath, $filename);
                 $uploadedImages[] = 'products/' . $filename;
                 \Log::info('Image uploaded: ' . $filename);
+
+                // Windows-compatible public copy for display
+                $publicPath = public_path('storage/products');
+                if (!file_exists($publicPath)) {
+                    mkdir($publicPath, 0755, true);
+                }
+                @copy($uploadPath . DIRECTORY_SEPARATOR . $filename, $publicPath . DIRECTORY_SEPARATOR . $filename);
             }
         } else {
             \Log::info('No images received in request');
         }
         $validated['images'] = $uploadedImages;
+
+        // Handle video upload (optional)
+        if ($request->hasFile('video')) {
+            $video = $request->file('video');
+            $videoPath = storage_path('app/public/products/videos');
+            if (!file_exists($videoPath)) {
+                mkdir($videoPath, 0755, true);
+            }
+            $videoFilename = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+            $video->move($videoPath, $videoFilename);
+            $validated['video'] = 'products/videos/' . $videoFilename;
+
+            $publicVideoPath = public_path('storage/products/videos');
+            if (!file_exists($publicVideoPath)) {
+                mkdir($publicVideoPath, 0755, true);
+            }
+            @copy($videoPath . DIRECTORY_SEPARATOR . $videoFilename, $publicVideoPath . DIRECTORY_SEPARATOR . $videoFilename);
+        }
 
         Product::create($validated);
 
@@ -269,8 +295,9 @@ class ProductController extends Controller
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'status' => 'required|in:draft,published,out_of_stock',
-            'images' => 'nullable|array|max:10',
+            'images' => 'nullable|array|max:5',
             'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
+            'video' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
         ]);
 
         // Update slug if name changed
@@ -289,6 +316,10 @@ class ProductController extends Controller
                     if (file_exists($oldImagePath)) {
                         unlink($oldImagePath);
                     }
+                    $oldPublicPath = public_path('storage/' . $oldImage);
+                    if (file_exists($oldPublicPath)) {
+                        unlink($oldPublicPath);
+                    }
                 }
             }
 
@@ -296,10 +327,49 @@ class ProductController extends Controller
             $uploadedImages = [];
             foreach ($request->file('images') as $image) {
                 $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-                $image->move(storage_path('app/public/products'), $filename);
+                $storageDir = storage_path('app/public/products');
+                if (!file_exists($storageDir)) {
+                    mkdir($storageDir, 0755, true);
+                }
+                $image->move($storageDir, $filename);
                 $uploadedImages[] = 'products/' . $filename;
+
+                $publicPath = public_path('storage/products');
+                if (!file_exists($publicPath)) {
+                    mkdir($publicPath, 0755, true);
+                }
+                @copy($storageDir . DIRECTORY_SEPARATOR . $filename, $publicPath . DIRECTORY_SEPARATOR . $filename);
             }
             $validated['images'] = $uploadedImages;
+        }
+
+        // Handle video upload for update
+        if ($request->hasFile('video')) {
+            if ($product->video) {
+                $oldVideoPath = storage_path('app/public/' . $product->video);
+                if (file_exists($oldVideoPath)) {
+                    unlink($oldVideoPath);
+                }
+                $oldPublicVideoPath = public_path('storage/' . $product->video);
+                if (file_exists($oldPublicVideoPath)) {
+                    unlink($oldPublicVideoPath);
+                }
+            }
+
+            $video = $request->file('video');
+            $videoPath = storage_path('app/public/products/videos');
+            if (!file_exists($videoPath)) {
+                mkdir($videoPath, 0755, true);
+            }
+            $videoFilename = time() . '_' . uniqid() . '.' . $video->getClientOriginalExtension();
+            $video->move($videoPath, $videoFilename);
+            $validated['video'] = 'products/videos/' . $videoFilename;
+
+            $publicVideoPath = public_path('storage/products/videos');
+            if (!file_exists($publicVideoPath)) {
+                mkdir($publicVideoPath, 0755, true);
+            }
+            @copy($videoPath . DIRECTORY_SEPARATOR . $videoFilename, $publicVideoPath . DIRECTORY_SEPARATOR . $videoFilename);
         }
 
         $product->update($validated);
