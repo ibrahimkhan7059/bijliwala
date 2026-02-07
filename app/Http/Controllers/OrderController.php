@@ -22,6 +22,7 @@ class OrderController extends Controller
             'payment_proof' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120', // 5MB max
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
+            'postal_code' => 'required|string|max:20',
         ];
         
         // Add name validation for guest users
@@ -106,11 +107,13 @@ class OrderController extends Controller
                     'name' => $request->customer_name ?? (Auth::check() ? Auth::user()->name : 'Guest'),
                     'phone' => $request->customer_phone,
                     'address' => $request->customer_address,
+                    'postal_code' => $request->postal_code,
                 ],
                 'shipping_address' => [
                     'name' => $request->customer_name ?? (Auth::check() ? Auth::user()->name : 'Guest'),
                     'phone' => $request->customer_phone,
                     'address' => $request->customer_address,
+                    'postal_code' => $request->postal_code,
                 ],
                 'notes' => $request->notes ?? null,
                 'customer_notes' => Auth::check() ? null : 'Guest order - ' . ($request->customer_name ?? 'No name provided'),

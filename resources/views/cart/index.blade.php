@@ -363,6 +363,23 @@
                                 @enderror
                             </div>
 
+                            <!-- Postal Code -->
+                            <div>
+                                <label for="postal_code" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Postal Code <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text"
+                                       name="postal_code"
+                                       id="postal_code"
+                                       value="{{ old('postal_code') }}"
+                                       class="w-full px-3 py-2 text-sm border @error('postal_code') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                       placeholder="Enter postal code"
+                                       required>
+                                @error('postal_code')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <!-- Payment Proof Upload -->
                             <div>
                                 <label for="payment_proof" class="block text-xs font-semibold text-gray-700 mb-1">
@@ -494,6 +511,23 @@
                                           placeholder="Enter complete delivery address"
                                           required>{{ old('customer_address') }}</textarea>
                                 @error('customer_address')
+                                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Postal Code -->
+                            <div>
+                                <label for="guest_postal_code" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Postal Code <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text"
+                                       name="postal_code"
+                                       id="guest_postal_code"
+                                       value="{{ old('postal_code') }}"
+                                       class="w-full px-3 py-2 text-sm border @error('postal_code') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                                       placeholder="Enter postal code"
+                                       required>
+                                @error('postal_code')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>

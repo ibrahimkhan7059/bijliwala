@@ -3,6 +3,19 @@
 @section('title', 'Order Confirmation - AJ Electric')
 
 @section('content')
+@php
+    $whatsappNumber = preg_replace('/\D+/', '', $siteSettings->site_whatsapp ?? '');
+    $customerName = $order->shipping_address['name'] ?? 'Customer';
+    $customerPhone = $order->shipping_address['phone'] ?? 'N/A';
+    $whatsappMessage = rawurlencode(
+        "Order placed successfully.\n" .
+        "Order #: {$order->order_number}\n" .
+        "Name: {$customerName}\n" .
+        "Phone: {$customerPhone}\n" .
+        "Total: Rs. " . number_format($order->total_amount)
+    );
+    $whatsappUrl = $whatsappNumber ? "https://wa.me/{$whatsappNumber}?text={$whatsappMessage}" : null;
+@endphp
 <div class="py-8" style="background: linear-gradient(180deg, rgba(255,245,230,0.5) 0%, rgba(255,237,213,0.8) 50%, rgba(255,228,196,0.5) 100%); min-height: calc(100vh - 200px);">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -101,7 +114,26 @@
                 View Orders
             </a>
         </div>
+
+        @if($whatsappUrl)
+            <div class="mt-6 text-center text-sm text-gray-600">
+                <p>We are sending your order details on WhatsApp.</p>
+                <a href="{{ $whatsappUrl }}" target="_blank" rel="noopener" class="text-green-600 font-semibold hover:underline">
+                    If WhatsApp doesn't open, click here
+                </a>
+            </div>
+        @endif
     </div>
 </div>
+
+@if($whatsappUrl)
+    <script>
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                window.open(@json($whatsappUrl), '_blank', 'noopener');
+            }, 800);
+        });
+    </script>
+@endif
 @endsection
 

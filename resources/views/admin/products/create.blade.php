@@ -218,7 +218,7 @@
                                                class="sr-only"
                                                onchange="handleImageSelect(this)">
                                     </label>
-                                    <p class="text-sm text-gray-500 mt-2">Upload multiple product images (PNG, JPG, JPEG up to 5MB each)</p>
+                                    <p class="text-sm text-gray-500 mt-2">Upload up to 5 product images (PNG, JPG, JPEG, WEBP up to 5MB each)</p>
                                 </div>
                             </div>
                         </div>
@@ -231,6 +231,22 @@
                         
                         <!-- Image Preview Area -->
                         <div id="image-preview" class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 hidden"></div>
+
+                        <!-- Product Video -->
+                        <div class="mt-6">
+                            <label for="video" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Product Video (Optional)
+                            </label>
+                            <input type="file"
+                                   id="video"
+                                   name="video"
+                                   accept="video/mp4,video/webm,video/ogg"
+                                   class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+                            <p class="text-xs text-gray-500 mt-2">Max 30 seconds recommended • MP4/WEBM/OGG up to 50MB</p>
+                            @error('video')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
                     <!-- Status -->
@@ -324,7 +340,7 @@
 let selectedImages = [];
 
 function handleImageSelect(input) {
-    const files = Array.from(input.files);
+    let files = Array.from(input.files);
     const previewArea = document.getElementById('image-preview');
     
     // Clear previous previews
@@ -332,6 +348,13 @@ function handleImageSelect(input) {
     selectedImages = [];
     
     if (files.length > 0) {
+        if (files.length > 5) {
+            alert('You can upload a maximum of 5 images.');
+            files = files.slice(0, 5);
+            const dt = new DataTransfer();
+            files.forEach(file => dt.items.add(file));
+            input.files = dt.files;
+        }
         previewArea.classList.remove('hidden');
         
         files.forEach((file, index) => {

@@ -21,6 +21,7 @@ class Product extends Model
         'manage_stock',
         'in_stock',
         'images',
+        'video',
         'weight',
         'dimensions',
         'category_id',

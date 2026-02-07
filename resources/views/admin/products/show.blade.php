@@ -77,6 +77,19 @@
                     </div>
                     @endif
 
+                    <!-- Product Video -->
+                    @if($product->video)
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Product Video</label>
+                        <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                            <video controls class="w-full max-w-md rounded-lg border border-gray-200">
+                                <source src="{{ asset('storage/' . $product->video) }}">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- Product Name -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Product Name</label>

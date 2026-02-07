@@ -165,6 +165,17 @@
                             @endif
                         </div>
 
+                        @if($product->video)
+                        <div class="mt-4 md:mt-6">
+                            <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+                                <video controls playsinline class="w-full h-full object-cover">
+                                    <source src="{{ asset('storage/' . $product->video) }}">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        @endif
+
                         <!-- Thumbnails -->
                         @if(count($product->images) > 1)
                         <div class="relative">
