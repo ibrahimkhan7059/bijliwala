@@ -1,6 +1,6 @@
 @extends('layouts.frontend')
 
-@section('title', 'AJ Electric - ' . $product->name)
+@section('title', $product->name)
 
 @push('styles')
 <style>
@@ -165,17 +165,6 @@
                             @endif
                         </div>
 
-                        @if($product->video)
-                        <div class="mt-4 md:mt-6">
-                            <div class="aspect-video bg-black rounded-2xl overflow-hidden shadow-xl border border-gray-200">
-                                <video controls playsinline class="w-full h-full object-cover">
-                                    <source src="{{ asset('storage/' . $product->video) }}">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        </div>
-                        @endif
-
                         <!-- Thumbnails -->
                         @if(count($product->images) > 1)
                         <div class="relative">
@@ -288,15 +277,183 @@
                         </svg>
                         Product Description
                     </h3>
-                    <p class="text-sm md:text-base text-gray-700 leading-relaxed">{{ $product->description }}</p>
+                    <div class="text-sm md:text-base text-gray-700 leading-relaxed prose prose-sm max-w-none">
+                        {!! $product->description !!}
+                    </div>
+                </div>
+                @endif
+
+                <!-- Product Variations -->
+                @if($product->hasVariations() && $product->activeVariations->count() > 0)
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
+                    <h3 class="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.871 4A17.926 17.926 0 003 12c0 2.874.673 5.59 1.871 8m14.13 0a17.926 17.926 0 001.87-8c0-2.874-.673-5.59-1.87-8M9 9h1.246a1 1 0 01.961.725l1.586 5.55A1 1 0 0013.754 16H15m-3-7v6m-5-6v6m5-6H9.5a1 1 0 00-.96.725L7.754 12H6" />
+                        </svg>
+                        Product Options
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        @foreach($product->activeVariations as $variation)
+                        <div class="bg-white rounded-lg p-4 border-2 border-blue-200 hover:border-blue-400 transition-colors">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-gray-900">{{ $variation->name }}</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                                    {{ $variation->type ?? 'Option' }}
+                                </span>
+                            </div>
+                            
+                            @if($variation->description)
+                            <p class="text-sm text-gray-600 mb-3">{!! $variation->description !!}</p>
+                            @endif
+                            
+                            <div class="flex justify-between items-center">
+                                @if($variation->price && $variation->price != $product->price)
+                                <div class="text-sm">
+                                    <span class="font-semibold text-green-600">
+                                        +Rs. {{ number_format($variation->price - $product->price) }}
+                                    </span>
+                                </div>
+                                @endif
+                                
+                                @if($variation->stock_quantity !== null)
+                                <div class="text-xs text-gray-500">
+                                    Stock: {{ $variation->stock_quantity }}
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
                 @endif
 
                 <!-- Add to Cart Form -->
                 @if($product->stock_quantity > 0)
-                <form action="{{ route('cart.add') }}" method="POST" class="space-y-4 md:space-y-6">
+                <form action="{{ route('cart.add') }}" method="POST" class="space-y-4 md:space-y-6" 
+                      x-data="{
+                        selectedVariation: null,
+                        basePrice: {{ $product->effective_price }},
+                        currentPrice: {{ $product->effective_price }},
+                        baseStock: {{ $product->stock_quantity }},
+                        currentStock: {{ $product->stock_quantity }},
+                        quantity: 1,
+                        canAddToCart: true,
+                        init() {
+                            this.validateStock();
+                        },
+                        updateVariation() {
+                            const select = this.$refs.variationSelect;
+                            const option = select.options[select.selectedIndex];
+                            
+                            if (option.value) {
+                                this.selectedVariation = option.value;
+                                this.currentPrice = parseFloat(option.dataset.price) || this.basePrice;
+                                this.currentStock = parseInt(option.dataset.stock) || this.baseStock;
+                            } else {
+                                this.selectedVariation = null;
+                                this.currentPrice = this.basePrice;
+                                this.currentStock = this.baseStock;
+                            }
+                            this.validateStock();
+                        },
+                        updateQuantity() {
+                            // Ensure quantity is not negative or zero
+                            if (this.quantity < 1) {
+                                this.quantity = 1;
+                            }
+                            // Ensure quantity doesn't exceed stock
+                            if (this.quantity > this.currentStock) {
+                                this.quantity = this.currentStock;
+                            }
+                            this.validateStock();
+                        },
+                        increaseQuantity() {
+                            if (this.quantity < this.currentStock) {
+                                this.quantity++;
+                                this.validateStock();
+                            }
+                        },
+                        decreaseQuantity() {
+                            if (this.quantity > 1) {
+                                this.quantity--;
+                                this.validateStock();
+                            }
+                        },
+                        validateStock() {
+                            // Button should be disabled if:
+                            // 1. No stock available (currentStock <= 0)
+                            // 2. Selected quantity is more than available stock
+                            this.canAddToCart = (this.currentStock > 0) && (this.quantity <= this.currentStock) && (this.quantity > 0);
+                            console.log('Stock validation:', {
+                                currentStock: this.currentStock,
+                                quantity: this.quantity,
+                                canAddToCart: this.canAddToCart
+                            });
+                        }
+                      }">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    
+                    <!-- Dynamic Price Display -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                                <span class="font-bold text-gray-900">Total Price:</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent" 
+                                      x-text="'Rs. ' + (currentPrice * quantity).toLocaleString()">
+                                    Rs. {{ number_format($product->effective_price) }}
+                                </span>
+                                <div class="text-sm text-gray-600" x-show="selectedVariation">
+                                    <span x-text="'Rs. ' + currentPrice.toLocaleString() + ' × ' + quantity"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stock Status -->
+                        <div class="mt-3 flex items-center gap-2">
+                            <div class="w-3 h-3 rounded-full" :class="currentStock > 0 ? 'bg-green-500' : 'bg-red-500'"></div>
+                            <span class="text-sm font-semibold" :class="currentStock > 0 ? 'text-green-700' : 'text-red-700'">
+                                <span x-text="currentStock + ' items available'"></span>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Variation Selector -->
+                    @if($product->hasVariations() && $product->activeVariations->count() > 0)
+                    <div class="bg-white border-2 border-blue-200 rounded-xl p-4">
+                        <label class="block text-sm md:text-base font-bold text-gray-900 mb-3 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                            </svg>
+                            Select Variation
+                        </label>
+                        <select name="variation_id" 
+                                x-ref="variationSelect"
+                                @change="updateVariation()"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base">
+                            <option value="">Standard Product (Rs. {{ number_format($product->effective_price) }})</option>
+                            @foreach($product->activeVariations as $variation)
+                            <option value="{{ $variation->id }}" 
+                                    data-price="{{ $variation->price }}" 
+                                    data-stock="{{ $variation->stock_quantity ?? $product->stock_quantity }}">
+                                {{ $variation->name }}
+                                @if($variation->price && $variation->price != $product->price)
+                                    (Rs. {{ number_format($variation->price) }})
+                                @endif
+                                @if($variation->stock_quantity !== null)
+                                    - Stock: {{ $variation->stock_quantity }}
+                                @endif
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                     
                     <!-- Quantity Selector -->
                     <div class="bg-white border-2 border-gray-200 rounded-xl p-4">
@@ -307,67 +464,85 @@
                             Select Quantity
                         </label>
                         <div class="flex items-center gap-4">
-                            <input type="number" 
-                                   id="quantity" 
-                                   name="quantity" 
-                                   value="1" 
-                                   min="1" 
-                                   max="{{ $product->stock_quantity }}"
-                                   class="w-24 md:w-32 px-4 py-3 text-center border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-indigo-500 focus:border-indigo-500 text-lg font-bold">
+                            <div class="flex items-center border-2 border-gray-300 rounded-lg overflow-hidden">
+                                <button type="button" 
+                                        @click="decreaseQuantity()"
+                                        :disabled="quantity <= 1"
+                                        :class="quantity <= 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-100 hover:bg-gray-200'"
+                                        class="px-3 py-2 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                                    </svg>
+                                </button>
+                                <input type="number" 
+                                       id="quantity" 
+                                       name="quantity" 
+                                       x-model.number="quantity"
+                                       @input="updateQuantity()"
+                                       min="1" 
+                                       :max="currentStock"
+                                       class="w-20 md:w-24 px-4 py-2 text-center border-0 focus:ring-0 text-lg font-bold">
+                                <button type="button" 
+                                        @click="increaseQuantity()"
+                                        :disabled="quantity >= currentStock"
+                                        :class="quantity >= currentStock ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-100 hover:bg-gray-200'"
+                                        class="px-3 py-2 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                </button>
+                            </div>
                             <span class="text-xs md:text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
-                                Max: <span class="font-bold">{{ $product->stock_quantity }}</span>
+                                Max: <span class="font-bold" x-text="currentStock">{{ $product->stock_quantity }}</span>
                             </span>
+                        </div>
+                        
+                        <!-- Stock Warning -->
+                        <div x-show="!canAddToCart && currentStock > 0" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 transform scale-95"
+                             x-transition:enter-end="opacity-100 transform scale-100"
+                             class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                            <div class="flex items-center gap-2 text-red-700">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold">
+                                    Quantity cannot exceed available stock! Only <span x-text="currentStock"></span> items available.
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Out of Stock Warning -->
+                        <div x-show="currentStock <= 0" 
+                             class="mt-3 p-3 bg-red-100 border border-red-300 rounded-lg">
+                            <div class="flex items-center gap-2 text-red-800">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="text-sm font-semibold">
+                                    This item is currently out of stock.
+                                </span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Add to Cart Button -->
-                    <button type="submit" class="w-full btn-primary py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold flex items-center justify-center gap-3 shadow-2xl hover:shadow-3xl">
+                    <button type="submit" 
+                            :disabled="!canAddToCart"
+                            :class="canAddToCart ? 'btn-primary hover:shadow-3xl' : 'bg-gray-300 text-gray-600 cursor-not-allowed'"
+                            class="w-full py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold flex items-center justify-center gap-3 shadow-2xl transition-all duration-300">
                         <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span>Add to Cart</span>
+                        <span x-show="canAddToCart">Add to Cart</span>
+                        <span x-show="!canAddToCart">Cannot Add to Cart</span>
                     </button>
                 </form>
                 @else
                 <button disabled class="w-full bg-gray-300 text-gray-600 py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold cursor-not-allowed">
                     Out of Stock
                 </button>
-                @endif
-
-                <!-- Divider with OR Text -->
-                @if($siteSettings->site_whatsapp)
-                <div class="relative my-4">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-xs">
-                        <span class="px-3 bg-white text-gray-400 font-medium">OR</span>
-                    </div>
-                </div>
-
-                <!-- WhatsApp Order Button -->
-                @php
-                    $whatsappMessage = "🛍️ *Product Inquiry*\n\n";
-                    $whatsappMessage .= "📦 *Product:* " . $product->name . "\n";
-                    if($product->sku) {
-                        $whatsappMessage .= "🔖 *SKU:* " . $product->sku . "\n";
-                    }
-                    $whatsappMessage .= "💰 *Price:* " . $siteSettings->currency_symbol . number_format($product->effective_price, 2) . "\n";
-                    if($product->discount_price) {
-                        $whatsappMessage .= "💸 *Original Price:* " . $siteSettings->currency_symbol . number_format($product->price, 2) . "\n";
-                        $whatsappMessage .= "🎉 *Discount:* " . $siteSettings->currency_symbol . number_format($product->price - $product->effective_price, 2) . " OFF\n";
-                    }
-                    $whatsappMessage .= "\nHi! I'm interested in this product. Please provide more details.";
-                @endphp
-                <a href="https://wa.me/{{ $siteSettings->site_whatsapp }}?text={{ urlencode($whatsappMessage) }}" 
-                   target="_blank" 
-                   rel="noopener noreferrer"
-                   class="w-full bg-green-500 hover:bg-green-600 text-white py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold flex items-center justify-center gap-3 shadow-2xl hover:shadow-green-500/50 transition-all duration-300 transform hover:scale-105">
-                    <svg class="w-6 h-6 md:w-7 md:h-7" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                    </svg>
-                    <span>Order on WhatsApp</span>
-                </a>
                 @endif
 
                 <!-- Features -->

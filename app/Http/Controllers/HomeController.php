@@ -70,7 +70,7 @@ class HomeController extends Controller
      */
     public function product($slug)
     {
-        $product = Product::active()->where('slug', $slug)->with('category')->firstOrFail();
+        $product = Product::active()->where('slug', $slug)->with(['category', 'activeVariations'])->firstOrFail();
         
         // Related products from same category
         $relatedProducts = Product::active()
@@ -95,5 +95,49 @@ class HomeController extends Controller
             ->paginate(12);
 
         return view('category', compact('category', 'products'));
+    }
+
+    /**
+     * Show blog posts
+     */
+    public function blog()
+    {
+        // For now, return a simple view with empty data
+        // You can implement blog functionality later
+        $posts = collect(); // Empty collection
+        return view('blog', compact('posts'));
+    }
+
+    /**
+     * Show a single blog post
+     */
+    public function blogShow($slug)
+    {
+        // For now, return a simple view
+        // You can implement blog functionality later
+        $post = (object) [
+            'title' => 'Sample Blog Post',
+            'content' => 'This is a placeholder for blog functionality.',
+            'slug' => $slug,
+            'created_at' => now()
+        ];
+        
+        return view('blog-show', compact('post'));
+    }
+
+    /**
+     * Show privacy policy page
+     */
+    public function privacy()
+    {
+        return view('privacy');
+    }
+
+    /**
+     * Show terms of service page
+     */
+    public function terms()
+    {
+        return view('terms');
     }
 }

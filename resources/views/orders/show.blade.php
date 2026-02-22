@@ -46,7 +46,12 @@
                 <div class="flex items-center justify-between py-3 border-b border-gray-200">
                     <div class="flex-1">
                         <h3 class="font-semibold text-gray-900">{{ $item->product_name }}</h3>
-                        <p class="text-sm text-gray-600">Qty: {{ $item->quantity }} × Rs. {{ number_format($item->product_price) }}</p>
+                        @if($item->variation_name)
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                {{ $item->variation_name }}
+                            </span>
+                        @endif
+                        <p class="text-sm text-gray-600 mt-1">Qty: {{ $item->quantity }} × Rs. {{ number_format($item->product_price) }}</p>
                     </div>
                     <p class="font-bold text-gray-900">Rs. {{ number_format($item->total_price) }}</p>
                 </div>

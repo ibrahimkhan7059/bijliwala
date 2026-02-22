@@ -3,6 +3,11 @@
 @section('title', 'Add New Product')
 @section('page-title', 'Add New Product')
 
+@push('styles')
+<!-- Quill.js CSS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+@endpush
+
 @section('content')
 <div class="animate-fade-in max-w-full overflow-hidden">
     <!-- Professional Header -->
@@ -182,11 +187,10 @@
                         <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
                             Description <span class="text-gray-500 text-xs">(Optional)</span>
                         </label>
+                        <div id="description-editor" style="min-height: 200px;" class="bg-white border border-gray-300 rounded-lg @error('description') border-red-500 @enderror"></div>
                         <textarea id="description" 
                                   name="description" 
-                                  rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors @error('description') border-red-500 @enderror"
-                                  placeholder="Enter product description">{{ old('description') }}</textarea>
+                                  class="hidden">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -265,6 +269,33 @@
                         @error('status')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
+                    </div>
+                </div>
+
+                <!-- Product Variations Section -->
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                                </svg>
+                                <h4 class="text-sm font-semibold text-blue-800">Product Variations (Optional)</h4>
+                            </div>
+                            <button type="button" 
+                                    onclick="addVariation()"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Add Variation
+                            </button>
+                        </div>
+                        <p class="text-xs text-blue-700 mt-2">Add variations like Size, Length, Wattage, etc. Each variation can have its own price and stock.</p>
+                    </div>
+
+                    <div id="variations-container" class="space-y-4">
+                        <!-- Variations will be added here dynamically -->
                     </div>
                 </div>
 
@@ -511,4 +542,181 @@ document.addEventListener('DOMContentLoaded', function() {
     calculateDiscount();
 });
 </script>
+
+<!-- Quill.js JS -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+<script>
+// Initialize Quill Editor for Description
+var quillEditor;
+document.addEventListener('DOMContentLoaded', function() {
+    quillEditor = new Quill('#description-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline', 'strike'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                [{ 'color': [] }, { 'background': [] }],
+                ['link'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Enter product description with formatting...'
+    });
+
+    // Load existing content if any (for old() values)
+    var existingContent = document.querySelector('#description').value;
+    if (existingContent) {
+        quillEditor.root.innerHTML = existingContent;
+    }
+
+    // Sync Quill content with hidden textarea on form submit
+    var form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Sync content before submission
+            var descriptionField = document.querySelector('#description');
+            var content = quillEditor.root.innerHTML;
+            
+            // If editor is empty (only contains <p><br></p>), set empty string
+            if (quillEditor.getText().trim() === '') {
+                descriptionField.value = '';
+            } else {
+                descriptionField.value = content;
+            }
+            
+            console.log('Description being submitted:', descriptionField.value);
+        });
+    }
+    
+    // Also sync on any text change (backup method)
+    quillEditor.on('text-change', function() {
+        var descriptionField = document.querySelector('#description');
+        var content = quillEditor.root.innerHTML;
+        
+        if (quillEditor.getText().trim() === '') {
+            descriptionField.value = '';
+        } else {
+            descriptionField.value = content;
+        }
+    });
+});
+</script>
+
+<script>
+// Product Variations Management
+let variationCount = 0;
+
+function addVariation() {
+    variationCount++;
+    const container = document.getElementById('variations-container');
+    const variationHtml = `
+        <div class="variation-item bg-white border-2 border-gray-200 rounded-lg p-6 relative" data-variation="${variationCount}">
+            <button type="button" 
+                    onclick="removeVariation(this)"
+                    class="absolute top-3 right-3 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg p-2 transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Variation Type -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Variation Type <span class="text-red-500">*</span>
+                    </label>
+                    <select name="variations[${variationCount}][type]" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                            required>
+                        <option value="">Select Type</option>
+                        <option value="Size">Size</option>
+                        <option value="Length">Length</option>
+                        <option value="Wattage">Wattage</option>
+                        <option value="Voltage">Voltage</option>
+                        <option value="Capacity">Capacity</option>
+                        <option value="Weight">Weight</option>
+                        <option value="Color">Color</option>
+                        <option value="Material">Material</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Variation Name/Value -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Value/Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" 
+                           name="variations[${variationCount}][name]" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                           placeholder="e.g., 1 Meter, 100W, Large"
+                           required>
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Price (PKR) <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" 
+                           name="variations[${variationCount}][price]" 
+                           step="0.01"
+                           min="0"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                           placeholder="0.00"
+                           required>
+                </div>
+
+                <!-- Stock Quantity -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Stock Quantity <span class="text-red-500">*</span>
+                    </label>
+                    <input type="number" 
+                           name="variations[${variationCount}][stock_quantity]" 
+                           min="0"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                           placeholder="0"
+                           required>
+                </div>
+
+                <!-- SKU (Optional) -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        SKU <span class="text-gray-500 text-xs">(Optional)</span>
+                    </label>
+                    <input type="text" 
+                           name="variations[${variationCount}][sku]" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                           placeholder="Unique SKU for this variation">
+                </div>
+
+                <!-- Is Active -->
+                <div class="flex items-center pt-8">
+                    <input type="checkbox" 
+                           name="variations[${variationCount}][is_active]" 
+                           value="1"
+                           checked
+                           id="variation_active_${variationCount}"
+                           class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="variation_active_${variationCount}" class="ml-2 text-sm font-medium text-gray-700">
+                        Active
+                    </label>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', variationHtml);
+}
+
+function removeVariation(button) {
+    if (confirm('Are you sure you want to remove this variation?')) {
+        button.closest('.variation-item').remove();
+    }
+}
+</script>
+
 @endsection

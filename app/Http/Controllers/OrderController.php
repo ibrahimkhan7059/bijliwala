@@ -121,18 +121,29 @@ class OrderController extends Controller
 
             // Create order items
             foreach ($cartItems as $item) {
+                // Use variation price if variation is selected
+                $itemPrice = $item->variation_id && $item->variation
+                    ? $item->variation->price
+                    : $item->product->effective_price;
+
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id ?? $item->product->id,
-                    'product_name' => $item->product->name,
-                    'product_sku' => $item->product->sku ?? 'N/A',
-                    'product_price' => $item->product->effective_price,
-                    'quantity' => $item->quantity,
-                    'total_price' => $item->product->effective_price * $item->quantity,
+                    'order_id'       => $order->id,
+                    'product_id'     => $item->product_id ?? $item->product->id,
+                    'variation_id'   => $item->variation_id ?? null,
+                    'variation_name' => $item->variation_name ?? null,
+                    'product_name'   => $item->product->name,
+                    'product_sku'    => $item->product->sku ?? 'N/A',
+                    'product_price'  => $itemPrice,
+                    'quantity'       => $item->quantity,
+                    'total_price'    => $itemPrice * $item->quantity,
                 ]);
 
-                // Update product stock
-                $item->product->decrement('stock_quantity', $item->quantity);
+                // Update variation stock if applicable, otherwise product stock
+                if ($item->variation_id && $item->variation) {
+                    $item->variation->decrement('stock_quantity', $item->quantity);
+                } else {
+                    $item->product->decrement('stock_quantity', $item->quantity);
+                }
             }
 
             // Clear cart

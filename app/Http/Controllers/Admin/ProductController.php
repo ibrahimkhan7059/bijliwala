@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use App\Models\Category;
 use Illuminate\Support\Str;
 
@@ -199,6 +200,13 @@ class ProductController extends Controller
             'images' => 'nullable|array|max:5',
             'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
             'video' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
+            'variations' => 'nullable|array',
+            'variations.*.type' => 'required_with:variations|string|max:50',
+            'variations.*.name' => 'required_with:variations|string|max:255',
+            'variations.*.price' => 'required_with:variations|numeric|min:0',
+            'variations.*.stock_quantity' => 'required_with:variations|integer|min:0',
+            'variations.*.sku' => 'nullable|string|max:100|unique:product_variations,sku',
+            'variations.*.is_active' => 'nullable|boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']) . '-' . Str::random(6);
@@ -252,7 +260,23 @@ class ProductController extends Controller
             @copy($videoPath . DIRECTORY_SEPARATOR . $videoFilename, $publicVideoPath . DIRECTORY_SEPARATOR . $videoFilename);
         }
 
-        Product::create($validated);
+        // Create product
+        $product = Product::create($validated);
+
+        // Handle product variations
+        if ($request->has('variations') && is_array($request->variations)) {
+            foreach ($request->variations as $index => $variationData) {
+                $product->variations()->create([
+                    'type' => $variationData['type'],
+                    'name' => $variationData['name'],
+                    'price' => $variationData['price'],
+                    'stock_quantity' => $variationData['stock_quantity'],
+                    'sku' => $variationData['sku'] ?? null,
+                    'is_active' => isset($variationData['is_active']) ? true : false,
+                    'sort_order' => $index,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product created successfully!');
@@ -298,6 +322,13 @@ class ProductController extends Controller
             'images' => 'nullable|array|max:5',
             'images.*' => 'nullable|image|mimes:jpeg,jpg,png,gif,webp|max:5120',
             'video' => 'nullable|file|mimes:mp4,webm,ogg|max:51200',
+            'variations' => 'nullable|array',
+            'variations.*.type' => 'required_with:variations|string|max:50',
+            'variations.*.name' => 'required_with:variations|string|max:255',
+            'variations.*.price' => 'required_with:variations|numeric|min:0',
+            'variations.*.stock_quantity' => 'required_with:variations|integer|min:0',
+            'variations.*.sku' => 'nullable|string|max:100',
+            'variations.*.is_active' => 'nullable|boolean',
         ]);
 
         // Update slug if name changed
@@ -373,6 +404,25 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+
+        // Handle product variations update
+        if ($request->has('variations')) {
+            // Delete old variations
+            $product->variations()->delete();
+            
+            // Create new variations
+            foreach ($request->variations as $index => $variationData) {
+                $product->variations()->create([
+                    'type' => $variationData['type'],
+                    'name' => $variationData['name'],
+                    'price' => $variationData['price'],
+                    'stock_quantity' => $variationData['stock_quantity'],
+                    'sku' => $variationData['sku'] ?? null,
+                    'is_active' => isset($variationData['is_active']) ? true : false,
+                    'sort_order' => $index,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product updated successfully!');

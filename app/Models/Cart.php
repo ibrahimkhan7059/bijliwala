@@ -10,27 +10,30 @@ class Cart extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'variation_id',
+        'variation_name',
         'quantity',
         'price',
+        'product_options',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'product_options' => 'array',
     ];
 
-    /**
-     * Get the user that owns the cart item
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the product associated with the cart item
-     */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function variation(): BelongsTo
+    {
+        return $this->belongsTo(ProductVariation::class);
     }
 }

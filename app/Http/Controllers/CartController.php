@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\ProductVariation;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -18,7 +19,7 @@ class CartController extends Controller
     {
         if (Auth::check()) {
             $cartItems = Cart::where('user_id', Auth::id())
-                ->with('product')
+                ->with(['product', 'variation'])
                 ->get();
         } else {
             // For guest users, use session
@@ -28,7 +29,8 @@ class CartController extends Controller
         $total = 0;
         if (Auth::check()) {
             foreach ($cartItems as $item) {
-                $total += $item->product->effective_price * $item->quantity;
+                // Use the stored price from cart (which includes variation price)
+                $total += $item->price * $item->quantity;
             }
         } else {
             foreach ($cartItems as $item) {
@@ -53,57 +55,75 @@ class CartController extends Controller
     public function add(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1'
+            'product_id'   => 'required|exists:products,id',
+            'quantity'     => 'required|integer|min:1',
+            'variation_id' => 'nullable|exists:product_variations,id',
         ]);
 
-        $product = Product::findOrFail($request->product_id);
+        $product   = Product::findOrFail($request->product_id);
+        $variation = null;
+        $price     = $product->effective_price;
+        $stock     = $product->stock_quantity;
+        $variationName = null;
 
-        // Check stock
-        if ($product->stock_quantity < $request->quantity) {
+        // If variation selected, use variation price & stock
+        if ($request->variation_id) {
+            $variation = ProductVariation::findOrFail($request->variation_id);
+            $price     = $variation->price;
+            $stock     = $variation->stock_quantity;
+            $variationName = $variation->type . ': ' . $variation->name;
+        }
+
+        if ($stock < $request->quantity) {
             return back()->with('error', 'Insufficient stock available!');
         }
 
         if (Auth::check()) {
-            // For logged in users
-            $cartItem = Cart::where('user_id', Auth::id())
+            // Unique cart item = product + variation combo
+            $query = Cart::where('user_id', Auth::id())
                 ->where('product_id', $request->product_id)
-                ->first();
+                ->where('variation_id', $request->variation_id ?? null);
+
+            $cartItem = $query->first();
 
             if ($cartItem) {
                 $newQuantity = $cartItem->quantity + $request->quantity;
-                if ($product->stock_quantity < $newQuantity) {
+                if ($stock < $newQuantity) {
                     return back()->with('error', 'Cannot add more items. Stock limit reached!');
                 }
-                // Update price in case product price changed
                 $cartItem->update([
                     'quantity' => $newQuantity,
-                    'price' => $product->effective_price,
+                    'price'    => $price,
                 ]);
             } else {
                 Cart::create([
-                    'user_id' => Auth::id(),
-                    'product_id' => $request->product_id,
-                    'quantity' => $request->quantity,
-                    'price' => $product->effective_price,
+                    'user_id'        => Auth::id(),
+                    'product_id'     => $request->product_id,
+                    'variation_id'   => $request->variation_id ?? null,
+                    'variation_name' => $variationName,
+                    'quantity'       => $request->quantity,
+                    'price'          => $price,
                 ]);
             }
         } else {
-            // For guest users, use session
-            $cart = session()->get('cart', []);
-            
-            if (isset($cart[$request->product_id])) {
-                $cart[$request->product_id]['quantity'] += $request->quantity;
+            // Guest session cart — key includes variation
+            $cart    = session()->get('cart', []);
+            $cartKey = $request->product_id . '_' . ($request->variation_id ?? '0');
+
+            if (isset($cart[$cartKey])) {
+                $cart[$cartKey]['quantity'] += $request->quantity;
             } else {
-                $cart[$request->product_id] = [
-                    'product_id' => $product->id,
-                    'name' => $product->name,
-                    'price' => $product->effective_price,
-                    'quantity' => $request->quantity,
-                    'image' => $product->images[0] ?? null,
+                $cart[$cartKey] = [
+                    'product_id'     => $product->id,
+                    'variation_id'   => $request->variation_id ?? null,
+                    'variation_name' => $variationName,
+                    'name'           => $product->name,
+                    'price'          => $price,
+                    'quantity'       => $request->quantity,
+                    'image'          => $product->images[0] ?? null,
                 ];
             }
-            
+
             session()->put('cart', $cart);
         }
 
@@ -125,8 +145,15 @@ class CartController extends Controller
                 ->firstOrFail();
 
             $product = $cartItem->product;
+            $stock = $product->stock_quantity;
             
-            if ($product->stock_quantity < $request->quantity) {
+            // If variation is selected, use variation stock
+            if ($cartItem->variation_id) {
+                $variation = $cartItem->variation;
+                $stock = $variation ? $variation->stock_quantity : $product->stock_quantity;
+            }
+            
+            if ($stock < $request->quantity) {
                 return back()->with('error', 'Insufficient stock available!');
             }
 

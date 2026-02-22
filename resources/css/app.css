@@ -3,6 +3,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prose styles for rich text content */
+@layer components {
+    .prose {
+        @apply text-gray-700;
+    }
+    .prose h1, .prose h2, .prose h3 {
+        @apply font-bold text-gray-900 mt-4 mb-2;
+    }
+    .prose h1 {
+        @apply text-2xl;
+    }
+    .prose h2 {
+        @apply text-xl;
+    }
+    .prose h3 {
+        @apply text-lg;
+    }
+    .prose p {
+        @apply mb-3;
+    }
+    .prose ul, .prose ol {
+        @apply ml-6 mb-3;
+    }
+    .prose ul {
+        @apply list-disc;
+    }
+    .prose ol {
+        @apply list-decimal;
+    }
+    .prose li {
+        @apply mb-1;
+    }
+    .prose strong {
+        @apply font-bold text-gray-900;
+    }
+    .prose em {
+        @apply italic;
+    }
+    .prose a {
+        @apply text-blue-600 hover:text-blue-800 underline;
+    }
+    .prose code {
+        @apply bg-gray-100 px-1 py-0.5 rounded text-sm font-mono;
+    }
+}
+
 /* Responsive Layout Fixes */
 @layer utilities {
     .container-responsive {

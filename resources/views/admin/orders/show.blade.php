@@ -130,9 +130,14 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <div class="text-sm font-medium text-gray-900">{{ $item->product->name ?? 'Product Deleted' }}</div>
+                                            <div class="text-sm font-medium text-gray-900">{{ $item->product_name ?? $item->product->name ?? 'Product Deleted' }}</div>
+                                            @if($item->variation_name)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                                    {{ $item->variation_name }}
+                                                </span>
+                                            @endif
                                             @if($item->product)
-                                                <div class="text-sm text-gray-500">SKU: {{ $item->product->sku }}</div>
+                                                <div class="text-sm text-gray-500 mt-1">SKU: {{ $item->product->sku }}</div>
                                             @endif
                                         </div>
                                     </div>

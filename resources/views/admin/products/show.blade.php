@@ -163,7 +163,7 @@
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
                         <div class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg min-h-[80px]">
                             @if($product->description)
-                                <p class="text-gray-700 leading-relaxed">{{ $product->description }}</p>
+                                <div class="text-gray-700 leading-relaxed prose max-w-none">{!! $product->description !!}</div>
                             @else
                                 <span class="text-gray-500 italic">No description provided</span>
                             @endif
@@ -237,6 +237,61 @@
     </div>
 
     <!-- Delete Form (hidden) -->
+    <!-- Product Variations Section -->
+    @if($product->variations->count() > 0)
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 mt-6 animate-slide-in-up">
+        <div class="border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                </svg>
+                <h3 class="text-base sm:text-lg font-semibold text-gray-900">Product Variations</h3>
+                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">{{ $product->variations->count() }}</span>
+            </div>
+        </div>
+        <div class="p-4 sm:p-6">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="px-4 py-3 font-semibold text-gray-700">Type</th>
+                            <th class="px-4 py-3 font-semibold text-gray-700">Value</th>
+                            <th class="px-4 py-3 font-semibold text-gray-700">SKU</th>
+                            <th class="px-4 py-3 font-semibold text-gray-700">Price</th>
+                            <th class="px-4 py-3 font-semibold text-gray-700">Stock</th>
+                            <th class="px-4 py-3 font-semibold text-gray-700">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach($product->variations as $variation)
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-4 py-3">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                    {{ $variation->type }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 font-medium text-gray-900">{{ $variation->name }}</td>
+                            <td class="px-4 py-3 text-gray-600">{{ $variation->sku ?? '-' }}</td>
+                            <td class="px-4 py-3 font-semibold text-green-700">Rs. {{ number_format($variation->price, 2) }}</td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $variation->stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                    {{ $variation->stock_quantity }} units
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $variation->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                    {{ $variation->is_active ? 'Active' : 'Inactive' }}
+                                </span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <form id="delete-form" action="{{ route('admin.products.destroy', $product) }}" method="POST" class="hidden">
         @csrf
         @method('DELETE')

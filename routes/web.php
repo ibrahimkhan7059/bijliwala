@@ -3,9 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\WishlistController;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
@@ -20,14 +19,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.show');
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.show');
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
-Route::get('/privacy', function () {
-    return view('privacy');
-})->name('privacy');
-Route::get('/terms', function () {
-    return view('terms');
-})->name('terms');
+Route::get('/blog', [HomeController::class, 'blog'])->name('blog.index');
+Route::get('/blog/{slug}', [HomeController::class, 'blogShow'])->name('blog.show');
+Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 
 // Test route for custom login (temporary)
 Route::get('/test-login', function () {
@@ -43,6 +38,9 @@ Route::prefix('cart')->name('cart.')->group(function () {
     Route::delete('/', [CartController::class, 'clear'])->name('clear');
     Route::get('/count', [CartController::class, 'count'])->name('count');
 });
+
+// Order Routes
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('auth');
 
 // Customer Dashboard
 Route::get('/dashboard', function () {
@@ -64,14 +62,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Category Management
     Route::resource('categories', AdminCategoryController::class);
     
+    // Blog Management
+    Route::resource('blogs', AdminBlogController::class);
+    
     // Order Management
     Route::resource('orders', AdminOrderController::class)->except(['create', 'store', 'edit']);
     
     // Customer Management
     Route::resource('customers', AdminCustomerController::class);
-    
-    // Blog Management
-    Route::resource('blogs', AdminBlogController::class);
     
     // Settings Management
     Route::prefix('settings')->group(function () {
@@ -79,15 +77,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::post('/general', [AdminSettingsController::class, 'updateGeneral'])->name('settings.general');
         Route::post('/email', [AdminSettingsController::class, 'updateEmail'])->name('settings.email');
         Route::post('/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security');
-        Route::post('/privacy-terms', [AdminSettingsController::class, 'updatePrivacyTerms'])->name('settings.privacy-terms');
         Route::post('/clear-cache', [AdminSettingsController::class, 'clearCache'])->name('settings.clear-cache');
         Route::post('/backup-database', [AdminSettingsController::class, 'backupDatabase'])->name('settings.backup-database');
     });
 });
-
-// Guest Order Placement (accessible without login)
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
-Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
 // User Profile Routes
 Route::middleware('auth')->group(function () {
@@ -98,8 +91,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/preferences', [ProfileController::class, 'updatePreferences'])->name('profile.preferences');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
-    // Order Management (logged-in users only)
+    // Order History
     Route::get('/orders', [ProfileController::class, 'orders'])->name('orders.index');
+    Route::get('/orders/{order}', [ProfileController::class, 'showOrder'])->name('orders.show');
     
     // Wishlist Routes
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');

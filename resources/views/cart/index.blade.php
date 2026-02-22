@@ -123,7 +123,12 @@
                                             {{ $item->product->name }}
                                         </a>
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-gray-600">SKU: {{ $item->product->sku }}</p>
+                                    @if($item->variation_name)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                            {{ $item->variation_name }}
+                                        </span>
+                                    @endif
+                                    <p class="text-xs sm:text-sm text-gray-600 mt-1">SKU: {{ $item->product->sku }}</p>
                                 </div>
                                 <div class="flex items-center gap-2 flex-shrink-0">
                                     @auth
@@ -173,10 +178,13 @@
                                 <!-- Price -->
                                 <div class="text-left sm:text-right">
                                     <p class="text-base sm:text-xl font-bold text-gray-900">
-                                        Rs. {{ number_format($item->product->effective_price * $item->quantity) }}
+                                        Rs. {{ number_format($item->price * $item->quantity) }}
                                     </p>
                                     <p class="text-xs sm:text-sm text-gray-600">
-                                        Rs. {{ number_format($item->product->effective_price) }} each
+                                        Rs. {{ number_format($item->price) }} each
+                                        @if($item->variation_name)
+                                            <br><span class="text-xs text-blue-600 font-medium">{{ $item->variation_name }}</span>
+                                        @endif
                                     </p>
                                 </div>
                             </div>
@@ -233,6 +241,9 @@
                                     </p>
                                     <p class="text-xs sm:text-sm text-gray-600">
                                         Rs. {{ number_format($item['price']) }} each
+                                        @if(isset($item['variation_name']) && $item['variation_name'])
+                                            <br><span class="text-xs text-blue-600 font-medium">{{ $item['variation_name'] }}</span>
+                                        @endif
                                     </p>
                                 </div>
                             </div>

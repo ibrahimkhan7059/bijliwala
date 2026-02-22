@@ -76,6 +76,30 @@ class Product extends Model
     }
 
     /**
+     * Get variations for this product
+     */
+    public function variations()
+    {
+        return $this->hasMany(ProductVariation::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Get active variations for this product
+     */
+    public function activeVariations()
+    {
+        return $this->hasMany(ProductVariation::class)->where('is_active', true)->orderBy('sort_order');
+    }
+
+    /**
+     * Check if product has variations
+     */
+    public function hasVariations(): bool
+    {
+        return $this->variations()->exists();
+    }
+
+    /**
      * Get the effective price (sale price if available, otherwise regular price)
      */
     public function getEffectivePriceAttribute()
