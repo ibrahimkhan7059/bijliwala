@@ -392,7 +392,7 @@
         <!-- Contact Info / About Section -->
         <div id="about" class="bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900 rounded-2xl md:rounded-3xl p-6 md:p-10 text-white shadow-2xl">
             <div class="text-center mb-6 md:mb-8">
-                <h3 class="text-2xl md:text-3xl font-bold mb-2">About {{ $siteSettings->site_name }}</h3>
+                <h3 class="text-2xl md:text-3xl font-bold mb-2 text-white">About {{ $siteSettings->site_name }}</h3>
                 <p class="text-gray-300 text-sm md:text-base">We're here to help you with all your electrical needs</p>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6">
@@ -404,7 +404,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-300 text-xs md:text-sm mb-1">Store Location</p>
-                    <p class="font-bold text-sm md:text-base">{!! nl2br(e($siteSettings->site_address)) !!}</p>
+                    <p class="font-bold text-sm md:text-base text-white">{!! nl2br(e($siteSettings->site_address)) !!}</p>
                 </div>
                 <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 md:p-6 hover:bg-white/20 transition-all text-center">
                     <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-3 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
@@ -413,7 +413,7 @@
                         </svg>
                     </div>
                     <p class="text-gray-300 text-xs md:text-sm mb-1">Delivery Time</p>
-                    <p class="font-bold text-sm md:text-base">3-5 Business Days</p>
+                    <p class="font-bold text-sm md:text-base text-white">3-5 Business Days</p>
                 </div>
             </div>
             <div class="bg-gradient-to-r from-red-500/30 to-pink-500/30 backdrop-blur-md rounded-xl p-4 md:p-6 border border-red-400/50 text-center">
@@ -421,7 +421,7 @@
                     <svg class="w-5 h-5 md:w-6 md:h-6 text-red-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
                     </svg>
-                    <p class="font-bold text-sm md:text-base">Important Note</p>
+                    <p class="font-bold text-sm md:text-base text-white">Important Note</p>
                 </div>
                 <p class="text-xs md:text-sm text-gray-200 leading-relaxed">We don't work on cash on delivery. Please contact us via WhatsApp to place your order.</p>
             </div>
