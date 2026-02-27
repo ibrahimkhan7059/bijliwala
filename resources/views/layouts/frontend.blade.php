@@ -581,7 +581,7 @@
                     
                     <!-- For Solar Installations & Brand Sponsorships -->
                     <div class="mb-6">
-                        <h4 class="text-md font-semibold mb-2 text-green-400">For Solar Installations & Brand Sponsorships</h4>
+                        <h4 class="text-md font-semibold mb-2 text-white">For Solar Installations & Brand Sponsorships</h4>
                         <ul class="space-y-2">
                             @if(isset($siteSettings->solar_contact_whatsapp) && $siteSettings->solar_contact_whatsapp)
                             <li class="flex items-start text-sm">
@@ -618,7 +618,7 @@
 
                     <!-- For Product Orders Only -->
                     <div>
-                        <h4 class="text-md font-semibold mb-2 text-orange-400">For Product Orders Only</h4>
+                        <h4 class="text-md font-semibold mb-2 text-white">For Product Orders Only</h4>
                         <ul class="space-y-2">
                             @if(isset($siteSettings->orders_contact_whatsapp) && $siteSettings->orders_contact_whatsapp)
                             <li class="flex items-start text-sm">
