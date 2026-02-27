@@ -77,6 +77,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
         Route::post('/general', [AdminSettingsController::class, 'updateGeneral'])->name('settings.general');
         Route::post('/email', [AdminSettingsController::class, 'updateEmail'])->name('settings.email');
         Route::post('/security', [AdminSettingsController::class, 'updateSecurity'])->name('settings.security');
+        Route::post('/privacy-terms', [AdminSettingsController::class, 'updatePrivacyTerms'])->name('settings.privacy-terms');
         Route::post('/clear-cache', [AdminSettingsController::class, 'clearCache'])->name('settings.clear-cache');
         Route::post('/backup-database', [AdminSettingsController::class, 'backupDatabase'])->name('settings.backup-database');
     });

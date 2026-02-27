@@ -47,7 +47,13 @@ class SettingsController extends Controller
             'social_twitter' => 'nullable|url|max:255',
             'delivery_charges' => 'required|numeric|min:0|max:99999',
             'bank_name' => 'nullable|string|max:255',
-            'account_number' => 'nullable|string|max:255'
+            'account_number' => 'nullable|string|max:255',
+            // Separate contact validation
+            'solar_contact_whatsapp' => 'nullable|string|max:20',
+            'solar_contact_email' => 'nullable|email|max:255',
+            'orders_contact_whatsapp' => 'nullable|string|max:20',
+            'orders_contact_email' => 'nullable|email|max:255',
+            'business_location' => 'nullable|string|max:255',
         ]);
 
         // Handle logo upload
@@ -95,12 +101,20 @@ class SettingsController extends Controller
         $this->updateSetting('delivery_charges', $request->delivery_charges);
         $this->updateSetting('bank_name', $request->bank_name);
         $this->updateSetting('account_number', $request->account_number);
+        
+        // Social media settings
         $this->updateSetting('social_facebook', $request->social_facebook);
         $this->updateSetting('social_instagram', $request->social_instagram);
         $this->updateSetting('social_tiktok', $request->social_tiktok);
         $this->updateSetting('social_youtube', $request->social_youtube);
         $this->updateSetting('social_twitter', $request->social_twitter);
-        $this->updateSetting('delivery_charges', $request->delivery_charges);
+        
+        // Separate contact settings
+        $this->updateSetting('solar_contact_whatsapp', $request->solar_contact_whatsapp);
+        $this->updateSetting('solar_contact_email', $request->solar_contact_email);
+        $this->updateSetting('orders_contact_whatsapp', $request->orders_contact_whatsapp);
+        $this->updateSetting('orders_contact_email', $request->orders_contact_email);
+        $this->updateSetting('business_location', $request->business_location);
 
         // Clear view cache automatically after updating settings
         Artisan::call('view:clear');
@@ -313,7 +327,13 @@ class SettingsController extends Controller
             'social_tiktok' => $this->getSetting('social_tiktok', null),
             'social_youtube' => $this->getSetting('social_youtube', null),
             'social_twitter' => $this->getSetting('social_twitter', null),
-            'delivery_charges' => $this->getSetting('delivery_charges', 250),
+            
+            // Separate Contact Settings
+            'solar_contact_whatsapp' => $this->getSetting('solar_contact_whatsapp', null),
+            'solar_contact_email' => $this->getSetting('solar_contact_email', null),
+            'orders_contact_whatsapp' => $this->getSetting('orders_contact_whatsapp', null),
+            'orders_contact_email' => $this->getSetting('orders_contact_email', null),
+            'business_location' => $this->getSetting('business_location', null),
             
             // Email Settings
             'mail_driver' => $this->getSetting('mail_driver', 'smtp'),

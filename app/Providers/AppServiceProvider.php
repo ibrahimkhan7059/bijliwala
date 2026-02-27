@@ -48,6 +48,13 @@ class AppServiceProvider extends ServiceProvider
                     'account_number' => $settingsData['account_number'] ?? null,
                     'privacy_policy' => $settingsData['privacy_policy'] ?? null,
                     'terms_of_service' => $settingsData['terms_of_service'] ?? null,
+                    
+                    // Separate Contact Information
+                    'solar_contact_whatsapp' => $settingsData['solar_contact_whatsapp'] ?? null,
+                    'solar_contact_email' => $settingsData['solar_contact_email'] ?? null,
+                    'orders_contact_whatsapp' => $settingsData['orders_contact_whatsapp'] ?? null,
+                    'orders_contact_email' => $settingsData['orders_contact_email'] ?? null,
+                    'business_location' => $settingsData['business_location'] ?? null,
                 ];
             });
             
