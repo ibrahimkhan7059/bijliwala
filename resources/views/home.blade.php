@@ -94,7 +94,7 @@
                     </svg>
                 </a>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 @foreach($featuredProducts as $product)
                 <div class="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 rounded-xl shadow-lg overflow-hidden card-hover group border-2 border-orange-200">
                     <a href="{{ route('product.show', $product->slug) }}" 
