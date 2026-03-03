@@ -17,6 +17,12 @@ class CartController extends Controller
      */
     public function index()
     {
+        // Check for order success data
+        $orderSuccess = session()->get('order_success');
+        if ($orderSuccess) {
+            session()->forget('order_success'); // Remove after displaying
+        }
+
         if (Auth::check()) {
             $cartItems = Cart::where('user_id', Auth::id())
                 ->with(['product', 'variation'])
@@ -46,7 +52,7 @@ class CartController extends Controller
         
         $grandTotal = $total + $deliveryCharges;
 
-        return view('cart.index', compact('cartItems', 'total', 'deliveryCharges', 'grandTotal'));
+        return view('cart.index', compact('cartItems', 'total', 'deliveryCharges', 'grandTotal', 'orderSuccess'));
     }
 
     /**
@@ -127,7 +133,7 @@ class CartController extends Controller
             session()->put('cart', $cart);
         }
 
-        return back()->with('success', 'Product added to cart successfully!');
+        return redirect()->route('cart.index')->with('success', 'Product added to cart successfully!');
     }
 
     /**

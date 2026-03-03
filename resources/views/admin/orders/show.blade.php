@@ -184,7 +184,14 @@
                 
                 <div class="p-6">
                     @if($order->user)
+                        <!-- Registered Customer -->
                         <div class="space-y-3">
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Customer Type:</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
+                                    Registered
+                                </span>
+                            </div>
                             <div>
                                 <span class="text-sm font-medium text-gray-700">Name:</span>
                                 <p class="text-sm text-gray-900">{{ $order->user->name }}</p>
@@ -201,10 +208,127 @@
                             @endif
                         </div>
                     @else
-                        <p class="text-sm text-gray-500">Guest Order - No customer account</p>
+                        <!-- Guest Customer -->
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Customer Type:</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-2">
+                                    Guest
+                                </span>
+                            </div>
+                            @if($order->billing_address && isset($order->billing_address['name']))
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Name:</span>
+                                <p class="text-sm text-gray-900">{{ $order->billing_address['name'] }}</p>
+                            </div>
+                            @endif
+                            @if($order->billing_address && isset($order->billing_address['phone']))
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Phone:</span>
+                                <p class="text-sm text-gray-900">{{ $order->billing_address['phone'] }}</p>
+                            </div>
+                            @endif
+                            <div>
+                                <span class="text-sm font-medium text-gray-700">Email:</span>
+                                <p class="text-sm text-gray-500">Not provided (Guest order)</p>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
+
+            <!-- Delivery Address Information -->
+            @if($order->shipping_address)
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 animate-slide-in-up">
+                <div class="border-b border-gray-200 px-6 py-4">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        Delivery Address
+                    </h3>
+                </div>
+                
+                <div class="p-6">
+                    <div class="space-y-3">
+                        @if(isset($order->shipping_address['name']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Recipient Name:</span>
+                            <p class="text-sm text-gray-900">{{ $order->shipping_address['name'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->shipping_address['phone']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Phone:</span>
+                            <p class="text-sm text-gray-900">{{ $order->shipping_address['phone'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->shipping_address['address']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Address:</span>
+                            <p class="text-sm text-gray-900">{{ $order->shipping_address['address'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->shipping_address['postal_code']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Postal Code:</span>
+                            <p class="text-sm text-gray-900">{{ $order->shipping_address['postal_code'] }}</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- Billing Address Information (if different from shipping) -->
+            @if($order->billing_address && $order->billing_address !== $order->shipping_address)
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 animate-slide-in-up">
+                <div class="border-b border-gray-200 px-6 py-4">
+                    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        Billing Address
+                    </h3>
+                </div>
+                
+                <div class="p-6">
+                    <div class="space-y-3">
+                        @if(isset($order->billing_address['name']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Name:</span>
+                            <p class="text-sm text-gray-900">{{ $order->billing_address['name'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->billing_address['phone']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Phone:</span>
+                            <p class="text-sm text-gray-900">{{ $order->billing_address['phone'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->billing_address['address']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Address:</span>
+                            <p class="text-sm text-gray-900">{{ $order->billing_address['address'] }}</p>
+                        </div>
+                        @endif
+                        
+                        @if(isset($order->billing_address['postal_code']))
+                        <div>
+                            <span class="text-sm font-medium text-gray-700">Postal Code:</span>
+                            <p class="text-sm text-gray-900">{{ $order->billing_address['postal_code'] }}</p>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            @endif
 
             <!-- Payment Proof -->
             @if($order->payment_proof)

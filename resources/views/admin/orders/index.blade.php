@@ -193,7 +193,15 @@
                     <div class="space-y-2 mb-3">
                         <div class="flex items-center justify-between text-xs">
                             <span class="text-gray-600">Customer:</span>
-                            <span class="font-medium text-gray-900 truncate ml-2">{{ $order->user->name ?? 'Guest' }}</span>
+                            <span class="font-medium text-gray-900 truncate ml-2">
+                                @if($order->user)
+                                    {{ $order->user->name }}
+                                    <span class="inline-flex items-center px-1 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-1">R</span>
+                                @else
+                                    {{ $order->billing_address['name'] ?? 'Guest' }}
+                                    <span class="inline-flex items-center px-1 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-1">G</span>
+                                @endif
+                            </span>
                         </div>
                         <div class="flex items-center justify-between text-xs">
                             <span class="text-gray-600">Amount:</span>
@@ -269,8 +277,23 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div>
-                                    <div class="text-sm font-medium text-gray-900">{{ $order->user->name ?? 'Guest' }}</div>
-                                    <div class="text-sm text-gray-500">{{ $order->user->email ?? 'N/A' }}</div>
+                                    @if($order->user)
+                                        <div class="text-sm font-medium text-gray-900">{{ $order->user->name }}</div>
+                                        <div class="text-sm text-gray-500">{{ $order->user->email }}</div>
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mt-1">
+                                            Registered
+                                        </span>
+                                    @else
+                                        <div class="text-sm font-medium text-gray-900">
+                                            {{ $order->billing_address['name'] ?? 'Guest Customer' }}
+                                        </div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ $order->billing_address['phone'] ?? 'No phone provided' }}
+                                        </div>
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-1">
+                                            Guest
+                                        </span>
+                                    @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">

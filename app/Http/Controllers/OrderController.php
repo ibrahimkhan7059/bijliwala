@@ -22,7 +22,7 @@ class OrderController extends Controller
             'payment_proof' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120', // 5MB max
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
-            'postal_code' => 'required|string|max:20',
+            'postal_code' => 'nullable|string|max:20',
         ];
         
         // Add name validation for guest users
@@ -156,7 +156,17 @@ class OrderController extends Controller
 
             DB::commit();
 
-            return redirect()->route('orders.show', $order->id)->with('success', 'Order placed successfully! We will contact you shortly.');
+            // Store order data in session for thank you display
+            session()->put('order_success', [
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'total_amount' => $order->total_amount,
+                'customer_name' => $order->billing_address['name'],
+                'items_count' => $cartItems->count(),
+                'show_thank_you' => true
+            ]);
+
+            return redirect()->route('cart.index')->with('success', 'Order placed successfully! We will contact you shortly.');
 
         } catch (\Exception $e) {
             DB::rollBack();

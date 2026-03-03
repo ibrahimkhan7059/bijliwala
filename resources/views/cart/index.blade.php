@@ -13,6 +13,92 @@
             <span class="truncate">Shopping Cart</span>
         </h1>
 
+        <!-- Order Success Thank You Message -->
+        @if(isset($orderSuccess) && $orderSuccess)
+        <div class="mb-8 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 border-4 border-green-400 rounded-3xl p-6 md:p-8 text-center shadow-2xl relative overflow-hidden">
+            
+            <!-- Background Decoration -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-200 to-emerald-300 rounded-full -translate-y-16 translate-x-16 opacity-20"></div>
+            <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-br from-amber-200 to-orange-300 rounded-full translate-y-12 -translate-x-12 opacity-20"></div>
+            
+            <!-- Success Icon with Animation -->
+            <div class="relative">
+                <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl animate-bounce">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                
+                <!-- Celebration Emojis -->
+                <div class="absolute -top-2 -left-2 text-2xl">🎉</div>
+                <div class="absolute -top-1 -right-3 text-xl">✨</div>
+                <div class="absolute -bottom-1 -left-1 text-xl">🎊</div>
+                <div class="absolute -bottom-2 -right-2 text-2xl">🥳</div>
+            </div>
+            
+            <h2 class="text-2xl md:text-4xl font-extrabold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-4">
+                Order Placed Successfully! 🎉
+            </h2>
+            <p class="text-lg md:text-xl text-gray-700 mb-6 max-w-2xl mx-auto">
+                Thank you {{ $orderSuccess['customer_name'] }}! Your order has been received and is being processed.
+            </p>
+            
+            <!-- Order Summary -->
+            <div class="bg-white rounded-2xl p-6 mb-6 shadow-lg border-2 border-green-200">
+                <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    Order Summary
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Order Number</p>
+                        <p class="text-lg font-bold text-green-700">{{ $orderSuccess['order_number'] }}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Total Items</p>
+                        <p class="text-lg font-bold text-gray-900">{{ $orderSuccess['items_count'] }}</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Total Amount</p>
+                        <p class="text-lg font-bold text-green-700">Rs. {{ number_format($orderSuccess['total_amount']) }}</p>
+                    </div>
+                </div>
+                
+                <div class="bg-green-100 border border-green-300 rounded-lg p-4">
+                    <h4 class="font-semibold text-green-800 mb-2">What happens next?</h4>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li>✓ We will verify your payment within 24 hours</li>
+                        <li>✓ You will receive a confirmation call from our team</li>
+                        <li>✓ Your order will be dispatched within 1-2 business days</li>
+                        <li>✓ Expected delivery: 3-5 business days</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="{{ route('shop') }}" 
+                   class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Continue Shopping
+                </a>
+                @if(isset($siteSettings) && $siteSettings->site_whatsapp)
+                @php
+                    $whatsappMessage = "🎉 Order placed successfully!\n\nOrder #: {$orderSuccess['order_number']}\nCustomer: {$orderSuccess['customer_name']}\nTotal: Rs. " . number_format($orderSuccess['total_amount']) . "\n\nThank you for choosing Bijliwala! ⚡🔌";
+                @endphp
+                <a href="https://wa.me/{{ $siteSettings->site_whatsapp }}?text={{ urlencode($whatsappMessage) }}" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-6 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl">
+                    Chat on WhatsApp
+                </a>
+                @endif
+            </div>
+        </div>
+        @endif
+
         @if((Auth::check() && $cartItems->count() > 0) || (!Auth::check() && count($cartItems) > 0))
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-8">
             
@@ -377,15 +463,14 @@
                             <!-- Postal Code -->
                             <div>
                                 <label for="postal_code" class="block text-xs font-semibold text-gray-700 mb-1">
-                                    Postal Code <span class="text-red-500">*</span>
+                                    Postal Code
                                 </label>
                                 <input type="text"
                                        name="postal_code"
                                        id="postal_code"
                                        value="{{ old('postal_code') }}"
                                        class="w-full px-3 py-2 text-sm border @error('postal_code') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                       placeholder="Enter postal code"
-                                       required>
+                                       placeholder="Enter postal code (optional)">
                                 @error('postal_code')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror
@@ -529,15 +614,14 @@
                             <!-- Postal Code -->
                             <div>
                                 <label for="guest_postal_code" class="block text-xs font-semibold text-gray-700 mb-1">
-                                    Postal Code <span class="text-red-500">*</span>
+                                    Postal Code
                                 </label>
                                 <input type="text"
                                        name="postal_code"
                                        id="guest_postal_code"
                                        value="{{ old('postal_code') }}"
                                        class="w-full px-3 py-2 text-sm border @error('postal_code') border-red-500 @else border-gray-300 @enderror rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                                       placeholder="Enter postal code"
-                                       required>
+                                       placeholder="Enter postal code (optional)">
                                 @error('postal_code')
                                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                                 @enderror

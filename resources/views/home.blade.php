@@ -261,7 +261,7 @@
                     </svg>
                 </a>
             </div>
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
                 @foreach($saleProducts as $product)
                 <div class="bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 rounded-xl shadow-lg overflow-hidden card-hover group relative border-2 border-red-200">
                     <div class="absolute top-2 right-2 z-10 bg-gradient-to-r from-red-500 to-pink-600 text-white px-2 md:px-3 py-1 rounded-full text-xs font-bold shadow-lg animate-pulse">

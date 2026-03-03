@@ -27,7 +27,10 @@ class OrderController extends Controller
                   ->orWhereHas('user', function($userQuery) use ($search) {
                       $userQuery->where('name', 'LIKE', "%{$search}%")
                                ->orWhere('email', 'LIKE', "%{$search}%");
-                  });
+                  })
+                  // Search in guest customer information (billing_address JSON)
+                  ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(billing_address, '$.name')) LIKE ?", ["%{$search}%"])
+                  ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(billing_address, '$.phone')) LIKE ?", ["%{$search}%"]);
             });
         }
 

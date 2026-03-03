@@ -94,7 +94,7 @@
                     tabindex="0"
                     class="sticky top-24 focus:outline-none select-none">
                         <!-- Main Image -->
-                        <div class="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden mb-3 md:mb-4 shadow-xl"
+                        <div class="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden mb-3 md:mb-4 shadow-xl p-2 md:p-0"
                              @mouseenter="if(totalImages > 1) { autoPlay = true; startAutoPlay(); }"
                              @mouseleave="autoPlay = false; clearAutoPlay();"
                              x-data="{
@@ -123,7 +123,7 @@
                                      x-transition:enter-end="opacity-100 scale-100"
                                      :src="'{{ asset('storage') }}/' + image" 
                                      :alt="'{{ $product->name }}'"
-                                     class="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-110"
+                                     class="w-full h-full object-contain md:object-cover cursor-pointer transition-transform duration-300 hover:scale-110"
                                      @click="nextImage()"
                                      @dblclick="openLightbox(index)"
                                      loading="lazy">
@@ -172,10 +172,10 @@
                                 @foreach($product->images as $index => $image)
                                 <button @click="activeImage = {{ $index }}"
                                         :class="activeImage === {{ $index }} ? 'ring-4 ring-indigo-600 scale-105' : 'ring-2 ring-gray-200'"
-                                        class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 bg-gray-100 rounded-lg md:rounded-xl overflow-hidden hover:ring-4 hover:ring-indigo-400 transition-all duration-300">
+                                        class="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 bg-gray-100 rounded-lg md:rounded-xl overflow-hidden hover:ring-4 hover:ring-indigo-400 transition-all duration-300 p-1">
                                     <img src="{{ asset('storage/' . $image) }}" 
                                          alt="{{ $product->name }}"
-                                         class="w-full h-full object-cover">
+                                         class="w-full h-full object-contain rounded">
                                 </button>
                                 @endforeach
                             </div>
@@ -227,110 +227,9 @@
                     SKU: <span class="font-semibold ml-1">{{ $product->sku }}</span>
                 </p>
 
-                <!-- Price -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
-                    <div class="flex flex-wrap items-end gap-3 md:gap-4">
-                        <div>
-                            <p class="text-xs md:text-sm text-gray-600 mb-1">Current Price</p>
-                            <span class="text-3xl md:text-5xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
-                                Rs. {{ number_format($product->effective_price) }}
-                            </span>
-                        </div>
-                        @if($product->on_sale)
-                            <div class="flex flex-col">
-                                <span class="text-base md:text-2xl text-gray-500 line-through">
-                                    Rs. {{ number_format($product->price) }}
-                                </span>
-                                <span class="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1 rounded-lg text-xs md:text-sm font-bold shadow-lg inline-block">
-                                    Save {{ $product->discount_percentage }}%
-                                </span>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-
-                <!-- Stock Status -->
-                <div class="mb-4 md:mb-6">
-                    @if($product->stock_quantity > 0)
-                        <div class="flex items-center gap-2 bg-green-50 text-green-700 px-4 py-3 rounded-xl">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="font-bold text-sm md:text-base">In Stock - {{ $product->stock_quantity }} available</span>
-                        </div>
-                    @else
-                        <div class="flex items-center gap-2 bg-red-50 text-red-700 px-4 py-3 rounded-xl">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                            </svg>
-                            <span class="font-bold text-sm md:text-base">Out of Stock</span>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Description -->
-                @if($product->description)
-                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
-                    <h3 class="text-base md:text-lg font-bold text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Product Description
-                    </h3>
-                    <div class="text-sm md:text-base text-gray-700 leading-relaxed prose prose-sm max-w-none">
-                        {!! $product->description !!}
-                    </div>
-                </div>
-                @endif
-
-                <!-- Product Variations -->
-                @if($product->hasVariations() && $product->activeVariations->count() > 0)
-                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
-                    <h3 class="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.871 4A17.926 17.926 0 003 12c0 2.874.673 5.59 1.871 8m14.13 0a17.926 17.926 0 001.87-8c0-2.874-.673-5.59-1.87-8M9 9h1.246a1 1 0 01.961.725l1.586 5.55A1 1 0 0013.754 16H15m-3-7v6m-5-6v6m5-6H9.5a1 1 0 00-.96.725L7.754 12H6" />
-                        </svg>
-                        Product Options
-                    </h3>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        @foreach($product->activeVariations as $variation)
-                        <div class="bg-white rounded-lg p-4 border-2 border-blue-200 hover:border-blue-400 transition-colors">
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="font-semibold text-gray-900">{{ $variation->name }}</h4>
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
-                                    {{ $variation->type ?? 'Option' }}
-                                </span>
-                            </div>
-                            
-                            @if($variation->description)
-                            <p class="text-sm text-gray-600 mb-3">{!! $variation->description !!}</p>
-                            @endif
-                            
-                            <div class="flex justify-between items-center">
-                                @if($variation->price && $variation->price != $product->price)
-                                <div class="text-sm">
-                                    <span class="font-semibold text-green-600">
-                                        +Rs. {{ number_format($variation->price - $product->price) }}
-                                    </span>
-                                </div>
-                                @endif
-                                
-                                @if($variation->stock_quantity !== null)
-                                <div class="text-xs text-gray-500">
-                                    Stock: {{ $variation->stock_quantity }}
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
-                <!-- Add to Cart Form -->
+                <!-- Place Order Section (Moved Above Description) -->
                 @if($product->stock_quantity > 0)
-                <form action="{{ route('cart.add') }}" method="POST" class="space-y-4 md:space-y-6" 
+                <form action="{{ route('cart.add') }}" method="POST" class="space-y-4 md:space-y-6 mb-6" 
                       x-data="{
                         selectedVariation: null,
                         basePrice: {{ $product->effective_price }},
@@ -358,11 +257,9 @@
                             this.validateStock();
                         },
                         updateQuantity() {
-                            // Ensure quantity is not negative or zero
                             if (this.quantity < 1) {
                                 this.quantity = 1;
                             }
-                            // Ensure quantity doesn't exceed stock
                             if (this.quantity > this.currentStock) {
                                 this.quantity = this.currentStock;
                             }
@@ -381,23 +278,15 @@
                             }
                         },
                         validateStock() {
-                            // Button should be disabled if:
-                            // 1. No stock available (currentStock <= 0)
-                            // 2. Selected quantity is more than available stock
                             this.canAddToCart = (this.currentStock > 0) && (this.quantity <= this.currentStock) && (this.quantity > 0);
-                            console.log('Stock validation:', {
-                                currentStock: this.currentStock,
-                                quantity: this.quantity,
-                                canAddToCart: this.canAddToCart
-                            });
                         }
                       }">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     
-                    <!-- Dynamic Price Display -->
-                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-2 border-green-200">
-                        <div class="flex items-center justify-between">
+                    <!-- Price & Total Section -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 md:p-6 border-2 border-green-200">
+                        <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
                                 <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
@@ -409,14 +298,19 @@
                                       x-text="'Rs. ' + (currentPrice * quantity).toLocaleString()">
                                     Rs. {{ number_format($product->effective_price) }}
                                 </span>
-                                <div class="text-sm text-gray-600" x-show="selectedVariation">
-                                    <span x-text="'Rs. ' + currentPrice.toLocaleString() + ' × ' + quantity"></span>
+                                @if($product->on_sale)
+                                <div class="text-sm">
+                                    <span class="text-gray-500 line-through">Rs. {{ number_format($product->price) }}</span>
+                                    <span class="bg-gradient-to-r from-red-500 to-pink-600 text-white px-2 py-1 rounded text-xs font-bold ml-2">
+                                        Save {{ $product->discount_percentage }}%
+                                    </span>
                                 </div>
+                                @endif
                             </div>
                         </div>
                         
                         <!-- Stock Status -->
-                        <div class="mt-3 flex items-center gap-2">
+                        <div class="flex items-center gap-2">
                             <div class="w-3 h-3 rounded-full" :class="currentStock > 0 ? 'bg-green-500' : 'bg-red-500'"></div>
                             <span class="text-sm font-semibold" :class="currentStock > 0 ? 'text-green-700' : 'text-red-700'">
                                 <span x-text="currentStock + ' items available'"></span>
@@ -496,53 +390,84 @@
                                 Max: <span class="font-bold" x-text="currentStock">{{ $product->stock_quantity }}</span>
                             </span>
                         </div>
-                        
-                        <!-- Stock Warning -->
-                        <div x-show="!canAddToCart && currentStock > 0" 
-                             x-transition:enter="transition ease-out duration-200"
-                             x-transition:enter-start="opacity-0 transform scale-95"
-                             x-transition:enter-end="opacity-100 transform scale-100"
-                             class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-                            <div class="flex items-center gap-2 text-red-700">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="text-sm font-semibold">
-                                    Quantity cannot exceed available stock! Only <span x-text="currentStock"></span> items available.
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <!-- Out of Stock Warning -->
-                        <div x-show="currentStock <= 0" 
-                             class="mt-3 p-3 bg-red-100 border border-red-300 rounded-lg">
-                            <div class="flex items-center gap-2 text-red-800">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="text-sm font-semibold">
-                                    This item is currently out of stock.
-                                </span>
-                            </div>
-                        </div>
                     </div>
 
-                    <!-- Add to Cart Button -->
+                    <!-- Place Order Button -->
                     <button type="submit" 
                             :disabled="!canAddToCart"
                             :class="canAddToCart ? 'btn-primary hover:shadow-3xl' : 'bg-gray-300 text-gray-600 cursor-not-allowed'"
                             class="w-full py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold flex items-center justify-center gap-3 shadow-2xl transition-all duration-300">
                         <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
-                        <span x-show="canAddToCart">Add to Cart</span>
-                        <span x-show="!canAddToCart">Cannot Add to Cart</span>
+                        <span x-show="canAddToCart">Place Order</span>
+                        <span x-show="!canAddToCart">Cannot Place Order</span>
                     </button>
                 </form>
                 @else
-                <button disabled class="w-full bg-gray-300 text-gray-600 py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold cursor-not-allowed">
+                <button disabled class="w-full bg-gray-300 text-gray-600 py-4 md:py-5 px-6 rounded-xl text-base md:text-xl font-bold cursor-not-allowed mb-6">
                     Out of Stock
                 </button>
+                @endif
+
+                <!-- Description -->
+                @if($product->description)
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
+                    <h3 class="text-base md:text-lg font-bold text-gray-900 mb-3 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Product Description
+                    </h3>
+                    <div class="text-sm md:text-base text-gray-700 leading-relaxed prose prose-sm max-w-none">
+                        {!! $product->description !!}
+                    </div>
+                </div>
+                @endif
+
+                <!-- Product Variations -->
+                @if($product->hasVariations() && $product->activeVariations->count() > 0)
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 md:p-6 mb-4 md:mb-6">
+                    <h3 class="text-base md:text-lg font-bold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.871 4A17.926 17.926 0 003 12c0 2.874.673 5.59 1.871 8m14.13 0a17.926 17.926 0 001.87-8c0-2.874-.673-5.59-1.87-8M9 9h1.246a1 1 0 01.961.725l1.586 5.55A1 1 0 0013.754 16H15m-3-7v6m-5-6v6m5-6H9.5a1 1 0 00-.96.725L7.754 12H6" />
+                        </svg>
+                        Product Options
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        @foreach($product->activeVariations as $variation)
+                        <div class="bg-white rounded-lg p-4 border-2 border-blue-200 hover:border-blue-400 transition-colors">
+                            <div class="flex justify-between items-start mb-2">
+                                <h4 class="font-semibold text-gray-900">{{ $variation->name }}</h4>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full">
+                                    {{ $variation->type ?? 'Option' }}
+                                </span>
+                            </div>
+                            
+                            @if($variation->description)
+                            <p class="text-sm text-gray-600 mb-3">{!! $variation->description !!}</p>
+                            @endif
+                            
+                            <div class="flex justify-between items-center">
+                                @if($variation->price && $variation->price != $product->price)
+                                <div class="text-sm">
+                                    <span class="font-semibold text-green-600">
+                                        +Rs. {{ number_format($variation->price - $product->price) }}
+                                    </span>
+                                </div>
+                                @endif
+                                
+                                @if($variation->stock_quantity !== null)
+                                <div class="text-xs text-gray-500">
+                                    Stock: {{ $variation->stock_quantity }}
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
                 @endif
 
                 <!-- Features -->
@@ -599,6 +524,41 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- WhatsApp Inquiry Button -->
+                    @if(isset($siteSettings) && $siteSettings->site_whatsapp)
+                    <div class="mt-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
+                        <div class="text-center">
+                            <h4 class="text-lg font-bold text-gray-900 mb-2 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.786"/>
+                                </svg>
+                                Have Questions About This Product?
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-4">Get instant answers from our experts via WhatsApp</p>
+                            @php
+                                $whatsappInquiry = "Hi! I want to inquire about this product:\n\n" .
+                                                  "Product: " . $product->name . "\n" .
+                                                  "SKU: " . $product->sku . "\n" .
+                                                  "Price: Rs. " . number_format($product->effective_price) . "\n";
+                                if($product->category) {
+                                    $whatsappInquiry .= "Category: " . $product->category->name . "\n";
+                                }
+                                $whatsappInquiry .= "Link: " . url()->current() . "\n\n" .
+                                                   "Please provide more details about availability, specifications, and delivery options.";
+                            @endphp
+                            <a href="https://wa.me/{{ $siteSettings->site_whatsapp }}?text={{ urlencode($whatsappInquiry) }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer"
+                               class="inline-flex items-center justify-center w-full py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.786"/>
+                                </svg>
+                                Ask About This Product on WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -709,4 +669,5 @@
     </div>
     @endif
 </div>
+
 @endsection

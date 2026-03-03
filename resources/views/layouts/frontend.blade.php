@@ -353,13 +353,13 @@
                         </svg>
                 Home
             </a>
-                    <a href="{{ route('home') }}#shop" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('home') && request()->get('_fragment') == 'shop' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('shop') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('shop') || request()->routeIs('category.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                         </svg>
                 Shop
             </a>
-                    <a href="{{ route('home') }}#products" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('home') && request()->get('_fragment') == 'products' ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('shop') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('product.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                         </svg>
@@ -371,13 +371,13 @@
                         </svg>
                 About
             </a>
-                    <a href="{{ route('blog.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('blog.index') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                         </svg>
                 Blog
             </a>
-                    <a href="{{ route('cart.index') }}" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('cart.index') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                    <a href="{{ route('cart.index') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('cart.index') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
@@ -882,7 +882,20 @@
 
     <!-- Floating WhatsApp Button -->
     @if($siteSettings->site_whatsapp)
-    <a href="https://wa.me/{{ $siteSettings->site_whatsapp }}?text={{ urlencode('Hi! I want to inquire about your products.') }}" 
+    @php
+        // Check if we're on a product page and have product data
+        $whatsappMessage = 'Hi! I want to inquire about your products.';
+        
+        if(isset($product) && $product) {
+            $whatsappMessage = "Hi! I want to inquire about this product:\n\n" .
+                              "Product: " . $product->name . "\n" .
+                              "SKU: " . $product->sku . "\n" .
+                              "Price: Rs. " . number_format($product->effective_price) . "\n" .
+                              "Link: " . url()->current() . "\n\n" .
+                              "Please provide more details and availability.";
+        }
+    @endphp
+    <a href="https://wa.me/{{ $siteSettings->site_whatsapp }}?text={{ urlencode($whatsappMessage) }}" 
        target="_blank" 
        rel="noopener noreferrer"
        class="whatsapp-float"

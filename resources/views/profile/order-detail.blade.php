@@ -51,8 +51,8 @@
                         <div class="flex flex-col sm:flex-row gap-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-200">
                             <!-- Product Image -->
                             <div class="flex-shrink-0">
-                                @if($item->product && $item->product->images->first())
-                                    <img src="{{ Storage::url($item->product->images->first()->image_path) }}" 
+                                @if($item->product && !empty($item->product->images))
+                                    <img src="{{ asset('storage/' . $item->product->images[0]) }}" 
                                          alt="{{ $item->product->name }}" 
                                          class="h-20 w-20 md:h-24 md:w-24 object-cover rounded-lg border-2 border-amber-200">
                                 @else

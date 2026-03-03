@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
@@ -19,8 +20,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/shop', [HomeController::class, 'shop'])->name('shop');
 Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product.show');
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.show');
-Route::get('/blog', [HomeController::class, 'blog'])->name('blog.index');
-Route::get('/blog/{slug}', [HomeController::class, 'blogShow'])->name('blog.show');
+Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 
