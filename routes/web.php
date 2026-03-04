@@ -41,7 +41,7 @@ Route::prefix('cart')->name('cart.')->group(function () {
 });
 
 // Order Routes
-Route::post('/orders', [OrderController::class, 'store'])->name('orders.store')->middleware('auth');
+Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
 
 // Customer Dashboard
 Route::get('/dashboard', function () {

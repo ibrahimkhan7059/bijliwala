@@ -22,7 +22,7 @@ class OrderController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('id', 'LIKE', "%{$search}%")
+                $q->where('order_number', 'LIKE', "%{$search}%")
                   ->orWhere('total_amount', 'LIKE', "%{$search}%")
                   ->orWhereHas('user', function($userQuery) use ($search) {
                       $userQuery->where('name', 'LIKE', "%{$search}%")

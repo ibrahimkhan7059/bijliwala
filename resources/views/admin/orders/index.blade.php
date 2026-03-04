@@ -61,7 +61,7 @@
                                name="search" 
                                value="{{ request('search') }}" 
                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
-                               placeholder="Search by order ID, customer name, email...">
+                               placeholder="Search by order number, customer name, email...">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Order Status</label>
@@ -95,8 +95,8 @@
                             <option value="created_at_asc" {{ request('sort') == 'created_at_asc' ? 'selected' : '' }}>Oldest First</option>
                             <option value="total_amount_desc" {{ request('sort') == 'total_amount_desc' ? 'selected' : '' }}>Amount (High to Low)</option>
                             <option value="total_amount_asc" {{ request('sort') == 'total_amount_asc' ? 'selected' : '' }}>Amount (Low to High)</option>
-                            <option value="id_desc" {{ request('sort') == 'id_desc' ? 'selected' : '' }}>Order ID (High to Low)</option>
-                            <option value="id_asc" {{ request('sort') == 'id_asc' ? 'selected' : '' }}>Order ID (Low to High)</option>
+                            <option value="id_desc" {{ request('sort') == 'id_desc' ? 'selected' : '' }}>Order Number (Newest to Oldest)</option>
+                            <option value="id_asc" {{ request('sort') == 'id_asc' ? 'selected' : '' }}>Order Number (Oldest to Newest)</option>
                         </select>
                     </div>
                     <div>
@@ -181,7 +181,7 @@
                                 </svg>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-medium text-gray-900">Order #{{ $order->id }}</h4>
+                                <h4 class="text-sm font-medium text-gray-900">Order {{ $order->order_number }}</h4>
                                 <p class="text-xs text-gray-500 mt-1">{{ $order->orderItems->count() }} items</p>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <div class="text-sm font-medium text-gray-900">#{{ $order->id }}</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ $order->order_number }}</div>
                                         <div class="text-sm text-gray-500">{{ $order->orderItems->count() }} items</div>
                                     </div>
                                 </div>

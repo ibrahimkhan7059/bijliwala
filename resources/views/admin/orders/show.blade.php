@@ -15,7 +15,7 @@
                     </svg>
                 </div>
                 <div>
-                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Order #{{ $order->id }}</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Order {{ $order->order_number }}</h1>
                     <p class="text-xs sm:text-sm text-gray-600">Order details and management</p>
                 </div>
             </div>
@@ -53,8 +53,8 @@
                             <h4 class="text-sm font-semibold text-gray-700 mb-3">Order Information</h4>
                             <div class="space-y-2">
                                 <div class="flex justify-between">
-                                    <span class="text-sm text-gray-600">Order ID:</span>
-                                    <span class="text-sm font-medium text-gray-900">#{{ $order->id }}</span>
+                                    <span class="text-sm text-gray-600">Order Number:</span>
+                                    <span class="text-sm font-medium text-gray-900">{{ $order->order_number }}</span>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="text-sm text-gray-600">Order Date:</span>

@@ -46,12 +46,16 @@ class OrderController extends Controller
                 }
                 
                 // Convert session cart to collection for consistency
-                $cartItems = collect($sessionCart)->map(function($item, $productId) {
+                $cartItems = collect($sessionCart)->map(function($item, $cartKey) {
+                    // Extract product_id from the cart item data, not from the key
+                    $productId = $item['product_id'];
                     $product = \App\Models\Product::find($productId);
                     return (object) [
                         'product_id' => $productId,
                         'product' => $product,
                         'quantity' => $item['quantity'],
+                        'variation_id' => $item['variation_id'] ?? null,
+                        'variation_name' => $item['variation_name'] ?? null,
                     ];
                 });
             }
@@ -89,8 +93,10 @@ class OrderController extends Controller
                 }
             }
 
-            // Generate order number
-            $orderNumber = 'ORD-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 6));
+            // Generate sequential order number
+            $lastOrder = Order::orderBy('id', 'desc')->first();
+            $nextNumber = $lastOrder ? ($lastOrder->id + 1) : 1;
+            $orderNumber = 'AJ' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
             // Create order
             $order = Order::create([
@@ -121,16 +127,22 @@ class OrderController extends Controller
 
             // Create order items
             foreach ($cartItems as $item) {
-                // Use variation price if variation is selected
-                $itemPrice = $item->variation_id && $item->variation
-                    ? $item->variation->price
+                // Check if this is a Cart model (logged-in user) or session data (guest)
+                $variationId = isset($item->variation_id) ? $item->variation_id : null;
+                $variation = isset($item->variation) ? $item->variation : null;
+                $variationName = isset($item->variation_name) ? $item->variation_name : null;
+                $productId = isset($item->product_id) ? $item->product_id : $item->product->id;
+                
+                // Use variation price if variation is selected, otherwise use product effective price
+                $itemPrice = ($variationId && $variation) 
+                    ? $variation->price 
                     : $item->product->effective_price;
 
                 OrderItem::create([
                     'order_id'       => $order->id,
-                    'product_id'     => $item->product_id ?? $item->product->id,
-                    'variation_id'   => $item->variation_id ?? null,
-                    'variation_name' => $item->variation_name ?? null,
+                    'product_id'     => $productId,
+                    'variation_id'   => $variationId,
+                    'variation_name' => $variationName,
                     'product_name'   => $item->product->name,
                     'product_sku'    => $item->product->sku ?? 'N/A',
                     'product_price'  => $itemPrice,
@@ -138,12 +150,8 @@ class OrderController extends Controller
                     'total_price'    => $itemPrice * $item->quantity,
                 ]);
 
-                // Update variation stock if applicable, otherwise product stock
-                if ($item->variation_id && $item->variation) {
-                    $item->variation->decrement('stock_quantity', $item->quantity);
-                } else {
-                    $item->product->decrement('stock_quantity', $item->quantity);
-                }
+                // Update stock - only update product stock for now (variation support can be added later)
+                $item->product->decrement('stock_quantity', $item->quantity);
             }
 
             // Clear cart
