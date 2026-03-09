@@ -374,10 +374,10 @@
                                     View All Products
                                 </a>
                             @else
-                                <img src="/images/csoon.jpeg" 
+                                <img src="{{ asset('images/csoon.jpeg') }}" 
                                      alt="Coming Soon" 
                                      class="w-full h-auto rounded-lg shadow-md mb-6"
-                                     onerror="this.style.display='none'">
+                                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNvbWluZyBTb29uPC90ZXh0Pgo8L3N2Zz4='">
                                 <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Products Coming Soon</h3>
                                 <p class="text-gray-600 mb-6 text-sm md:text-base">We're working hard to bring you amazing electrical and solar products. Check back soon!</p>
                                 <a href="{{ route('home') }}" class="btn-primary inline-flex items-center py-3 px-6 rounded-lg font-semibold">
