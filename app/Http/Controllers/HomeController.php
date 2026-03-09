@@ -140,4 +140,12 @@ class HomeController extends Controller
     {
         return view('terms');
     }
+
+    /**
+     * Show solar inquiry page
+     */
+    public function solarInquiry()
+    {
+        return view('solar-inquiry');
+    }
 }

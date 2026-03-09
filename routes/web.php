@@ -22,6 +22,7 @@ Route::get('/product/{slug}', [HomeController::class, 'product'])->name('product
 Route::get('/category/{slug}', [HomeController::class, 'category'])->name('category.show');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
+Route::get('/solar-inquiry', [HomeController::class, 'solarInquiry'])->name('solar.inquiry');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/terms', [HomeController::class, 'terms'])->name('terms');
 

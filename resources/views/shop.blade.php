@@ -357,19 +357,36 @@
                     </div>
                 @else
                     <div class="bg-gradient-to-br from-orange-50 via-amber-100 to-yellow-50 rounded-2xl shadow-xl p-8 md:p-16 text-center border-2 border-orange-200">
-                        <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
-                            <svg class="w-12 h-12 md:w-16 md:h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                            </svg>
+                        <div class="max-w-md mx-auto">
+                            <!-- Show Coming Soon image if no search/filter applied, otherwise show no results message -->
+                            @if(request()->get('search') || request()->get('category') || request()->get('price_range') || request()->get('sort'))
+                                <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
+                                    <svg class="w-12 h-12 md:w-16 md:h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">No Products Found</h3>
+                                <p class="text-gray-600 mb-6 text-sm md:text-base">Try adjusting your filters or search terms to find what you're looking for</p>
+                                <a href="{{ route('shop') }}" class="btn-primary inline-flex items-center py-3 px-6 rounded-lg font-semibold">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    View All Products
+                                </a>
+                            @else
+                                <img src="{{ asset('images/csoon.jpeg') }}" 
+                                     alt="Coming Soon" 
+                                     class="w-full h-auto rounded-lg shadow-md mb-6">
+                                <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Products Coming Soon</h3>
+                                <p class="text-gray-600 mb-6 text-sm md:text-base">We're working hard to bring you amazing electrical and solar products. Check back soon!</p>
+                                <a href="{{ route('home') }}" class="btn-primary inline-flex items-center py-3 px-6 rounded-lg font-semibold">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
+                                    Back to Home
+                                </a>
+                            @endif
                         </div>
-                        <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">No Products Found</h3>
-                        <p class="text-gray-600 mb-6 text-sm md:text-base">Try adjusting your filters or search terms to find what you're looking for</p>
-                        <a href="{{ route('shop') }}" class="btn-primary inline-flex items-center py-3 px-6 rounded-lg font-semibold">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            View All Products
-                        </a>
                     </div>
                 @endif
             </div>

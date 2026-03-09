@@ -178,6 +178,9 @@
                     <a href="{{ route('home') }}#about" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('home') && request()->get('_fragment') == 'about' ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                         About
                     </a>
+                    <a href="{{ route('solar.inquiry') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('solar.inquiry') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
+                        Solar Inquiry
+                    </a>
                     <a href="{{ route('blog.index') }}" class="px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700' : 'text-gray-700 hover:bg-amber-50' }}">
                         Blog
                     </a>
@@ -370,6 +373,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                 About
+            </a>
+                    <a href="{{ route('solar.inquiry') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('solar.inquiry') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                Solar Inquiry
             </a>
                     <a href="{{ route('blog.index') }}" onclick="closeMobileMenu()" class="flex items-center px-4 py-3 rounded-lg text-base font-semibold {{ request()->routeIs('blog.*') ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-lg' : 'text-gray-700 hover:bg-amber-50' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -700,9 +709,14 @@
             <!-- Bottom Footer -->
             <div class="border-t border-gray-700 pt-8">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-                    <p class="text-gray-400 text-sm text-center sm:text-left">
-                        &copy; {{ date('Y') }} <span class="font-semibold text-white">{{ $siteSettings->site_name }}</span>. All rights reserved.
-                    </p>
+                    <div class="flex flex-col space-y-2 text-center sm:text-left">
+                        <p class="text-gray-400 text-sm">
+                            &copy; {{ date('Y') }} <span class="font-semibold text-white">{{ $siteSettings->site_name }}</span>. All rights reserved.
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            Developed by <span class="font-semibold text-amber-400 hover:text-amber-300 transition-colors">MI</span>
+                        </p>
+                    </div>
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('privacy') }}" class="text-gray-400 hover:text-white transition-colors">
                             <span class="sr-only">Privacy Policy</span>
