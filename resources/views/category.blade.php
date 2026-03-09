@@ -180,7 +180,7 @@
             <!-- Coming Soon Image when no products -->
             <div class="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div class="max-w-md mx-auto">
-                    <img src="{{ asset('images/csoon.jpeg') }}" 
+                    <img src="/images/csoon.jpeg" 
                          alt="Coming Soon" 
                          class="w-full h-auto rounded-lg shadow-md mb-6"
                          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+CiAgPHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkNvbWluZyBTb29uPC90ZXh0Pgo8L3N2Zz4='">
