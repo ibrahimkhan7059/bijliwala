@@ -374,9 +374,10 @@
                                     View All Products
                                 </a>
                             @else
-                                <img src="{{ asset('images/csoon.jpeg') }}" 
+                                <img src="/images/csoon.jpeg" 
                                      alt="Coming Soon" 
-                                     class="w-full h-auto rounded-lg shadow-md mb-6">
+                                     class="w-full h-auto rounded-lg shadow-md mb-6"
+                                     onerror="this.style.display='none'">
                                 <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-2">Products Coming Soon</h3>
                                 <p class="text-gray-600 mb-6 text-sm md:text-base">We're working hard to bring you amazing electrical and solar products. Check back soon!</p>
                                 <a href="{{ route('home') }}" class="btn-primary inline-flex items-center py-3 px-6 rounded-lg font-semibold">

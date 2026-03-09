@@ -180,9 +180,10 @@
             <!-- Coming Soon Image when no products -->
             <div class="bg-white rounded-lg shadow-sm p-8 text-center">
                 <div class="max-w-md mx-auto">
-                    <img src="{{ asset('images/csoon.jpeg') }}" 
+                    <img src="/images/csoon.jpeg" 
                          alt="Coming Soon" 
-                         class="w-full h-auto rounded-lg shadow-md mb-6">
+                         class="w-full h-auto rounded-lg shadow-md mb-6"
+                         onerror="this.style.display='none'">
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">Products Coming Soon</h3>
                     <p class="text-gray-600 mb-4">We're working hard to bring you amazing products in this category. Check back soon!</p>
                     <a href="{{ route('shop') }}" class="btn-primary inline-block">
