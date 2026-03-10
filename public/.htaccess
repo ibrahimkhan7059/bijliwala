@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Serve static files directly (images, css, js, etc.)
+    RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif|css|js|ico|txt|svg|webp|avif|pdf)$ [NC]
+    RewriteRule .* - [L]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
