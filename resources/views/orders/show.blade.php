@@ -362,6 +362,152 @@
             </div>
         </div>
 
+        <!-- Payment Information Section -->
+        @if($order->payment_method === 'advance' || $order->payment_method === 'bank_transfer')
+        <div class="slide-in bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-3xl p-6 sm:p-8 mb-8 shadow-xl" style="animation-delay: 0.4s;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                    </div>
+                    Bank Transfer Payment Details
+                </h2>
+            </div>
+
+            <!-- Bank Information -->
+            @if($siteSettings->bank_name || $siteSettings->account_number)
+            <div class="bg-white rounded-2xl p-6 border border-green-200 mb-6">
+                <h3 class="font-bold text-gray-900 mb-4 text-lg">📋 Account Information</h3>
+                <div class="space-y-3">
+                    @if($siteSettings->bank_name)
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <span class="text-gray-600 font-medium">Bank Name:</span>
+                        <span class="text-gray-900 font-bold text-lg">{{ $siteSettings->bank_name }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($siteSettings->account_number)
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <span class="text-gray-600 font-medium">Account Number:</span>
+                        <span class="text-gray-900 font-mono font-bold text-lg break-all">{{ $siteSettings->account_number }}</span>
+                    </div>
+                    @endif
+                    
+                    <div class="flex items-center justify-between p-3 bg-green-100 border-2 border-green-300 rounded-lg">
+                        <span class="text-gray-700 font-bold">Amount to Transfer:</span>
+                        <span class="text-green-700 font-bold text-2xl">Rs. {{ number_format($order->total_amount) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-6">
+                <h3 class="font-bold text-amber-900 mb-4 flex items-center text-lg">
+                    <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Payment Instructions
+                </h3>
+                <ol class="space-y-3 text-sm text-amber-900">
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-300 text-amber-900 font-bold text-xs mr-3 flex-shrink-0">1</span>
+                        <span>Transfer the exact amount shown above to the bank account</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-300 text-amber-900 font-bold text-xs mr-3 flex-shrink-0">2</span>
+                        <span>Take a screenshot or photo of the payment proof (transaction receipt)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-300 text-amber-900 font-bold text-xs mr-3 flex-shrink-0">3</span>
+                        <span>Upload the payment proof in your order details page</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-300 text-amber-900 font-bold text-xs mr-3 flex-shrink-0">4</span>
+                        <span>Our team will verify and process your order immediately</span>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Status Note -->
+            <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                <p class="text-sm text-yellow-800">
+                    <strong>⏱️ Note:</strong> Your order will be processed once payment verification is complete. You'll receive a WhatsApp confirmation when your payment is verified.
+                </p>
+            </div>
+        </div>
+        @elseif($order->payment_method === 'cod')
+        <div class="slide-in bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-3xl p-6 sm:p-8 mb-8 shadow-xl" style="animation-delay: 0.4s;">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent flex items-center">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mr-3">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                    </div>
+                    Cash on Delivery (COD)
+                </h2>
+            </div>
+
+            <!-- COD Information -->
+            <div class="bg-white rounded-2xl p-6 border border-blue-200 mb-6">
+                <h3 class="font-bold text-gray-900 mb-4 text-lg">💰 Payment Information</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                        <span class="text-gray-600 font-medium">Payment Method:</span>
+                        <span class="text-gray-900 font-bold text-lg bg-blue-100 px-3 py-1 rounded-full">Pay at Delivery</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                        <span class="text-gray-600 font-medium">Delivery Charges:</span>
+                        <span class="text-gray-900 font-bold text-lg">Rs. {{ number_format($order->shipping_amount) }}</span>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-blue-100 border-2 border-blue-300 rounded-lg">
+                        <span class="text-gray-700 font-bold">Total Amount Due:</span>
+                        <span class="text-blue-700 font-bold text-2xl">Rs. {{ number_format($order->total_amount) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-cyan-50 border-2 border-cyan-300 rounded-2xl p-6">
+                <h3 class="font-bold text-cyan-900 mb-4 flex items-center text-lg">
+                    <svg class="w-5 h-5 mr-2 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Delivery & Payment Process
+                </h3>
+                <ol class="space-y-3 text-sm text-cyan-900">
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-300 text-cyan-900 font-bold text-xs mr-3 flex-shrink-0">1</span>
+                        <span>Our team will contact you on the provided number to confirm delivery</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-300 text-cyan-900 font-bold text-xs mr-3 flex-shrink-0">2</span>
+                        <span>We'll deliver your items within 3-5 business days</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-300 text-cyan-900 font-bold text-xs mr-3 flex-shrink-0">3</span>
+                        <span>Make payment (Rs. {{ number_format($order->total_amount) }}) to the delivery person</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-cyan-300 text-cyan-900 font-bold text-xs mr-3 flex-shrink-0">4</span>
+                        <span>Receive your items and verify the products before completion</span>
+                    </li>
+                </ol>
+            </div>
+
+            <!-- Status Note -->
+            <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                <p class="text-sm text-blue-800">
+                    <strong>✓ Status:</strong> Your order is confirmed! You'll receive a confirmation call and WhatsApp message with delivery details shortly.
+                </p>
+            </div>
+        </div>
+        @endif
+
         <!-- What's Next Section -->
         <div class="slide-in bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-3xl p-6 sm:p-8 mb-8 shadow-xl" style="animation-delay: 0.6s;">
             <h3 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 flex items-center">
@@ -376,7 +522,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Timeline Steps -->
                 <div class="space-y-4">
-                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 0.7s;">
+                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 1.1s;">
                         <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold text-sm">1</span>
                         </div>
@@ -386,7 +532,7 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 0.8s;">
+                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 1.2s;">
                         <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold text-sm">2</span>
                         </div>
@@ -396,7 +542,7 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 0.9s;">
+                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 1.3s;">
                         <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold text-sm">3</span>
                         </div>
@@ -406,7 +552,7 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 1s;">
+                    <div class="flex items-start space-x-4 fade-in" style="animation-delay: 1.4s;">
                         <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center flex-shrink-0">
                             <span class="text-white font-bold text-sm">4</span>
                         </div>
@@ -448,7 +594,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="slide-in grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" style="animation-delay: 1.1s;">
+        <div class="slide-in grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8" style="animation-delay: 1.5s;">
             <a href="{{ route('shop') }}" 
                class="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-4 px-6 rounded-2xl font-bold text-center shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -481,7 +627,7 @@
         </div>
         
         <!-- Thank You Message -->
-        <div class="slide-in text-center bg-gradient-to-r from-orange-100 to-amber-100 border-2 border-orange-300 rounded-3xl p-8" style="animation-delay: 1.2s;">
+        <div class="slide-in text-center bg-gradient-to-r from-orange-100 to-amber-100 border-2 border-orange-300 rounded-3xl p-8" style="animation-delay: 1.6s;">
             <h3 class="text-2xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4">
                 Thank You for Choosing Bijliwala! ⚡
             </h3>

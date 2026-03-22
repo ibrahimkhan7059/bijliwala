@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Cart;
+use App\Mail\OrderPlaced;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -179,6 +181,9 @@ class OrderController extends Controller
                 session()->forget('cart');
             }
 
+            // Send admin notification email
+            $this->sendAdminNotification($order);
+
             DB::commit();
 
             // Store order data in session for thank you display
@@ -226,5 +231,45 @@ class OrderController extends Controller
         $order = $query->findOrFail($id);
 
         return view('orders.show', compact('order'));
+    }
+
+    /**
+     * Send admin notification email when order is placed
+     */
+    private function sendAdminNotification(Order $order)
+    {
+        try {
+            // Get admin email from settings
+            $adminEmail = DB::table('settings')
+                ->where('key', 'orders_contact_email')
+                ->value('value');
+
+            // If no admin email is configured, skip sending
+            if (!$adminEmail) {
+                \Log::warning('Admin email not configured in settings. Order notification not sent.', [
+                    'order_id' => $order->id,
+                    'order_number' => $order->order_number
+                ]);
+                return;
+            }
+
+            // Send email
+            Mail::to($adminEmail)->send(new OrderPlaced($order));
+
+            // Log successful email send
+            \Log::info('Admin order notification email sent', [
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'admin_email' => $adminEmail
+            ]);
+
+        } catch (\Exception $e) {
+            // Log error but don't fail the order placement
+            \Log::error('Failed to send admin order notification email', [
+                'order_id' => $order->id,
+                'order_number' => $order->order_number,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }

@@ -100,6 +100,7 @@
         @endif
 
         @if((Auth::check() && $cartItems->count() > 0) || (!Auth::check() && count($cartItems) > 0))
+        @if(!isset($orderSuccess) || !$orderSuccess)
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-8">
             
             <!-- Cart Items -->
@@ -820,6 +821,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 @endsection
