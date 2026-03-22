@@ -19,11 +19,16 @@ class OrderController extends Controller
     {
         // Validation rules - add customer_name for guest users
         $rules = [
-            'payment_proof' => 'required|image|mimes:jpeg,jpg,png,webp|max:5120', // 5MB max
+            'payment_method' => 'required|in:advance,bank_transfer,cod',
             'customer_phone' => 'required|string|max:20',
             'customer_address' => 'required|string|max:500',
             'postal_code' => 'nullable|string|max:20',
         ];
+        
+        // Payment proof required only for bank transfer/advance payment
+        if ($request->input('payment_method') === 'advance' || $request->input('payment_method') === 'bank_transfer') {
+            $rules['payment_proof'] = 'required|image|mimes:jpeg,jpg,png,webp|max:5120'; // 5MB max
+        }
         
         // Add name validation for guest users
         if (!Auth::check()) {
@@ -72,7 +77,18 @@ class OrderController extends Controller
 
             // Get delivery charges from settings
             $deliveryCharges = DB::table('settings')->where('key', 'delivery_charges')->value('value') ?? 250;
-            $total = $subtotal + $deliveryCharges;
+            
+            // Determine delivery charges based on payment method
+            $paymentMethod = $request->input('payment_method', 'bank_transfer');
+            $shippingAmount = 0;
+            
+            // COD: Add delivery charges
+            // Advance/Bank Transfer: No delivery charges
+            if ($paymentMethod === 'cod') {
+                $shippingAmount = $deliveryCharges;
+            }
+            
+            $total = $subtotal + $shippingAmount;
 
             // Handle payment proof upload
             $paymentProofPath = null;
@@ -98,16 +114,17 @@ class OrderController extends Controller
             $nextNumber = $lastOrder ? ($lastOrder->id + 1) : 1;
             $orderNumber = 'AJ' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
+
             // Create order
             $order = Order::create([
                 'order_number' => $orderNumber,
                 'user_id' => Auth::id(), // Nullable for guest users
                 'subtotal' => $subtotal,
-                'shipping_amount' => $deliveryCharges,
+                'shipping_amount' => $shippingAmount,
                 'total_amount' => $total,
                 'status' => 'pending',
-                'payment_status' => 'pending',
-                'payment_method' => 'bank_transfer',
+                'payment_status' => $paymentMethod === 'cod' ? 'pending_cod' : 'pending',
+                'payment_method' => $paymentMethod === 'cod' ? 'cod' : 'bank_transfer',
                 'payment_proof' => $paymentProofPath,
                 'billing_address' => [
                     'name' => $request->customer_name ?? (Auth::check() ? Auth::user()->name : 'Guest'),
