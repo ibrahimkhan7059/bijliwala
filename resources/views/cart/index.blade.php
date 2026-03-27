@@ -423,69 +423,69 @@
                         </div>
                     </div>
 
-                    @auth
-                        <!-- Bank Transfer Section -->
-                        <div x-show="paymentMethod === 'bank_transfer' || paymentMethod === 'advance'" x-transition>
-                            <!-- Bank Details for Payment -->
-                            <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
-                                <div class="flex items-center mb-3">
-                                    <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                    </svg>
-                                    <h3 class="text-base font-bold text-gray-900">Payment Details</h3>
-                                </div>
-                                <div class="space-y-2 text-sm mb-3">
-                                    <div class="flex items-start">
-                                        <span class="text-gray-600 font-medium w-24 flex-shrink-0">Bank:</span>
-                                        <span class="text-gray-900 font-semibold">{{ $siteSettings->bank_name ?? 'N/A' }}</span>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <span class="text-gray-600 font-medium w-24 flex-shrink-0">Account:</span>
-                                        <span class="text-gray-900 font-mono text-xs sm:text-sm break-all">{{ $siteSettings->account_number ?? 'N/A' }}</span>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <span class="text-gray-600 font-medium w-24 flex-shrink-0">Amount:</span>
-                                        <span class="text-green-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
-                                    </div>
-                                </div>
-                                <div class="pt-3 border-t border-green-200">
-                                    <p class="text-xs text-gray-700 leading-relaxed">
-                                        <strong>📱 Steps:</strong> 1) Transfer amount to above account 2) Upload payment screenshot below 3) Submit order
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- COD Section -->
-                        <div x-show="paymentMethod === 'cod'" x-transition class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl">
+                    <!-- Bank Transfer Section (For Both Auth and Guest) -->
+                    <div x-show="paymentMethod === 'bank_transfer' || paymentMethod === 'advance'" x-transition>
+                        <!-- Bank Details for Payment -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
                             <div class="flex items-center mb-3">
-                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                 </svg>
-                                <h3 class="text-base font-bold text-gray-900">Cash on Delivery</h3>
+                                <h3 class="text-base font-bold text-gray-900">Payment Details</h3>
                             </div>
                             <div class="space-y-2 text-sm mb-3">
                                 <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Payment:</span>
-                                    <span class="text-blue-700 font-semibold">Pay at delivery</span>
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Bank:</span>
+                                    <span class="text-gray-900 font-semibold">{{ $siteSettings->bank_name ?? 'N/A' }}</span>
                                 </div>
                                 <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Delivery:</span>
-                                    <span class="text-blue-700 font-semibold">{{ $deliveryCharges }} PKR</span>
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Account:</span>
+                                    <span class="text-gray-900 font-mono text-xs sm:text-sm break-all">{{ $siteSettings->account_number ?? 'N/A' }}</span>
                                 </div>
                                 <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Total:</span>
-                                    <span class="text-blue-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
+                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Amount:</span>
+                                    <span class="text-green-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
                                 </div>
                             </div>
-                            <div class="pt-3 border-t border-blue-200">
+                            <div class="pt-3 border-t border-green-200">
                                 <p class="text-xs text-gray-700 leading-relaxed">
-                                    <strong>✓ Process:</strong> Order confirmed → Product delivery → Payment collection at doorstep
+                                    <strong>📱 Steps:</strong> 1) Transfer amount to above account 2) Upload payment screenshot below 3) Submit order
                                 </p>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Order Placement Form -->
+                    <!-- COD Section (For Both Auth and Guest) -->
+                    <div x-show="paymentMethod === 'cod'" x-transition class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl">
+                        <div class="flex items-center mb-3">
+                            <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                            </svg>
+                            <h3 class="text-base font-bold text-gray-900">Cash on Delivery</h3>
+                        </div>
+                        <div class="space-y-2 text-sm mb-3">
+                            <div class="flex items-start">
+                                <span class="text-gray-600 font-medium w-24 flex-shrink-0">Payment:</span>
+                                <span class="text-blue-700 font-semibold">Pay at delivery</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-gray-600 font-medium w-24 flex-shrink-0">Delivery:</span>
+                                <span class="text-blue-700 font-semibold">{{ $deliveryCharges }} PKR</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-gray-600 font-medium w-24 flex-shrink-0">Total:</span>
+                                <span class="text-blue-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-blue-200">
+                            <p class="text-xs text-gray-700 leading-relaxed">
+                                <strong>✓ Process:</strong> Order confirmed → Product delivery → Payment collection at doorstep
+                            </p>
+                        </div>
+                    </div>
+
+                    @auth
+                        <!-- Registered User Order Form -->
                         <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf
                             <input type="hidden" name="payment_method" x-model="paymentMethod">
@@ -583,90 +583,8 @@
                                 Submit Order
                             </button>
                         </form>
-                        @endif
                     @else
-                        <!-- Guest Checkout Section -->
-                        <!-- Payment Method Selection -->
-                        <div class="mb-4 p-3 bg-white border border-gray-300 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-700 mb-2">
-                                Select Payment Method <span class="text-red-500">*</span>
-                            </label>
-                            <div class="space-y-2">
-                                <!-- Advance Payment Option -->
-                                <label class="flex items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
-                                       :class="paymentMethod === 'advance' ? 'bg-green-100 border-green-400' : 'bg-white'">
-                                    <input type="radio" name="payment_method_select" value="advance" x-model="paymentMethod" @change="updateTotal()" class="w-4 h-4 text-green-600">
-                                    <span class="ml-2 text-sm font-medium text-gray-700">💳 Bank Transfer (Advance Payment)</span>
-                                </label>
-                                
-                                <!-- COD Option -->
-                                <label class="flex items-center p-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
-                                       :class="paymentMethod === 'cod' ? 'bg-blue-100 border-blue-400' : 'bg-white'">
-                                    <input type="radio" name="payment_method_select" value="cod" x-model="paymentMethod" @change="updateTotal()" class="w-4 h-4 text-blue-600">
-                                    <span class="ml-2 text-sm font-medium text-gray-700">🚚 Cash on Delivery (COD)</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Bank Details for Advance Payment -->
-                        <div x-show="paymentMethod === 'advance'" x-transition class="mb-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl">
-                            <div class="flex items-center mb-3">
-                                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                                </svg>
-                                <h3 class="text-base font-bold text-gray-900">Payment Details</h3>
-                            </div>
-                            <div class="space-y-2 text-sm mb-3">
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Bank:</span>
-                                    <span class="text-gray-900 font-semibold">{{ $siteSettings->bank_name ?? 'N/A' }}</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Account:</span>
-                                    <span class="text-gray-900 font-mono text-xs sm:text-sm break-all">{{ $siteSettings->account_number ?? 'N/A' }}</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Amount:</span>
-                                    <span class="text-green-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
-                                </div>
-                            </div>
-                            <div class="pt-3 border-t border-green-200">
-                                <p class="text-xs text-gray-700 leading-relaxed">
-                                    <strong>📱 Steps:</strong> 1) Transfer amount to above account 2) Upload payment screenshot below 3) Submit order
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- COD Info -->
-                        <div x-show="paymentMethod === 'cod'" x-transition class="mb-4 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-xl">
-                            <div class="flex items-center mb-3">
-                                <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                                </svg>
-                                <h3 class="text-base font-bold text-gray-900">Cash on Delivery</h3>
-                            </div>
-                            <div class="space-y-2 text-sm mb-3">
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Payment:</span>
-                                    <span class="text-blue-700 font-semibold">Pay at delivery</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Delivery:</span>
-                                    <span class="text-blue-700 font-semibold">{{ $deliveryCharges }} PKR</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <span class="text-gray-600 font-medium w-24 flex-shrink-0">Total:</span>
-                                    <span class="text-blue-700 font-bold text-lg">Rs. <span x-text="grandTotal.toLocaleString('en-PK')">{{ number_format($grandTotal) }}</span></span>
-                                </div>
-                            </div>
-                            <div class="pt-3 border-t border-blue-200">
-                                <p class="text-xs text-gray-700 leading-relaxed">
-                                    <strong>✓ Process:</strong> Order confirmed → Product delivery → Payment collection at doorstep
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Guest Order Placement Form -->
+                        <!-- Guest User Order Form -->
                         <form action="{{ route('orders.store') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             @csrf
                             
@@ -793,9 +711,11 @@
                         </div>
                     @endauth
 
-                    <a href="{{ route('shop') }}" class="block w-full text-center py-2.5 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-lg text-sm sm:text-base font-semibold text-gray-700 hover:bg-gray-50">
-                        Continue Shopping
-                    </a>
+                    <div class="mt-4 sm:mt-6">
+                        <a href="{{ route('shop') }}" class="block w-full text-center py-2.5 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-lg text-sm sm:text-base font-semibold text-gray-700 hover:bg-gray-50">
+                            Continue Shopping
+                        </a>
+                    </div>
 
                     <!-- Features -->
                     <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-2 sm:space-y-3">
@@ -809,6 +729,7 @@
                 </div>
             </div>
         </div>
+        @endif
         @endif
     </div>
 </div>
