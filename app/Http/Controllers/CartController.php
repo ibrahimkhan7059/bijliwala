@@ -145,6 +145,15 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
+        // Handle increase/decrease buttons
+        $newQuantity = (int) $request->quantity;
+        
+        if ($request->has('increase')) {
+            $newQuantity += 1;
+        } elseif ($request->has('decrease')) {
+            $newQuantity = max(1, $newQuantity - 1);
+        }
+
         if (Auth::check()) {
             $cartItem = Cart::where('user_id', Auth::id())
                 ->where('id', $id)
@@ -159,15 +168,15 @@ class CartController extends Controller
                 $stock = $variation ? $variation->stock_quantity : $product->stock_quantity;
             }
             
-            if ($stock < $request->quantity) {
+            if ($stock < $newQuantity) {
                 return back()->with('error', 'Insufficient stock available!');
             }
 
-            $cartItem->update(['quantity' => $request->quantity]);
+            $cartItem->update(['quantity' => $newQuantity]);
         } else {
             $cart = session()->get('cart', []);
             if (isset($cart[$id])) {
-                $cart[$id]['quantity'] = $request->quantity;
+                $cart[$id]['quantity'] = $newQuantity;
                 session()->put('cart', $cart);
             }
         }

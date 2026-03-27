@@ -248,19 +248,32 @@
 
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                 <!-- Quantity -->
-                                <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center gap-2">
-                                    @csrf
-                                    @method('PATCH')
+                                <div class="flex items-center gap-2">
                                     <label class="text-xs sm:text-sm text-gray-600">Qty:</label>
-                                    <input type="number" 
-                                           name="quantity" 
-                                           value="{{ $item->quantity }}" 
-                                           min="1" 
-                                           max="{{ $item->product->stock_quantity }}"
-                                           class="w-16 sm:w-20 px-2 py-1.5 border border-gray-300 rounded text-center text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500"
-                                           onchange="this.form.submit()">
+                                    <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center gap-1">
+                                        @csrf
+                                        @method('PATCH')
+                                        <!-- Decrease Button -->
+                                        <button type="submit" name="decrease" value="1" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors" @if($item->quantity <= 1) disabled @endif>
+                                            −
+                                        </button>
+                                        
+                                        <!-- Quantity Display -->
+                                        <input type="number" 
+                                               name="quantity" 
+                                               value="{{ $item->quantity }}" 
+                                               min="1" 
+                                               max="{{ $item->product->stock_quantity }}"
+                                               class="w-12 px-2 py-1 border border-gray-300 rounded text-center text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500"
+                                               readonly>
+                                        
+                                        <!-- Increase Button -->
+                                        <button type="submit" name="increase" value="1" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors" @if($item->quantity >= $item->product->stock_quantity) disabled @endif>
+                                            +
+                                        </button>
+                                    </form>
                                     <span class="text-xs text-gray-500 hidden sm:inline">(Max: {{ $item->product->stock_quantity }})</span>
-                                </form>
+                                </div>
 
                                 <!-- Price -->
                                 <div class="text-left sm:text-right">
@@ -309,17 +322,30 @@
 
                             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                 <!-- Quantity -->
-                                <form action="{{ route('cart.update', $productId) }}" method="POST" class="flex items-center gap-2">
-                                    @csrf
-                                    @method('PATCH')
+                                <div class="flex items-center gap-2">
                                     <label class="text-xs sm:text-sm text-gray-600">Qty:</label>
-                                    <input type="number" 
-                                           name="quantity" 
-                                           value="{{ $item['quantity'] }}" 
-                                           min="1"
-                                           class="w-16 sm:w-20 px-2 py-1.5 border border-gray-300 rounded text-center text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500"
-                                           onchange="this.form.submit()">
-                                </form>
+                                    <form action="{{ route('cart.update', $productId) }}" method="POST" class="flex items-center gap-1">
+                                        @csrf
+                                        @method('PATCH')
+                                        <!-- Decrease Button -->
+                                        <button type="submit" name="decrease" value="1" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors" @if($item['quantity'] <= 1) disabled @endif>
+                                            −
+                                        </button>
+                                        
+                                        <!-- Quantity Display -->
+                                        <input type="number" 
+                                               name="quantity" 
+                                               value="{{ $item['quantity'] }}" 
+                                               min="1"
+                                               class="w-12 px-2 py-1 border border-gray-300 rounded text-center text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500"
+                                               readonly>
+                                        
+                                        <!-- Increase Button -->
+                                        <button type="submit" name="increase" value="1" class="px-2 py-1 bg-gray-200 hover:bg-gray-300 rounded text-gray-700 font-bold transition-colors">
+                                            +
+                                        </button>
+                                    </form>
+                                </div>
 
                                 <!-- Price -->
                                 <div class="text-left sm:text-right">
@@ -710,12 +736,6 @@
                             </p>
                         </div>
                     @endauth
-
-                    <div class="mt-4 sm:mt-6">
-                        <a href="{{ route('shop') }}" class="block w-full text-center py-2.5 sm:py-3 px-4 sm:px-6 border border-gray-300 rounded-lg text-sm sm:text-base font-semibold text-gray-700 hover:bg-gray-50">
-                            Continue Shopping
-                        </a>
-                    </div>
 
                     <!-- Features -->
                     <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 space-y-2 sm:space-y-3">
