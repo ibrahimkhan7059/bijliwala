@@ -47,7 +47,7 @@
             <p class="text-xs sm:text-sm text-gray-600 mt-1">Fill in the details below to create your blog post</p>
         </div>
         
-        <form id="blog-form" method="POST" action="{{ route('admin.blogs.store') }}" class="p-4 sm:p-6">
+        <form id="blog-form" method="POST" action="{{ route('admin.blogs.store') }}" enctype="multipart/form-data" class="p-4 sm:p-6">
             @csrf
             <!-- Simple Single Column Form -->
             <div class="max-w-2xl mx-auto">
@@ -111,6 +111,30 @@
                         <p class="mt-1 text-xs text-gray-500">Enter the full YouTube video URL</p>
                     </div>
 
+                    <!-- Cover Photo Upload -->
+                    <div>
+                        <label for="cover_photo" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Cover Photo (Optional)
+                        </label>
+                        <div class="relative">
+                            <input type="file" 
+                                   name="cover_photo" 
+                                   id="cover_photo" 
+                                   accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 @error('cover_photo') border-red-500 @enderror file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                                   onchange="previewImage(this)">
+                        </div>
+                        @error('cover_photo')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-xs text-gray-500">📸 Upload a custom cover photo (JPEG, PNG, GIF). Max size: 5MB. If not provided, YouTube thumbnail will be used.</p>
+                        
+                        <!-- Preview -->
+                        <div id="preview-container" class="mt-4 hidden">
+                            <img id="preview-image" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg border-2 border-gray-300">
+                        </div>
+                    </div>
+
                     <!-- Status -->
                     <div>
                         <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -150,6 +174,24 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+function previewImage(input) {
+    const preview = document.getElementById('preview-container');
+    const previewImage = document.getElementById('preview-image');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.classList.add('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var textarea = document.querySelector('textarea[name=description]');
     var existingContent = textarea ? textarea.value.trim() : '';

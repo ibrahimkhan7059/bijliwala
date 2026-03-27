@@ -416,15 +416,6 @@
                     <p class="font-bold text-sm md:text-base text-white">3-5 Business Days</p>
                 </div>
             </div>
-            <div class="bg-gradient-to-r from-red-500/30 to-pink-500/30 backdrop-blur-md rounded-xl p-4 md:p-6 border border-red-400/50 text-center">
-                <div class="flex items-center justify-center space-x-2 mb-2">
-                    <svg class="w-5 h-5 md:w-6 md:h-6 text-red-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>
-                    <p class="font-bold text-sm md:text-base text-white">Important Note</p>
-                </div>
-                <p class="text-xs md:text-sm text-gray-200 leading-relaxed">We don't work on cash on delivery. Please contact us via WhatsApp to place your order.</p>
-            </div>
 
             <!-- Social Media Links -->
             @if(($siteSettings->social_facebook ?? null) || ($siteSettings->social_instagram ?? null) || ($siteSettings->social_tiktok ?? null) || ($siteSettings->social_youtube ?? null) || ($siteSettings->social_twitter ?? null))

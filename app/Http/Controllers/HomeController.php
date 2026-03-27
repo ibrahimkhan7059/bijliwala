@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -146,6 +147,8 @@ class HomeController extends Controller
      */
     public function solarInquiry()
     {
-        return view('solar-inquiry');
+        $settingsData = DB::table('settings')->pluck('value', 'key')->toArray();
+        $siteSettings = (object) $settingsData;
+        return view('solar-inquiry', compact('siteSettings'));
     }
 }

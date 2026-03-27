@@ -47,7 +47,7 @@
             <p class="text-xs sm:text-sm text-gray-600 mt-1">Update the details below to edit your blog post</p>
         </div>
         
-        <form id="blog-form" method="POST" action="{{ route('admin.blogs.update', $blog) }}" class="p-4 sm:p-6">
+        <form id="blog-form" method="POST" action="{{ route('admin.blogs.update', $blog) }}" enctype="multipart/form-data" class="p-4 sm:p-6">
             @csrf
             @method('PUT')
             <!-- Simple Single Column Form -->
@@ -127,6 +127,62 @@
                         </div>
                     @endif
 
+                    <!-- Cover Photo Upload -->
+                    <div>
+                        <label for="cover_photo" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Cover Photo (Optional)
+                        </label>
+                        <div class="relative">
+                            <input type="file" 
+                                   name="cover_photo" 
+                                   id="cover_photo" 
+                                   accept="image/*"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-200 @error('cover_photo') border-red-500 @enderror file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100"
+                                   onchange="previewImage(this)">
+                        </div>
+                        @error('cover_photo')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-xs text-gray-500">📸 Upload a custom cover photo (JPEG, PNG, GIF). Max size: 5MB. If not provided, YouTube thumbnail will be used.</p>
+                        
+                        <!-- Current Thumbnail -->
+                        @php
+                            $isCustomThumbnail = $blog->thumbnail && 
+                                                !str_contains($blog->thumbnail, 'youtube') && 
+                                                !str_contains($blog->thumbnail, 'img.youtube.com');
+                        @endphp
+                        @if($isCustomThumbnail)
+                        <div class="mt-4">
+                            <p class="text-xs text-gray-600 mb-2">📷 Current Cover Photo:</p>
+                            <img src="{{ asset('storage/' . $blog->thumbnail) }}" 
+                                 alt="Current Cover" 
+                                 class="w-full h-48 object-cover rounded-lg border-2 border-gray-300"
+                                 onerror="this.parentElement.style.display='none'">
+                        </div>
+                        @else
+                        <div class="mt-4">
+                            <p class="text-xs text-gray-600 mb-2">📷 Current Thumbnail:</p>
+                            <div class="w-full h-48 bg-gradient-to-br from-orange-200 to-red-200 rounded-lg border-2 border-gray-300 flex items-center justify-center">
+                                @if($blog->youtube_thumbnail)
+                                <img src="{{ $blog->youtube_thumbnail }}" 
+                                     alt="YouTube Thumbnail" 
+                                     class="w-full h-full object-cover rounded-lg">
+                                @else
+                                <svg class="w-16 h-16 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                        
+                        <!-- Preview for New Upload -->
+                        <div id="preview-container" class="mt-4 hidden">
+                            <p class="text-xs text-gray-600 mb-2">👁️ New Cover Photo Preview:</p>
+                            <img id="preview-image" src="" alt="Preview" class="w-full h-48 object-cover rounded-lg border-2 border-blue-300">
+                        </div>
+                    </div>
+
                     <!-- Status -->
                     <div>
                         <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -180,6 +236,24 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+function previewImage(input) {
+    const preview = document.getElementById('preview-container');
+    const previewImage = document.getElementById('preview-image');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImage.src = e.target.result;
+            preview.classList.remove('hidden');
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.classList.add('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var textarea = document.querySelector('textarea[name=description]');
     var existingContent = textarea ? textarea.value.trim() : '';

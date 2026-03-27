@@ -25,6 +25,10 @@ class Blog extends Model
         'views' => 'integer',
     ];
 
+    protected $appends = [
+        'thumbnail_url',
+    ];
+
     /**
      * Get the route key for the model.
      */
@@ -62,7 +66,7 @@ class Blog extends Model
     /**
      * Extract YouTube video ID from URL
      */
-    private static function extractYoutubeVideoId($url)
+    public static function extractYoutubeVideoId($url)
     {
         $pattern = '/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|)?([\w-]{11})(?:\S+)?/';
         if (preg_match($pattern, $url, $matches)) {
@@ -95,6 +99,23 @@ class Blog extends Model
     {
         $videoId = $this->youtube_id;
         return $videoId ? "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg" : null;
+    }
+
+    /**
+     * Get thumbnail URL - returns custom thumbnail if available, otherwise YouTube thumbnail
+     */
+    public function getThumbnailUrlAttribute()
+    {
+        if ($this->thumbnail) {
+            // If it's a YouTube URL, return it as is
+            if (str_contains($this->thumbnail, 'youtube')) {
+                return $this->thumbnail;
+            }
+            // Otherwise it's a custom upload, prepend storage URL
+            return asset('storage/' . $this->thumbnail);
+        }
+        // Fallback to YouTube thumbnail
+        return $this->youtube_thumbnail;
     }
 
     /**

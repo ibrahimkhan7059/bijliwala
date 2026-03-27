@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -73,15 +74,23 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'youtube_url' => 'required|url',
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'status' => 'required|in:published,draft',
         ]);
 
         $data = $request->all();
 
-        // Extract YouTube thumbnail if URL is valid
-        $blog = new Blog($data);
-        if ($blog->youtube_id) {
-            $data['thumbnail'] = $blog->youtube_thumbnail;
+        // Handle cover photo upload
+        if ($request->hasFile('cover_photo')) {
+            $file = $request->file('cover_photo');
+            $path = $file->store('blogs', 'public');
+            $data['thumbnail'] = $path;
+        } else {
+            // Extract YouTube thumbnail if no cover photo uploaded
+            $videoId = Blog::extractYoutubeVideoId($data['youtube_url']);
+            if ($videoId) {
+                $data['thumbnail'] = "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg";
+            }
         }
 
         Blog::create($data);
@@ -115,15 +124,30 @@ class BlogController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'youtube_url' => 'required|url',
+            'cover_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'status' => 'required|in:published,draft',
         ]);
 
         $data = $request->all();
 
-        // Extract YouTube thumbnail if URL is valid
-        $tempBlog = new Blog($data);
-        if ($tempBlog->youtube_id) {
-            $data['thumbnail'] = $tempBlog->youtube_thumbnail;
+        // Handle cover photo upload
+        if ($request->hasFile('cover_photo')) {
+            // Delete old image if it exists and is not a YouTube URL
+            if ($blog->thumbnail && !str_contains($blog->thumbnail, 'youtube')) {
+                Storage::disk('public')->delete($blog->thumbnail);
+            }
+            
+            $file = $request->file('cover_photo');
+            $path = $file->store('blogs', 'public');
+            $data['thumbnail'] = $path;
+        } else {
+            // Extract YouTube thumbnail if no cover photo uploaded and thumbnail not already set
+            if (!isset($data['thumbnail']) || empty($data['thumbnail'])) {
+                $videoId = Blog::extractYoutubeVideoId($data['youtube_url']);
+                if ($videoId) {
+                    $data['thumbnail'] = "https://img.youtube.com/vi/{$videoId}/maxresdefault.jpg";
+                }
+            }
         }
 
         $blog->update($data);
@@ -137,6 +161,11 @@ class BlogController extends Controller
      */
     public function destroy(Blog $blog)
     {
+        // Delete thumbnail if it's a custom upload (not YouTube URL)
+        if ($blog->thumbnail && !str_contains($blog->thumbnail, 'youtube')) {
+            Storage::disk('public')->delete($blog->thumbnail);
+        }
+        
         $blog->delete();
 
         return redirect()->route('admin.blogs.index')

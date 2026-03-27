@@ -27,25 +27,22 @@
             @foreach($blogs as $blog)
             <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover border-2 border-orange-200 hover:border-red-400 transition-all">
                 <!-- Video Thumbnail -->
-                @if($blog->youtube_thumbnail)
                 <a href="{{ route('blog.show', $blog->slug) }}" class="block relative aspect-video bg-gray-100 overflow-hidden group">
-                    <img src="{{ $blog->youtube_thumbnail }}" 
+                    @if($blog->thumbnail_url)
+                    <img src="{{ $blog->thumbnail_url }}" 
                          alt="{{ $blog->title }}" 
                          class="w-full h-full object-cover group-hover:scale-105 transition-transform">
-                    <!-- Play Button Overlay -->
-                    <div class="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                        <div class="bg-red-600 rounded-full p-4 md:p-6 shadow-2xl transform group-hover:scale-110 transition-transform">
-                            <svg class="w-8 h-8 md:w-12 md:h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z"/>
-                            </svg>
-                        </div>
+                    @else
+                    <!-- Fallback placeholder if no image -->
+                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-200 to-red-200">
+                        <svg class="w-16 h-16 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
                     </div>
-                    <!-- Duration Badge (if you want to add later) -->
-                    <div class="absolute top-3 right-3 bg-black/80 text-white text-xs px-2 py-1 rounded">
-                        YouTube
-                    </div>
+                    @endif
+
+
                 </a>
-                @endif
 
                 <!-- Content -->
                 <div class="p-4 md:p-5">

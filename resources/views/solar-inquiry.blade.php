@@ -213,7 +213,7 @@
 
 <script>
 function sendWhatsApp() {
-    const phoneNumber = "923315346889"; 
+    const phoneNumber = "{{ preg_replace('/[^\d]/', '', $siteSettings->solar_contact_whatsapp ?? '923315346889') }}"; 
     
     const name = document.getElementById('name').value;
     const city = document.getElementById('city').value;
